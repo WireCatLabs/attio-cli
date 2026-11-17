@@ -1,7 +1,7 @@
 {
   "wcat_manifest": 2,
   "name": "attio",
-  "description": "a new WireCat CLI, started from cli-template",
+  "description": "Attio CRM: people and companies, searchable with your other WireCat data",
   "docs_url": "https://github.com/WireCatLabs/attio-cli#readme",
   "package": "@wirecat/attio-cli",
   "bin": "wcat-attio",
@@ -2043,7 +2043,7 @@
     ]
   },
   "desktop": {
-    "tagline": "A new WireCat CLI, started from cli-template",
+    "tagline": "Attio people and companies for you and your agent",
     "profiles": {
       "args": [
         "session",
@@ -2086,8 +2086,8 @@
       "start"
     ],
     "signIn": {
-      "gives": "Lets your agent read and change your account through attio.",
-      "asks": "An API token or key from the service."
+      "gives": "Lets your agent read your Attio people and companies and call the Attio API.",
+      "asks": "An access token from your Attio workspace."
     },
     "skill": {
       "status": [

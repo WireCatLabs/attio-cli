@@ -1,4 +1,4 @@
-attio — a new WireCat CLI, started from cli-template
+attio — Attio CRM: people and companies, searchable with your other WireCat data
 
 Usage: attio <profile> <command> [options]
 Account commands start with your profile, a name you choose; none is ever assumed.

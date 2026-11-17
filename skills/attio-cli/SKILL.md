@@ -1,6 +1,6 @@
 ---
 name: attio-cli
-description: Use attio, a WireCat CLI started from cli-template, from an agent — find a command, run it with the owner's profile, read JSON answers. Use when a task needs attio. Its one service is a made-up sample, Example Comments.
+description: Use attio, the WireCat CLI for Attio CRM, from an agent — sync the owner's Attio people and companies into the local store, search them, or call any Attio API operation with the owner's profile and read JSON answers. Use when a task needs Attio records.
 metadata:
   openclaw:
     requires:
@@ -21,6 +21,8 @@ Find your way with the tool itself, not this file:
 - `attio commands --json` is the full command tree; `attio commands config --json` one group.
 - `attio help config set` is one command's help, with what it returns.
 - `attio doctor --json` says what is set up on this computer.
+- `attio <profile> sync` copies people and companies (current values only) into the local store; deals, the
+  workspace's own attributes and custom objects are not copied: read those with `attio <profile> api`.
 - `attio skill show api` lists the service's raw API, one command per operation, in groups: [references/api.md](references/api.md).
 
 ## Rules

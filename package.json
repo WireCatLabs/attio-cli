@@ -1,7 +1,7 @@
 {
   "name": "@wirecat/attio-cli",
   "version": "0.0.0",
-  "description": "A new WireCat CLI, started from cli-template",
+  "description": "Attio CRM: people and companies, searchable with your other WireCat data",
   "license": "Apache-2.0",
   "author": "Viacheslav Ptsarev",
   "repository": {

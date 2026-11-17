@@ -1,6 +1,7 @@
 # attio: Attio CLI for AI agents
 
-A new WireCat CLI, started from cli-template. One tool for you and for Claude Code, Codex or any agent that speaks MCP.
+Your Attio people and companies in WireCat's local store, searchable next to your messages, mail and meetings. One
+tool for you and for Claude Code, Codex or any agent that speaks MCP.
 
 <p align="center">
   <a href="https://github.com/WireCatLabs/attio-cli/blob/main/docs/index.md">Docs</a> ·
