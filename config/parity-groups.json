@@ -1,0 +1,8 @@
+[
+  {
+    "name": "attio",
+    "members": ["attio", "tg", "max", "memo", "drive", "zm", "wa"],
+    "covers": ["commands", "upgrade"],
+    "differences": []
+  }
+]

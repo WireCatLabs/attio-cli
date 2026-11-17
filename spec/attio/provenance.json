@@ -1,0 +1,11 @@
+{
+  "sources": [
+    {
+      "name": "attio",
+      "url": "https://api.attio.com/openapi/api",
+      "file": "openapi.json",
+      "sha256": "2288cbc1698d59d6c53e1665a1b5595b956a1151ff154b85804757fa6b7c79e5"
+    }
+  ],
+  "retrieved_at": "2026-11-17T20:58:45.577Z"
+}

@@ -1,0 +1,2251 @@
+{
+  "wcat_manifest": 2,
+  "name": "attio",
+  "description": "a new WireCat CLI, started from cli-template",
+  "docs_url": "https://github.com/WireCatLabs/attio-cli#readme",
+  "package": "@wirecat/attio-cli",
+  "bin": "wcat-attio",
+  "commands": [
+    {
+      "path": [
+        "commands"
+      ],
+      "summary": "every command by section; --json prints its contract, one path per call",
+      "effects": {
+        "remote": "none",
+        "local": "none"
+      }
+    },
+    {
+      "path": [
+        "commands",
+        "info"
+      ],
+      "summary": "one command contract, or all schemas, error reasons and explicit overrides",
+      "effects": {
+        "remote": "none",
+        "local": "none"
+      }
+    },
+    {
+      "path": [
+        "session",
+        "start"
+      ],
+      "summary": "sign in to Attio with its API token",
+      "effects": {
+        "remote": "read",
+        "local": "write"
+      }
+    },
+    {
+      "path": [
+        "session",
+        "status"
+      ],
+      "summary": "show where this profile's token comes from; never the token",
+      "effects": {
+        "remote": "read",
+        "local": "read"
+      }
+    },
+    {
+      "path": [
+        "session",
+        "end"
+      ],
+      "summary": "forget this profile's token on this computer",
+      "effects": {
+        "remote": "none",
+        "local": "write"
+      }
+    },
+    {
+      "path": [
+        "session",
+        "list"
+      ],
+      "summary": "list the profiles here and whether each is signed in",
+      "effects": {
+        "remote": "none",
+        "local": "read"
+      }
+    },
+    {
+      "path": [
+        "api",
+        "list"
+      ],
+      "summary": "list every Attio API operation this CLI offers, without calling Attio",
+      "effects": {
+        "remote": "none",
+        "local": "none"
+      },
+      "permission": "api.list",
+      "entity": "api_operation"
+    },
+    {
+      "path": [
+        "api",
+        "show"
+      ],
+      "summary": "show one operation's parameters and request schema, without calling Attio",
+      "effects": {
+        "remote": "none",
+        "local": "none"
+      },
+      "permission": "api.show"
+    },
+    {
+      "path": [
+        "api",
+        "objects-list"
+      ],
+      "summary": "List objects — read (GET /v2/objects)",
+      "effects": {
+        "remote": "read",
+        "local": "none"
+      },
+      "permission": "api.objects-list"
+    },
+    {
+      "path": [
+        "api",
+        "objects-create"
+      ],
+      "summary": "Create an object — write (POST /v2/objects)",
+      "effects": {
+        "remote": "write",
+        "local": "none"
+      },
+      "permission": "api.objects-create"
+    },
+    {
+      "path": [
+        "api",
+        "objects-get"
+      ],
+      "summary": "Get an object — read (GET /v2/objects/{object})",
+      "effects": {
+        "remote": "read",
+        "local": "none"
+      },
+      "permission": "api.objects-get"
+    },
+    {
+      "path": [
+        "api",
+        "objects-update"
+      ],
+      "summary": "Update an object — write (PATCH /v2/objects/{object})",
+      "effects": {
+        "remote": "write",
+        "local": "none"
+      },
+      "permission": "api.objects-update"
+    },
+    {
+      "path": [
+        "api",
+        "objects-delete"
+      ],
+      "summary": "Delete an object — destructive (DELETE /v2/objects/{object})",
+      "effects": {
+        "remote": "write",
+        "local": "none"
+      },
+      "permission": "api.objects-delete"
+    },
+    {
+      "path": [
+        "api",
+        "objects-views-list"
+      ],
+      "summary": "List views for object — read (GET /v2/objects/{object}/views)",
+      "effects": {
+        "remote": "read",
+        "local": "none"
+      },
+      "permission": "api.objects-views-list"
+    },
+    {
+      "path": [
+        "api",
+        "objects-views-create"
+      ],
+      "summary": "Create an object view — write (POST /v2/objects/{object}/views)",
+      "effects": {
+        "remote": "write",
+        "local": "none"
+      },
+      "permission": "api.objects-views-create"
+    },
+    {
+      "path": [
+        "api",
+        "objects-views-get"
+      ],
+      "summary": "Get an object view — read (GET /v2/objects/{object}/views/{view_id})",
+      "effects": {
+        "remote": "read",
+        "local": "none"
+      },
+      "permission": "api.objects-views-get"
+    },
+    {
+      "path": [
+        "api",
+        "objects-views-update"
+      ],
+      "summary": "Update an object view — write (PATCH /v2/objects/{object}/views/{view_id})",
+      "effects": {
+        "remote": "write",
+        "local": "none"
+      },
+      "permission": "api.objects-views-update"
+    },
+    {
+      "path": [
+        "api",
+        "objects-views-delete"
+      ],
+      "summary": "Delete an object view — destructive (DELETE…",
+      "effects": {
+        "remote": "write",
+        "local": "none"
+      },
+      "permission": "api.objects-views-delete"
+    },
+    {
+      "path": [
+        "api",
+        "activities-list"
+      ],
+      "summary": "List activities — read (GET /v2/activities)",
+      "effects": {
+        "remote": "read",
+        "local": "none"
+      },
+      "permission": "api.activities-list"
+    },
+    {
+      "path": [
+        "api",
+        "activities-create"
+      ],
+      "summary": "Create an activity — write (POST /v2/activities)",
+      "effects": {
+        "remote": "write",
+        "local": "none"
+      },
+      "permission": "api.activities-create"
+    },
+    {
+      "path": [
+        "api",
+        "activities-get"
+      ],
+      "summary": "Get an activity — read (GET /v2/activities/{activity})",
+      "effects": {
+        "remote": "read",
+        "local": "none"
+      },
+      "permission": "api.activities-get"
+    },
+    {
+      "path": [
+        "api",
+        "activities-update"
+      ],
+      "summary": "Update an activity — write (PATCH /v2/activities/{activity})",
+      "effects": {
+        "remote": "write",
+        "local": "none"
+      },
+      "permission": "api.activities-update"
+    },
+    {
+      "path": [
+        "api",
+        "activities-delete"
+      ],
+      "summary": "Delete an activity — destructive (DELETE /v2/activities/{activity})",
+      "effects": {
+        "remote": "write",
+        "local": "none"
+      },
+      "permission": "api.activities-delete"
+    },
+    {
+      "path": [
+        "api",
+        "attributes-list"
+      ],
+      "summary": "List attributes — read (GET /v2/{target}/{identifier}/attributes)",
+      "effects": {
+        "remote": "read",
+        "local": "none"
+      },
+      "permission": "api.attributes-list"
+    },
+    {
+      "path": [
+        "api",
+        "attributes-create"
+      ],
+      "summary": "Create an attribute — write (POST /v2/{target}/{identifier}/attributes)",
+      "effects": {
+        "remote": "write",
+        "local": "none"
+      },
+      "permission": "api.attributes-create"
+    },
+    {
+      "path": [
+        "api",
+        "attributes-get"
+      ],
+      "summary": "Get an attribute — read (GET /v2/{target}/{identifier}/attributes/{attribute})",
+      "effects": {
+        "remote": "read",
+        "local": "none"
+      },
+      "permission": "api.attributes-get"
+    },
+    {
+      "path": [
+        "api",
+        "attributes-update"
+      ],
+      "summary": "Update an attribute — write (PATCH…",
+      "effects": {
+        "remote": "write",
+        "local": "none"
+      },
+      "permission": "api.attributes-update"
+    },
+    {
+      "path": [
+        "api",
+        "attributes-options-list"
+      ],
+      "summary": "List select options — read (GET…",
+      "effects": {
+        "remote": "read",
+        "local": "none"
+      },
+      "permission": "api.attributes-options-list"
+    },
+    {
+      "path": [
+        "api",
+        "attributes-options-create"
+      ],
+      "summary": "Create a select option — write (POST…",
+      "effects": {
+        "remote": "write",
+        "local": "none"
+      },
+      "permission": "api.attributes-options-create"
+    },
+    {
+      "path": [
+        "api",
+        "attributes-options-update"
+      ],
+      "summary": "Update a select option — write (PATCH…",
+      "effects": {
+        "remote": "write",
+        "local": "none"
+      },
+      "permission": "api.attributes-options-update"
+    },
+    {
+      "path": [
+        "api",
+        "attributes-statuses-list"
+      ],
+      "summary": "List statuses — read (GET…",
+      "effects": {
+        "remote": "read",
+        "local": "none"
+      },
+      "permission": "api.attributes-statuses-list"
+    },
+    {
+      "path": [
+        "api",
+        "attributes-statuses-create"
+      ],
+      "summary": "Create a status — write (POST…",
+      "effects": {
+        "remote": "write",
+        "local": "none"
+      },
+      "permission": "api.attributes-statuses-create"
+    },
+    {
+      "path": [
+        "api",
+        "attributes-statuses-update"
+      ],
+      "summary": "Update a status — write (PATCH…",
+      "effects": {
+        "remote": "write",
+        "local": "none"
+      },
+      "permission": "api.attributes-statuses-update"
+    },
+    {
+      "path": [
+        "api",
+        "objects-records-query"
+      ],
+      "summary": "List records — read (POST /v2/objects/{object}/records/query)",
+      "effects": {
+        "remote": "read",
+        "local": "none"
+      },
+      "permission": "api.objects-records-query"
+    },
+    {
+      "path": [
+        "api",
+        "objects-records-create"
+      ],
+      "summary": "Create a record — write (POST /v2/objects/{object}/records)",
+      "effects": {
+        "remote": "write",
+        "local": "none"
+      },
+      "permission": "api.objects-records-create"
+    },
+    {
+      "path": [
+        "api",
+        "objects-records-assert"
+      ],
+      "summary": "Upsert a record — write (PUT /v2/objects/{object}/records)",
+      "effects": {
+        "remote": "write",
+        "local": "none"
+      },
+      "permission": "api.objects-records-assert"
+    },
+    {
+      "path": [
+        "api",
+        "objects-records-get"
+      ],
+      "summary": "Get a record — read (GET /v2/objects/{object}/records/{record_id})",
+      "effects": {
+        "remote": "read",
+        "local": "none"
+      },
+      "permission": "api.objects-records-get"
+    },
+    {
+      "path": [
+        "api",
+        "objects-records-replace"
+      ],
+      "summary": "Update a record (overwrite multiselect values) — write (PUT…",
+      "effects": {
+        "remote": "write",
+        "local": "none"
+      },
+      "permission": "api.objects-records-replace"
+    },
+    {
+      "path": [
+        "api",
+        "objects-records-update"
+      ],
+      "summary": "Update a record (append multiselect values) — write (PATCH…",
+      "effects": {
+        "remote": "write",
+        "local": "none"
+      },
+      "permission": "api.objects-records-update"
+    },
+    {
+      "path": [
+        "api",
+        "objects-records-delete"
+      ],
+      "summary": "Delete a record — destructive (DELETE /v2/objects/{object}/records/{record_id})",
+      "effects": {
+        "remote": "write",
+        "local": "none"
+      },
+      "permission": "api.objects-records-delete"
+    },
+    {
+      "path": [
+        "api",
+        "objects-records-merge"
+      ],
+      "summary": "Merge two records — write (POST /v2/objects/{object}/records/merge)",
+      "effects": {
+        "remote": "write",
+        "local": "none"
+      },
+      "permission": "api.objects-records-merge"
+    },
+    {
+      "path": [
+        "api",
+        "objects-records-attributes-values-list"
+      ],
+      "summary": "List record attribute values — read (GET…",
+      "effects": {
+        "remote": "read",
+        "local": "none"
+      },
+      "permission": "api.objects-records-attributes-values-list"
+    },
+    {
+      "path": [
+        "api",
+        "objects-records-attributes-values-replace"
+      ],
+      "summary": "Write record attribute values — write (PUT…",
+      "effects": {
+        "remote": "write",
+        "local": "none"
+      },
+      "permission": "api.objects-records-attributes-values-replace"
+    },
+    {
+      "path": [
+        "api",
+        "objects-records-entries-list"
+      ],
+      "summary": "List record entries — read (GET…",
+      "effects": {
+        "remote": "read",
+        "local": "none"
+      },
+      "permission": "api.objects-records-entries-list"
+    },
+    {
+      "path": [
+        "api",
+        "objects-records-search"
+      ],
+      "summary": "Search records — read (POST /v2/objects/records/search)",
+      "effects": {
+        "remote": "read",
+        "local": "none"
+      },
+      "permission": "api.objects-records-search"
+    },
+    {
+      "path": [
+        "api",
+        "activities-records-query"
+      ],
+      "summary": "List activity records — read (POST /v2/activities/{activity}/records/query)",
+      "effects": {
+        "remote": "read",
+        "local": "none"
+      },
+      "permission": "api.activities-records-query"
+    },
+    {
+      "path": [
+        "api",
+        "activities-records-create"
+      ],
+      "summary": "Create an activity record — write (POST /v2/activities/{activity}/records)",
+      "effects": {
+        "remote": "write",
+        "local": "none"
+      },
+      "permission": "api.activities-records-create"
+    },
+    {
+      "path": [
+        "api",
+        "activities-records-assert"
+      ],
+      "summary": "Upsert an activity record — write (PUT /v2/activities/{activity}/records)",
+      "effects": {
+        "remote": "write",
+        "local": "none"
+      },
+      "permission": "api.activities-records-assert"
+    },
+    {
+      "path": [
+        "api",
+        "activities-records-get"
+      ],
+      "summary": "Get an activity record — read (GET…",
+      "effects": {
+        "remote": "read",
+        "local": "none"
+      },
+      "permission": "api.activities-records-get"
+    },
+    {
+      "path": [
+        "api",
+        "activities-records-replace"
+      ],
+      "summary": "Update an activity record (overwrite multiselect values) — write (PUT…",
+      "effects": {
+        "remote": "write",
+        "local": "none"
+      },
+      "permission": "api.activities-records-replace"
+    },
+    {
+      "path": [
+        "api",
+        "activities-records-update"
+      ],
+      "summary": "Update an activity record (append multiselect values) — write (PATCH…",
+      "effects": {
+        "remote": "write",
+        "local": "none"
+      },
+      "permission": "api.activities-records-update"
+    },
+    {
+      "path": [
+        "api",
+        "activities-records-delete"
+      ],
+      "summary": "Delete an activity record — destructive (DELETE…",
+      "effects": {
+        "remote": "write",
+        "local": "none"
+      },
+      "permission": "api.activities-records-delete"
+    },
+    {
+      "path": [
+        "api",
+        "sql"
+      ],
+      "summary": "Query SQL — write (POST /v2/sql)",
+      "effects": {
+        "remote": "write",
+        "local": "none"
+      },
+      "permission": "api.sql"
+    },
+    {
+      "path": [
+        "api",
+        "lists-list"
+      ],
+      "summary": "List all lists — read (GET /v2/lists)",
+      "effects": {
+        "remote": "read",
+        "local": "none"
+      },
+      "permission": "api.lists-list"
+    },
+    {
+      "path": [
+        "api",
+        "lists-create"
+      ],
+      "summary": "Create a list — write (POST /v2/lists)",
+      "effects": {
+        "remote": "write",
+        "local": "none"
+      },
+      "permission": "api.lists-create"
+    },
+    {
+      "path": [
+        "api",
+        "lists-get"
+      ],
+      "summary": "Get a list — read (GET /v2/lists/{list})",
+      "effects": {
+        "remote": "read",
+        "local": "none"
+      },
+      "permission": "api.lists-get"
+    },
+    {
+      "path": [
+        "api",
+        "lists-update"
+      ],
+      "summary": "Update a list — write (PATCH /v2/lists/{list})",
+      "effects": {
+        "remote": "write",
+        "local": "none"
+      },
+      "permission": "api.lists-update"
+    },
+    {
+      "path": [
+        "api",
+        "lists-views-list"
+      ],
+      "summary": "List views for list — read (GET /v2/lists/{list}/views)",
+      "effects": {
+        "remote": "read",
+        "local": "none"
+      },
+      "permission": "api.lists-views-list"
+    },
+    {
+      "path": [
+        "api",
+        "lists-views-create"
+      ],
+      "summary": "Create a list view — write (POST /v2/lists/{list}/views)",
+      "effects": {
+        "remote": "write",
+        "local": "none"
+      },
+      "permission": "api.lists-views-create"
+    },
+    {
+      "path": [
+        "api",
+        "lists-views-get"
+      ],
+      "summary": "Get a list view — read (GET /v2/lists/{list}/views/{view_id})",
+      "effects": {
+        "remote": "read",
+        "local": "none"
+      },
+      "permission": "api.lists-views-get"
+    },
+    {
+      "path": [
+        "api",
+        "lists-views-update"
+      ],
+      "summary": "Update a list view — write (PATCH /v2/lists/{list}/views/{view_id})",
+      "effects": {
+        "remote": "write",
+        "local": "none"
+      },
+      "permission": "api.lists-views-update"
+    },
+    {
+      "path": [
+        "api",
+        "lists-views-delete"
+      ],
+      "summary": "Delete a list view — destructive (DELETE /v2/lists/{list}/views/{view_id})",
+      "effects": {
+        "remote": "write",
+        "local": "none"
+      },
+      "permission": "api.lists-views-delete"
+    },
+    {
+      "path": [
+        "api",
+        "lists-entries-query"
+      ],
+      "summary": "List entries — read (POST /v2/lists/{list}/entries/query)",
+      "effects": {
+        "remote": "read",
+        "local": "none"
+      },
+      "permission": "api.lists-entries-query"
+    },
+    {
+      "path": [
+        "api",
+        "lists-entries-create"
+      ],
+      "summary": "Create an entry (add record to list) — write (POST /v2/lists/{list}/entries)",
+      "effects": {
+        "remote": "write",
+        "local": "none"
+      },
+      "permission": "api.lists-entries-create"
+    },
+    {
+      "path": [
+        "api",
+        "lists-entries-assert"
+      ],
+      "summary": "Upsert a list entry by parent — write (PUT /v2/lists/{list}/entries)",
+      "effects": {
+        "remote": "write",
+        "local": "none"
+      },
+      "permission": "api.lists-entries-assert"
+    },
+    {
+      "path": [
+        "api",
+        "lists-entries-get"
+      ],
+      "summary": "Get a list entry — read (GET /v2/lists/{list}/entries/{entry_id})",
+      "effects": {
+        "remote": "read",
+        "local": "none"
+      },
+      "permission": "api.lists-entries-get"
+    },
+    {
+      "path": [
+        "api",
+        "lists-entries-replace"
+      ],
+      "summary": "Update a list entry (overwrite multiselect values) — write (PUT…",
+      "effects": {
+        "remote": "write",
+        "local": "none"
+      },
+      "permission": "api.lists-entries-replace"
+    },
+    {
+      "path": [
+        "api",
+        "lists-entries-update"
+      ],
+      "summary": "Update a list entry (append multiselect values) — write (PATCH…",
+      "effects": {
+        "remote": "write",
+        "local": "none"
+      },
+      "permission": "api.lists-entries-update"
+    },
+    {
+      "path": [
+        "api",
+        "lists-entries-delete"
+      ],
+      "summary": "Delete a list entry — destructive (DELETE /v2/lists/{list}/entries/{entry_id})",
+      "effects": {
+        "remote": "write",
+        "local": "none"
+      },
+      "permission": "api.lists-entries-delete"
+    },
+    {
+      "path": [
+        "api",
+        "lists-entries-attributes-values-list"
+      ],
+      "summary": "List attribute values for a list entry — read (GET…",
+      "effects": {
+        "remote": "read",
+        "local": "none"
+      },
+      "permission": "api.lists-entries-attributes-values-list"
+    },
+    {
+      "path": [
+        "api",
+        "lists-entries-attributes-values-replace"
+      ],
+      "summary": "Write list entry attribute values — write (PUT…",
+      "effects": {
+        "remote": "write",
+        "local": "none"
+      },
+      "permission": "api.lists-entries-attributes-values-replace"
+    },
+    {
+      "path": [
+        "api",
+        "workspace-members-list"
+      ],
+      "summary": "List workspace members — read (GET /v2/workspace_members)",
+      "effects": {
+        "remote": "read",
+        "local": "none"
+      },
+      "permission": "api.workspace-members-list"
+    },
+    {
+      "path": [
+        "api",
+        "workspace-members-get"
+      ],
+      "summary": "Get a workspace member — read (GET /v2/workspace_members/{workspace_member_id})",
+      "effects": {
+        "remote": "read",
+        "local": "none"
+      },
+      "permission": "api.workspace-members-get"
+    },
+    {
+      "path": [
+        "api",
+        "notes-list"
+      ],
+      "summary": "List notes — read (GET /v2/notes)",
+      "effects": {
+        "remote": "read",
+        "local": "none"
+      },
+      "permission": "api.notes-list"
+    },
+    {
+      "path": [
+        "api",
+        "notes-create"
+      ],
+      "summary": "Create a note — write (POST /v2/notes)",
+      "effects": {
+        "remote": "write",
+        "local": "none"
+      },
+      "permission": "api.notes-create"
+    },
+    {
+      "path": [
+        "api",
+        "notes-get"
+      ],
+      "summary": "Get a note — read (GET /v2/notes/{note_id})",
+      "effects": {
+        "remote": "read",
+        "local": "none"
+      },
+      "permission": "api.notes-get"
+    },
+    {
+      "path": [
+        "api",
+        "notes-update"
+      ],
+      "summary": "Update a note — write (PATCH /v2/notes/{note_id})",
+      "effects": {
+        "remote": "write",
+        "local": "none"
+      },
+      "permission": "api.notes-update"
+    },
+    {
+      "path": [
+        "api",
+        "notes-delete"
+      ],
+      "summary": "Delete a note — destructive (DELETE /v2/notes/{note_id})",
+      "effects": {
+        "remote": "write",
+        "local": "none"
+      },
+      "permission": "api.notes-delete"
+    },
+    {
+      "path": [
+        "api",
+        "tasks-list"
+      ],
+      "summary": "List tasks — read (GET /v2/tasks)",
+      "effects": {
+        "remote": "read",
+        "local": "none"
+      },
+      "permission": "api.tasks-list"
+    },
+    {
+      "path": [
+        "api",
+        "tasks-create"
+      ],
+      "summary": "Create a task — write (POST /v2/tasks)",
+      "effects": {
+        "remote": "write",
+        "local": "none"
+      },
+      "permission": "api.tasks-create"
+    },
+    {
+      "path": [
+        "api",
+        "tasks-get"
+      ],
+      "summary": "Get a task — read (GET /v2/tasks/{task_id})",
+      "effects": {
+        "remote": "read",
+        "local": "none"
+      },
+      "permission": "api.tasks-get"
+    },
+    {
+      "path": [
+        "api",
+        "tasks-update"
+      ],
+      "summary": "Update a task — write (PATCH /v2/tasks/{task_id})",
+      "effects": {
+        "remote": "write",
+        "local": "none"
+      },
+      "permission": "api.tasks-update"
+    },
+    {
+      "path": [
+        "api",
+        "tasks-delete"
+      ],
+      "summary": "Delete a task — destructive (DELETE /v2/tasks/{task_id})",
+      "effects": {
+        "remote": "write",
+        "local": "none"
+      },
+      "permission": "api.tasks-delete"
+    },
+    {
+      "path": [
+        "api",
+        "threads-list"
+      ],
+      "summary": "List threads — read (GET /v2/threads)",
+      "effects": {
+        "remote": "read",
+        "local": "none"
+      },
+      "permission": "api.threads-list"
+    },
+    {
+      "path": [
+        "api",
+        "threads-get"
+      ],
+      "summary": "Get a thread and its comments — read (GET /v2/threads/{thread_id})",
+      "effects": {
+        "remote": "read",
+        "local": "none"
+      },
+      "permission": "api.threads-get"
+    },
+    {
+      "path": [
+        "api",
+        "comments-create"
+      ],
+      "summary": "Create a comment — write (POST /v2/comments)",
+      "effects": {
+        "remote": "write",
+        "local": "none"
+      },
+      "permission": "api.comments-create"
+    },
+    {
+      "path": [
+        "api",
+        "comments-get"
+      ],
+      "summary": "Get a comment — read (GET /v2/comments/{comment_id})",
+      "effects": {
+        "remote": "read",
+        "local": "none"
+      },
+      "permission": "api.comments-get"
+    },
+    {
+      "path": [
+        "api",
+        "comments-delete"
+      ],
+      "summary": "Delete a comment — destructive (DELETE /v2/comments/{comment_id})",
+      "effects": {
+        "remote": "write",
+        "local": "none"
+      },
+      "permission": "api.comments-delete"
+    },
+    {
+      "path": [
+        "api",
+        "emails-list"
+      ],
+      "summary": "List emails — read (GET /v2/emails)",
+      "effects": {
+        "remote": "read",
+        "local": "none"
+      },
+      "permission": "api.emails-list"
+    },
+    {
+      "path": [
+        "api",
+        "sequences-unsubscribed-emails"
+      ],
+      "summary": "Add emails to the unsubscribe list — write (POST…",
+      "effects": {
+        "remote": "write",
+        "local": "none"
+      },
+      "permission": "api.sequences-unsubscribed-emails"
+    },
+    {
+      "path": [
+        "api",
+        "workspace-blocklist-addresses-list"
+      ],
+      "summary": "List workspace blocklist addresses — read (GET…",
+      "effects": {
+        "remote": "read",
+        "local": "none"
+      },
+      "permission": "api.workspace-blocklist-addresses-list"
+    },
+    {
+      "path": [
+        "api",
+        "workspace-blocklist-addresses-replace"
+      ],
+      "summary": "Add or update workspace blocklist addresses — write (PUT…",
+      "effects": {
+        "remote": "write",
+        "local": "none"
+      },
+      "permission": "api.workspace-blocklist-addresses-replace"
+    },
+    {
+      "path": [
+        "api",
+        "workspace-blocklist-addresses-delete"
+      ],
+      "summary": "Delete a workspace blocklist address — destructive (DELETE…",
+      "effects": {
+        "remote": "write",
+        "local": "none"
+      },
+      "permission": "api.workspace-blocklist-addresses-delete"
+    },
+    {
+      "path": [
+        "api",
+        "meetings-list"
+      ],
+      "summary": "List meetings — read (GET /v2/meetings)",
+      "effects": {
+        "remote": "read",
+        "local": "none"
+      },
+      "permission": "api.meetings-list"
+    },
+    {
+      "path": [
+        "api",
+        "meetings-create"
+      ],
+      "summary": "Create a meeting — write (POST /v2/meetings)",
+      "effects": {
+        "remote": "write",
+        "local": "none"
+      },
+      "permission": "api.meetings-create"
+    },
+    {
+      "path": [
+        "api",
+        "meetings-get"
+      ],
+      "summary": "Get a meeting — read (GET /v2/meetings/{meeting_id})",
+      "effects": {
+        "remote": "read",
+        "local": "none"
+      },
+      "permission": "api.meetings-get"
+    },
+    {
+      "path": [
+        "api",
+        "meetings-replace"
+      ],
+      "summary": "Update a meeting (overwrite linked records) — write (PUT…",
+      "effects": {
+        "remote": "write",
+        "local": "none"
+      },
+      "permission": "api.meetings-replace"
+    },
+    {
+      "path": [
+        "api",
+        "meetings-update"
+      ],
+      "summary": "Update a meeting (append linked records) — write (PATCH…",
+      "effects": {
+        "remote": "write",
+        "local": "none"
+      },
+      "permission": "api.meetings-update"
+    },
+    {
+      "path": [
+        "api",
+        "meetings-delete"
+      ],
+      "summary": "Delete a meeting — destructive (DELETE /v2/meetings/{meeting_id})",
+      "effects": {
+        "remote": "write",
+        "local": "none"
+      },
+      "permission": "api.meetings-delete"
+    },
+    {
+      "path": [
+        "api",
+        "meetings-call-recordings-list"
+      ],
+      "summary": "List call recordings — read (GET /v2/meetings/{meeting_id}/call_recordings)",
+      "effects": {
+        "remote": "read",
+        "local": "none"
+      },
+      "permission": "api.meetings-call-recordings-list"
+    },
+    {
+      "path": [
+        "api",
+        "meetings-call-recordings-create"
+      ],
+      "summary": "Create call recording — write (POST /v2/meetings/{meeting_id}/call_recordings)",
+      "effects": {
+        "remote": "write",
+        "local": "none"
+      },
+      "permission": "api.meetings-call-recordings-create"
+    },
+    {
+      "path": [
+        "api",
+        "meetings-call-recordings-get"
+      ],
+      "summary": "Get call recording — read (GET…",
+      "effects": {
+        "remote": "read",
+        "local": "none"
+      },
+      "permission": "api.meetings-call-recordings-get"
+    },
+    {
+      "path": [
+        "api",
+        "meetings-call-recordings-delete"
+      ],
+      "summary": "Delete call recording — destructive (DELETE…",
+      "effects": {
+        "remote": "write",
+        "local": "none"
+      },
+      "permission": "api.meetings-call-recordings-delete"
+    },
+    {
+      "path": [
+        "api",
+        "meetings-call-recordings-transcript-list"
+      ],
+      "summary": "Deprecated: Get call transcript — read (GET…",
+      "effects": {
+        "remote": "read",
+        "local": "none"
+      },
+      "permission": "api.meetings-call-recordings-transcript-list"
+    },
+    {
+      "path": [
+        "api",
+        "files-list"
+      ],
+      "summary": "List files — read (GET /v2/files)",
+      "effects": {
+        "remote": "read",
+        "local": "none"
+      },
+      "permission": "api.files-list"
+    },
+    {
+      "path": [
+        "api",
+        "files-create"
+      ],
+      "summary": "Create a folder — write (POST /v2/files)",
+      "effects": {
+        "remote": "write",
+        "local": "none"
+      },
+      "permission": "api.files-create"
+    },
+    {
+      "path": [
+        "api",
+        "files-get"
+      ],
+      "summary": "Get a file — read (GET /v2/files/{file_id})",
+      "effects": {
+        "remote": "read",
+        "local": "none"
+      },
+      "permission": "api.files-get"
+    },
+    {
+      "path": [
+        "api",
+        "files-delete"
+      ],
+      "summary": "Delete a file — destructive (DELETE /v2/files/{file_id})",
+      "effects": {
+        "remote": "write",
+        "local": "none"
+      },
+      "permission": "api.files-delete"
+    },
+    {
+      "path": [
+        "api",
+        "files-download-list"
+      ],
+      "summary": "Download a file — read (GET /v2/files/{file_id}/download)",
+      "effects": {
+        "remote": "read",
+        "local": "none"
+      },
+      "permission": "api.files-download-list"
+    },
+    {
+      "path": [
+        "api",
+        "webhooks-list"
+      ],
+      "summary": "List webhooks — read (GET /v2/webhooks)",
+      "effects": {
+        "remote": "read",
+        "local": "none"
+      },
+      "permission": "api.webhooks-list"
+    },
+    {
+      "path": [
+        "api",
+        "webhooks-create"
+      ],
+      "summary": "Create a webhook — write (POST /v2/webhooks)",
+      "effects": {
+        "remote": "write",
+        "local": "none"
+      },
+      "permission": "api.webhooks-create"
+    },
+    {
+      "path": [
+        "api",
+        "webhooks-get"
+      ],
+      "summary": "Get a webhook — read (GET /v2/webhooks/{webhook_id})",
+      "effects": {
+        "remote": "read",
+        "local": "none"
+      },
+      "permission": "api.webhooks-get"
+    },
+    {
+      "path": [
+        "api",
+        "webhooks-update"
+      ],
+      "summary": "Update a webhook — write (PATCH /v2/webhooks/{webhook_id})",
+      "effects": {
+        "remote": "write",
+        "local": "none"
+      },
+      "permission": "api.webhooks-update"
+    },
+    {
+      "path": [
+        "api",
+        "webhooks-delete"
+      ],
+      "summary": "Delete a webhook — destructive (DELETE /v2/webhooks/{webhook_id})",
+      "effects": {
+        "remote": "write",
+        "local": "none"
+      },
+      "permission": "api.webhooks-delete"
+    },
+    {
+      "path": [
+        "api",
+        "self-list"
+      ],
+      "summary": "Identify — read (GET /v2/self)",
+      "effects": {
+        "remote": "read",
+        "local": "none"
+      },
+      "permission": "api.self-list"
+    },
+    {
+      "path": [
+        "sync"
+      ],
+      "summary": "bring the CRM's copy in the local store up to date: pipelines, companies,…",
+      "effects": {
+        "remote": "read",
+        "local": "write"
+      },
+      "permission": "sync",
+      "entity": "crm_sync"
+    },
+    {
+      "path": [
+        "store",
+        "status"
+      ],
+      "summary": "how far each kind's sync is: rows saved, partial or complete, when it last…",
+      "effects": {
+        "remote": "none",
+        "local": "read"
+      },
+      "permission": "store.status",
+      "entity": "crm_sync_progress"
+    },
+    {
+      "path": [
+        "store",
+        "apply"
+      ],
+      "summary": "apply scope mine to the contacts already stored: remove those no deal or…",
+      "effects": {
+        "remote": "none",
+        "local": "write"
+      },
+      "permission": "store.apply",
+      "entity": "crm_contacts_removed"
+    },
+    {
+      "path": [
+        "store",
+        "info"
+      ],
+      "summary": "the shared store's format, size and contents, and whether this tool can read it",
+      "effects": {
+        "remote": "none",
+        "local": "read"
+      },
+      "permission": "store.info",
+      "entity": "store_info"
+    },
+    {
+      "path": [
+        "store",
+        "check"
+      ],
+      "summary": "check the local store for problems",
+      "effects": {
+        "remote": "none",
+        "local": "read"
+      },
+      "permission": "store.check",
+      "entity": "store_check"
+    },
+    {
+      "path": [
+        "store",
+        "migrate"
+      ],
+      "summary": "migrate an older local store",
+      "effects": {
+        "remote": "none",
+        "local": "write"
+      },
+      "permission": "store.migrate",
+      "entity": "store_migration"
+    },
+    {
+      "path": [
+        "store",
+        "rebuild"
+      ],
+      "summary": "rebuild the local store's search indexes",
+      "effects": {
+        "remote": "none",
+        "local": "write"
+      },
+      "permission": "store.rebuild",
+      "entity": "store_reindex"
+    },
+    {
+      "path": [
+        "store",
+        "backup"
+      ],
+      "summary": "copy the store into a new file, while it is in use; never overwrites a file",
+      "effects": {
+        "remote": "none",
+        "local": "write"
+      },
+      "permission": "store.backup",
+      "entity": "store_backup"
+    },
+    {
+      "path": [
+        "store",
+        "restore"
+      ],
+      "summary": "restore a backup and keep the current store, or roll back a breaking upgrade",
+      "effects": {
+        "remote": "none",
+        "local": "write"
+      },
+      "permission": "store.restore",
+      "entity": "store_restore"
+    },
+    {
+      "path": [
+        "store",
+        "decrypt"
+      ],
+      "summary": "open a file written with --encrypt into a new file; asks for its password",
+      "effects": {
+        "remote": "none",
+        "local": "write"
+      },
+      "permission": "store.decrypt",
+      "entity": "store_decrypt"
+    },
+    {
+      "path": [
+        "store",
+        "repair"
+      ],
+      "summary": "repair table shapes while keeping the old tables",
+      "effects": {
+        "remote": "none",
+        "local": "write"
+      },
+      "permission": "store.repair",
+      "entity": "store_repair"
+    },
+    {
+      "path": [
+        "store",
+        "reset"
+      ],
+      "summary": "back up the local store and replace it with an empty one",
+      "effects": {
+        "remote": "none",
+        "local": "write"
+      },
+      "permission": "store.reset",
+      "entity": "store_reset"
+    },
+    {
+      "path": [
+        "store",
+        "copies",
+        "delete"
+      ],
+      "summary": "delete one copy `store repair` kept, named exactly; refuses any other table",
+      "effects": {
+        "remote": "none",
+        "local": "write"
+      },
+      "permission": "store.copies.delete",
+      "entity": "store_copy_removal"
+    },
+    {
+      "path": [
+        "store",
+        "tables",
+        "list"
+      ],
+      "summary": "every table of the local archive, with its kind and row count",
+      "effects": {
+        "remote": "none",
+        "local": "read"
+      },
+      "permission": "store.tables.list",
+      "entity": "store_table"
+    },
+    {
+      "path": [
+        "store",
+        "recover"
+      ],
+      "summary": "what is damaged in the store and how to recover it",
+      "effects": {
+        "remote": "none",
+        "local": "read"
+      },
+      "permission": "store.recover"
+    },
+    {
+      "path": [
+        "store",
+        "recover",
+        "run"
+      ],
+      "summary": "rebuild a damaged store from every row it can read",
+      "effects": {
+        "remote": "none",
+        "local": "write"
+      },
+      "permission": "store.recover.run"
+    },
+    {
+      "path": [
+        "deals",
+        "list"
+      ],
+      "summary": "deals copied from the CRM, newest first; run sync to bring them up to date",
+      "effects": {
+        "remote": "none",
+        "local": "read"
+      },
+      "permission": "deals.list",
+      "entity": "deal"
+    },
+    {
+      "path": [
+        "deals",
+        "show"
+      ],
+      "summary": "one deal with its pipeline, stage, status, amount and the people on it, and…",
+      "effects": {
+        "remote": "none",
+        "local": "read"
+      },
+      "permission": "deals.show",
+      "entity": "deal"
+    },
+    {
+      "path": [
+        "pipelines",
+        "list"
+      ],
+      "summary": "pipelines copied from the CRM, with their stages in order and how many are…",
+      "effects": {
+        "remote": "none",
+        "local": "read"
+      },
+      "permission": "pipelines.list",
+      "entity": "pipeline"
+    },
+    {
+      "path": [
+        "pipelines",
+        "show"
+      ],
+      "summary": "one pipeline as a board and a funnel: how many stand in each stage and their…",
+      "effects": {
+        "remote": "none",
+        "local": "read"
+      },
+      "permission": "pipelines.show",
+      "entity": "pipeline"
+    },
+    {
+      "path": [
+        "stages",
+        "list"
+      ],
+      "summary": "every stage of the CRM's pipelines in order, with its outcome and how many…",
+      "effects": {
+        "remote": "none",
+        "local": "read"
+      },
+      "permission": "stages.list",
+      "entity": "stage"
+    },
+    {
+      "path": [
+        "changes",
+        "list"
+      ],
+      "summary": "deals and leads made, moved, won, lost and given another owner, activities…",
+      "effects": {
+        "remote": "none",
+        "local": "read"
+      },
+      "permission": "changes.list",
+      "entity": "crm_change"
+    },
+    {
+      "path": [
+        "fields",
+        "list"
+      ],
+      "summary": "the CRM's custom fields of one kind, in its order, with a list field's options",
+      "effects": {
+        "remote": "none",
+        "local": "read"
+      },
+      "permission": "fields.list",
+      "entity": "crm_field"
+    },
+    {
+      "path": [
+        "search",
+        "all"
+      ],
+      "summary": "search stored deals and leads, messages, notes, calendar events and meetings",
+      "effects": {
+        "remote": "none",
+        "local": "read"
+      },
+      "permission": "search.all",
+      "entity": "hit"
+    },
+    {
+      "path": [
+        "comments",
+        "list"
+      ],
+      "summary": "list the comments in Example Comments, newest first",
+      "effects": {
+        "remote": "read",
+        "local": "read"
+      },
+      "permission": "comments.list",
+      "entity": "comment"
+    },
+    {
+      "path": [
+        "comments",
+        "show"
+      ],
+      "summary": "show one comment in Example Comments",
+      "effects": {
+        "remote": "read",
+        "local": "read"
+      },
+      "permission": "comments.show",
+      "entity": "comment"
+    },
+    {
+      "path": [
+        "comments",
+        "create"
+      ],
+      "summary": "post a comment in Example Comments",
+      "effects": {
+        "remote": "write",
+        "local": "write"
+      },
+      "permission": "comments.create"
+    },
+    {
+      "path": [
+        "comments",
+        "update"
+      ],
+      "summary": "change the text of your comment in Example Comments",
+      "effects": {
+        "remote": "write",
+        "local": "write"
+      },
+      "permission": "comments.update"
+    },
+    {
+      "path": [
+        "doctor"
+      ],
+      "summary": "the state this installation is in, without connecting unless --online",
+      "effects": {
+        "remote": "read",
+        "local": "read"
+      }
+    },
+    {
+      "path": [
+        "doctor",
+        "reports",
+        "show"
+      ],
+      "summary": "what a report holds and never holds, and where to send it; writes nothing",
+      "effects": {
+        "remote": "none",
+        "local": "none"
+      }
+    },
+    {
+      "path": [
+        "doctor",
+        "reports",
+        "create"
+      ],
+      "summary": "the report file written: its path, the run it is about, and where to send it",
+      "effects": {
+        "remote": "none",
+        "local": "write"
+      },
+      "permission": "doctor.reports.create"
+    },
+    {
+      "path": [
+        "skill",
+        "show"
+      ],
+      "summary": "print the tool's instructions for AI agents",
+      "effects": {
+        "remote": "none",
+        "local": "read"
+      }
+    },
+    {
+      "path": [
+        "skill",
+        "install"
+      ],
+      "summary": "install the tool's instructions for AI agents",
+      "effects": {
+        "remote": "none",
+        "local": "write"
+      }
+    },
+    {
+      "path": [
+        "skill",
+        "status"
+      ],
+      "summary": "whether the installed instructions for AI agents match this version",
+      "effects": {
+        "remote": "none",
+        "local": "read"
+      }
+    },
+    {
+      "path": [
+        "mcp",
+        "serve"
+      ],
+      "summary": "serve this profile's commands to an AI agent",
+      "effects": {
+        "remote": "write",
+        "local": "write"
+      }
+    },
+    {
+      "path": [
+        "mcp",
+        "revoke"
+      ],
+      "summary": "forget every login given to a browser app",
+      "effects": {
+        "remote": "none",
+        "local": "write"
+      }
+    },
+    {
+      "path": [
+        "mcp",
+        "server",
+        "start"
+      ],
+      "summary": "start the HTTP MCP server in the background",
+      "effects": {
+        "remote": "none",
+        "local": "write"
+      }
+    },
+    {
+      "path": [
+        "mcp",
+        "server",
+        "stop"
+      ],
+      "summary": "stop the background HTTP MCP server",
+      "effects": {
+        "remote": "none",
+        "local": "write"
+      }
+    },
+    {
+      "path": [
+        "mcp",
+        "server",
+        "status"
+      ],
+      "summary": "whether the HTTP MCP server runs, its login code and the apps logged in",
+      "effects": {
+        "remote": "none",
+        "local": "read"
+      }
+    },
+    {
+      "path": [
+        "mcp",
+        "config"
+      ],
+      "summary": "print the local MCP configuration of this profile, or of those --profiles names",
+      "effects": {
+        "remote": "none",
+        "local": "read"
+      }
+    },
+    {
+      "path": [
+        "mcp",
+        "add"
+      ],
+      "summary": "add this profile's local MCP server to Codex or Claude Code",
+      "effects": {
+        "remote": "none",
+        "local": "write"
+      }
+    },
+    {
+      "path": [
+        "mcp",
+        "check"
+      ],
+      "summary": "check this profile's local MCP handshake and tool list",
+      "effects": {
+        "remote": "none",
+        "local": "read"
+      }
+    },
+    {
+      "path": [
+        "upgrade"
+      ],
+      "summary": "upgrade attio with the package manager that installed it; --check only looks",
+      "effects": {
+        "remote": "none",
+        "local": "write"
+      }
+    },
+    {
+      "path": [
+        "config",
+        "show"
+      ],
+      "summary": "the profile, the profiles that exist, and each setting with where it came from",
+      "effects": {
+        "remote": "none",
+        "local": "read"
+      }
+    },
+    {
+      "path": [
+        "config",
+        "set"
+      ],
+      "summary": "save a setting to the configuration file",
+      "effects": {
+        "remote": "none",
+        "local": "write"
+      }
+    },
+    {
+      "path": [
+        "config",
+        "unset"
+      ],
+      "summary": "remove a setting from the configuration file",
+      "effects": {
+        "remote": "none",
+        "local": "write"
+      }
+    },
+    {
+      "path": [
+        "config",
+        "migrate"
+      ],
+      "summary": "write each setting the file lacks at its default, keeping yours",
+      "effects": {
+        "remote": "none",
+        "local": "write"
+      }
+    },
+    {
+      "path": [
+        "config",
+        "repair"
+      ],
+      "summary": "fix the settings file's JSON syntax, keeping every value",
+      "effects": {
+        "remote": "none",
+        "local": "write"
+      }
+    },
+    {
+      "path": [
+        "runs",
+        "list"
+      ],
+      "summary": "recorded runs, newest first",
+      "effects": {
+        "remote": "none",
+        "local": "read"
+      },
+      "entity": "run"
+    },
+    {
+      "path": [
+        "runs",
+        "show"
+      ],
+      "summary": "one run: what it was, how it ended, and every event it logged",
+      "effects": {
+        "remote": "none",
+        "local": "read"
+      },
+      "entity": "run"
+    },
+    {
+      "path": [
+        "runs",
+        "path"
+      ],
+      "summary": "the directory holding one run",
+      "effects": {
+        "remote": "none",
+        "local": "none"
+      },
+      "entity": "run_location"
+    }
+  ],
+  "entities": {
+    "api_operation": {
+      "fields": [
+        "effect",
+        "tag"
+      ]
+    },
+    "store_table": {
+      "fields": [
+        "name",
+        "kind",
+        "rows",
+        "bytes"
+      ]
+    },
+    "deal": {
+      "fields": [
+        "status",
+        "organization"
+      ]
+    },
+    "pipeline": {
+      "fields": [
+        "kind"
+      ]
+    },
+    "stage": {
+      "fields": [
+        "kind"
+      ]
+    },
+    "crm_change": {
+      "fields": [
+        "change"
+      ]
+    },
+    "crm_field": {
+      "fields": [
+        "code",
+        "label",
+        "type",
+        "multiple",
+        "filterable",
+        "untrusted"
+      ]
+    },
+    "comment": {
+      "fields": [
+        "author"
+      ]
+    },
+    "run": {
+      "fields": [
+        "run_id",
+        "command",
+        "profile",
+        "started_at",
+        "completed_at",
+        "status",
+        "requests",
+        "duration_ms",
+        "cli_version",
+        "runtime",
+        "platform",
+        "arch",
+        "error_code",
+        "provider_error",
+        "kept_because_failed",
+        "operations",
+        "codes",
+        "trace_id",
+        "cli_command",
+        "argv",
+        "unknown_command",
+        "via",
+        "events_dropped",
+        "directory",
+        "event_count",
+        "events_truncated"
+      ]
+    }
+  },
+  "network": {
+    "hosts": [
+      "comments.example.invalid",
+      "api.attio.com",
+      "app.attio.com",
+      "registry.npmjs.org",
+      "huggingface.co",
+      "*.huggingface.co",
+      "*.hf.co",
+      "github.com",
+      "*.githubusercontent.com"
+    ]
+  },
+  "desktop": {
+    "tagline": "A new WireCat CLI, started from cli-template",
+    "profiles": {
+      "args": [
+        "session",
+        "list",
+        "--no-record",
+        "--json"
+      ],
+      "shape": "items"
+    },
+    "doctor": [
+      "{profile}",
+      "doctor",
+      "--record",
+      "--json"
+    ],
+    "runs": {
+      "list": [
+        "runs",
+        "list",
+        "{query}",
+        "--limit",
+        "{limit}",
+        "--page",
+        "{page}",
+        "--no-record",
+        "--json"
+      ],
+      "show": [
+        "runs",
+        "show",
+        "{run}",
+        "--no-record",
+        "--json"
+      ]
+    },
+    "search": null,
+    "setup": [
+      "{profile}",
+      "session",
+      "start"
+    ],
+    "signIn": {
+      "gives": "Lets your agent read and change your account through attio.",
+      "asks": "An API token or key from the service."
+    },
+    "skill": {
+      "status": [
+        "skill",
+        "status",
+        "--no-record",
+        "--json"
+      ],
+      "install": [
+        "skill",
+        "install",
+        "--for",
+        "{target}",
+        "--json"
+      ],
+      "show": [
+        "skill",
+        "show",
+        "--no-record",
+        "--json"
+      ]
+    },
+    "mcpServer": {
+      "start": [
+        "mcp",
+        "server",
+        "start",
+        "--port",
+        "{port}",
+        "--public-url",
+        "{url}",
+        "--profiles",
+        "all",
+        "--json"
+      ],
+      "stop": [
+        "mcp",
+        "server",
+        "stop",
+        "--profiles",
+        "all",
+        "--json"
+      ],
+      "status": [
+        "mcp",
+        "server",
+        "status",
+        "--profiles",
+        "all",
+        "--no-record",
+        "--json"
+      ],
+      "revoke": [
+        "mcp",
+        "revoke",
+        "--profiles",
+        "all",
+        "--json"
+      ],
+      "config": [
+        "mcp",
+        "config",
+        "--profiles",
+        "all",
+        "--no-record",
+        "--json"
+      ]
+    },
+    "tasks": null,
+    "sync": {
+      "run": [
+        "{profile}",
+        "sync",
+        "--record",
+        "--json"
+      ],
+      "last": [
+        "runs",
+        "list",
+        "command:sync",
+        "status:success",
+        "--limit",
+        "50",
+        "--no-record",
+        "--json"
+      ],
+      "lastShape": "runs",
+      "what": "your companies and people",
+      "note": null
+    },
+    "storeInfo": null,
+    "storeTables": null,
+    "storeTableSizes": null,
+    "storeCheck": null,
+    "storeBackup": null,
+    "storeBackupEncrypted": null,
+    "storeResetPreview": null,
+    "storeReset": null,
+    "storage": {
+      "app": "attio-cli",
+      "env": "WCATTIO"
+    },
+    "settings": null
+  }
+}
