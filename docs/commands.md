@@ -2413,84 +2413,6 @@ attio search all <query> [options]
 
 **Example:** `attio work search all Example LLC`, `attio work search all website --only crm --json`
 
-## `attio comments`
-
-read and write comments in Example Comments, the sample service
-
-### `attio comments list`
-
-list the comments in Example Comments, newest first
-
-```sh
-attio comments list [query] [options]
-```
-
-| Argument | | What it is |
-|---|---|---|
-| `query` | optional | field:value terms that narrow the list — the fields are below. |
-
-| Option | What it does |
-|---|---|
-| `--limit <n>` | how many to show. |
-| `--page <n>` | which page, starting at 1. |
-| `--all` | every row, no paging. |
-
-**Returns:** comment — id, text, author, created_at; every field: attio commands info comments list
-
-**Example:** `attio personal comments list`, `attio personal comments list author:u2 --json=id,text`
-
-### `attio comments show`
-
-show one comment in Example Comments
-
-```sh
-attio comments show <id>
-```
-
-| Argument | | What it is |
-|---|---|---|
-| `id` | required | the comment's id, as list prints it. |
-
-**Returns:** comment — id, text, author, created_at; every field: attio commands info comments show
-
-**Example:** `attio personal comments show c1`, `attio personal comments show c1 --json`
-
-### `attio comments create`
-
-post a comment in Example Comments
-
-**Changes something in the service.**
-
-```sh
-attio comments create [options]
-```
-
-| Option | What it does |
-|---|---|
-| `--text <text>` | the comment's text. |
-
-**Example:** `attio personal comments create --text "Looks good to me"`, `attio personal comments create --text "Looks good to me" --dry-run`
-
-### `attio comments update`
-
-change the text of your comment in Example Comments
-
-**Changes something in the service.**
-
-```sh
-attio comments update <id> [options]
-```
-
-| Argument | | What it is |
-|---|---|---|
-| `id` | required | the comment's id, as list prints it. |
-
-| Option | What it does |
-|---|---|
-| `--text <text>` | the new text. |
-
-**Example:** `attio personal comments update c1 --text "Looks good now"`
-
 ## `attio doctor`
 
 the state this installation is in, without connecting unless --online
@@ -2600,7 +2522,7 @@ attio mcp serve [options]
 
 | Option | What it does |
 |---|---|
-| `--permission <key=level>` | make a permission stricter for this server only, like comments.create=deny; it never loosens the profile; repeat for more keys. |
+| `--permission <key=level>` | make a permission stricter for this server only, like api.objects-records-delete=deny; it never loosens the profile; repeat for more keys. |
 | `--profiles <names\|all>` | serve several profiles from one server instead of one: names, comma-separated, or all for every profile. |
 | `--http` | serve over HTTP on 127.0.0.1 for ChatGPT and Claude in the browser, behind your tunnel; the profile's permissions decide. |
 | `--port <port>` | the local port for --http (default 8765). |
@@ -2687,7 +2609,7 @@ attio mcp config [options]
 
 | Option | What it does |
 |---|---|
-| `--permission <key=level>` | make a permission stricter for this server only, like comments.create=deny; it never loosens the profile; repeat for more keys. |
+| `--permission <key=level>` | make a permission stricter for this server only, like api.objects-records-delete=deny; it never loosens the profile; repeat for more keys. |
 | `--profiles <names\|all>` | serve several profiles from one server instead of one: names, comma-separated, or all for every profile. |
 
 **Example:** `attio personal mcp config`, `attio mcp config --profiles all`
@@ -2709,7 +2631,7 @@ attio mcp add <client> [options]
 | Option | What it does |
 |---|---|
 | `--allow-writes` | acknowledge that this profile offers writing tools. |
-| `--permission <key=level>` | make a permission stricter for this server only, like comments.create=deny; it never loosens the profile; repeat for more keys. |
+| `--permission <key=level>` | make a permission stricter for this server only, like api.objects-records-delete=deny; it never loosens the profile; repeat for more keys. |
 
 **Example:** `attio personal mcp add codex --allow-writes`
 
@@ -2723,7 +2645,7 @@ attio mcp check [options]
 
 | Option | What it does |
 |---|---|
-| `--permission <key=level>` | make a permission stricter for this server only, like comments.create=deny; it never loosens the profile; repeat for more keys. |
+| `--permission <key=level>` | make a permission stricter for this server only, like api.objects-records-delete=deny; it never loosens the profile; repeat for more keys. |
 
 **Example:** `attio personal mcp check`
 

@@ -107,9 +107,5 @@
   "api webhooks-get": "read",
   "api webhooks-update": "write",
   "api webhooks-delete": "write",
-  "api self-list": "read",
-  "comments list": "read",
-  "comments show": "read",
-  "comments create": "write",
-  "comments update": "write"
+  "api self-list": "read"
 }

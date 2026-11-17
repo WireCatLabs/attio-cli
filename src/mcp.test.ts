@@ -90,7 +90,10 @@ it("a denied command is offered as unavailable and refused before any request (W
         }),
       ]),
     })
-    const listed = await mcp.call("attio_read", { command: "api objects-records-query" })
+    const listed = await mcp.call("attio_read", {
+      command: "api objects-records-query",
+      arguments: { object: "people" },
+    })
     expect(listed.isError).toBe(true)
     expect(JSON.stringify(listed.body)).toContain("permission_error")
     expect(service.calls).toEqual([])
