@@ -3,10 +3,10 @@ import { type KeyringStore, memoryKeyring } from "@wirecat/cli-base"
 import type { RunOptions } from "@wirecat/cli-core/cli"
 import type { ServiceEnvironment } from "../context.js"
 import { run } from "../program.js"
-import { FAKE_TOKEN, fakeComments } from "./fake-comments.js"
+import { FAKE_API_TOKEN, fakeServiceApi } from "./fake-api.js"
 
 /** A keyring where profile `personal` is already signed in to the fake service; never the real one (WC-TEST-2). */
-export const signedIn = (): KeyringStore => memoryKeyring({ "attio-cli:token:personal": FAKE_TOKEN })
+export const signedIn = (): KeyringStore => memoryKeyring({ "attio-cli:token:personal": FAKE_API_TOKEN })
 
 export interface Ran {
   code: number
@@ -20,7 +20,7 @@ export interface Ran {
 export const runCli = async (
   argv: string[],
   {
-    service = fakeComments(),
+    service = fakeServiceApi(),
     keyring = signedIn(),
     stdin,
     env,

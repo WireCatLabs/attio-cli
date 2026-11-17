@@ -7,7 +7,7 @@ import { permissions } from "./config.js"
 import type { ServiceEnvironment } from "./context.js"
 import { IDENTITY } from "./identity.js"
 import { createProgram, run } from "./program.js"
-import { fakeComments } from "./testing/fake-comments.js"
+import { fakeServiceApi } from "./testing/fake-api.js"
 import { runCli, signedIn } from "./testing/harness.js"
 
 it("mcp serve offers search, read and write, and runs a command through the CLI", async () => {
@@ -73,21 +73,24 @@ it("doctor --online answers even when npm cannot be reached", async () => {
 it("a denied command is offered as unavailable and refused before any request (WC-PERM-23)", async () => {
   const file = join(process.env.WCATTIO_CONFIG_DIR ?? "", "config.json")
   mkdirSync(join(file, ".."), { recursive: true })
-  writeFileSync(file, JSON.stringify({ profiles: { personal: { permissions: { "comments.list": "deny" } } } }))
-  const service = fakeComments()
+  writeFileSync(
+    file,
+    JSON.stringify({ profiles: { personal: { permissions: { "api.objects-records-query": "deny" } } } }),
+  )
+  const service = fakeServiceApi()
   const options: RunOptions & ServiceEnvironment = { tty: false, keyring: signedIn(), fetch: service.fetch }
   const mcp = await mcpOverStdio((streams) => run(["personal", "mcp", "serve"], { ...options, ...streams }))
   try {
-    const found = await mcp.call("attio_tools_search", { query: "comments list" })
+    const found = await mcp.call("attio_tools_search", { query: "objects records query" })
     expect(found.body).toMatchObject({
       items: expect.arrayContaining([
         expect.objectContaining({
-          command: "comments list",
+          command: "api objects-records-query",
           availability: expect.objectContaining({ available: false }),
         }),
       ]),
     })
-    const listed = await mcp.call("attio_read", { command: "comments list" })
+    const listed = await mcp.call("attio_read", { command: "api objects-records-query" })
     expect(listed.isError).toBe(true)
     expect(JSON.stringify(listed.body)).toContain("permission_error")
     expect(service.calls).toEqual([])

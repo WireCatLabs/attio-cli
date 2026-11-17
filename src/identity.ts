@@ -20,8 +20,7 @@ export const IDENTITY: AppIdentity = {
 export const DESKTOP: ManifestIdentity = {
   ...IDENTITY,
   docs: "https://github.com/WireCatLabs/attio-cli#readme",
-  // SAMPLE: every host the CLI contacts (WC-CMD-32); src/sample/transport.ts reaches only these.
-  hosts: ["comments.example.invalid", "api.attio.com", "app.attio.com"],
+  hosts: ["api.attio.com", "app.attio.com"],
   tagline: "A new WireCat CLI, started from cli-template",
   syncs: "your companies and people",
   signIn: {

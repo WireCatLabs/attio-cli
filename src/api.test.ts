@@ -5,7 +5,7 @@ import { apiFlagOf, manifestBaseUrl, sendsBytes } from "@wirecat/cli-core/cli"
 import { afterEach, expect, it } from "vitest"
 import { API } from "./config.js"
 import { definitions } from "./generated/definitions.js"
-import { FAKE_TOKEN } from "./testing/fake-comments.js"
+import { FAKE_API_TOKEN } from "./testing/fake-api.js"
 import { runCli } from "./testing/harness.js"
 
 const configFile = join(process.env.WCATTIO_CONFIG_DIR ?? "", "config.json")
@@ -29,7 +29,7 @@ const fake = () =>
     baseUrl: manifestBaseUrl(API.manifest),
     security: API.manifest.security,
     securitySchemes: API.manifest.securitySchemes,
-    token: FAKE_TOKEN,
+    token: FAKE_API_TOKEN,
   })
 
 const deleteKeys = [
