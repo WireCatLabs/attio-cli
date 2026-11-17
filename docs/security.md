@@ -3,8 +3,9 @@
 What WireCat CLIs share — the keyring, permissions, MCP and what never reaches a log — is on the
 [shared security page](https://wirecat.dev/en/docs/security). This page keeps only what is particular to `attio`.
 
-`attio` keeps its settings in `config.json` and its state in the folders `attio doctor` shows. It talks only to
-`api.attio.com`. `session start` reads an Attio access token from stdin, never from an argument, and keeps it in the OS
+`attio` keeps its settings in `config.json` and its state in the folders `attio doctor` shows. It sends requests only to
+`api.attio.com`; `app.attio.com`, Attio's sign-in page for OAuth, is allowed too, though this version signs in only
+by an access token. `session start` reads an Attio access token from stdin, never from an argument, and keeps it in the OS
 keyring, or in a private file where no keyring works; the token goes only into the request's Authorization header,
 never into an address, an answer, a run record or the send journal.
 

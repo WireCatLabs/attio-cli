@@ -56,6 +56,7 @@ export default defineCli({
         externalId: "id.workspace_member_id",
         name: { join: ["first_name", "last_name"] },
         email: "email_address",
+        active: { path: "access_level", map: { admin: true, member: true, suspended: false } },
       },
     },
   },

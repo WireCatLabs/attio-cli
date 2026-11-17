@@ -1655,6 +1655,32 @@
     },
     {
       "path": [
+        "users",
+        "list"
+      ],
+      "summary": "the CRM's users, read live, in the CRM's order",
+      "effects": {
+        "remote": "read",
+        "local": "read"
+      },
+      "permission": "users.list",
+      "entity": "crm_user"
+    },
+    {
+      "path": [
+        "users",
+        "show"
+      ],
+      "summary": "one of the CRM's users, read live",
+      "effects": {
+        "remote": "read",
+        "local": "read"
+      },
+      "permission": "users.show",
+      "entity": "crm_user"
+    },
+    {
+      "path": [
         "changes",
         "list"
       ],
@@ -1982,6 +2008,16 @@
     "stage": {
       "fields": [
         "kind"
+      ]
+    },
+    "crm_user": {
+      "fields": [
+        "id",
+        "name",
+        "email",
+        "position",
+        "active",
+        "department_ids"
       ]
     },
     "crm_change": {

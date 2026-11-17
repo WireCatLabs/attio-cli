@@ -3,6 +3,7 @@
 # the `# Needs:` lines below, passes the token on stdin and records the pass. Every folder is a temporary one and the
 # keyring is out of reach, so nothing touches the owner's store, keyring or settings.
 #   scripts/live.sh < token-file
+# Needs: a key the owner chose for this check (keyring service attio, read access only is enough)
 # Needs: an Attio workspace API key with read access to records, object configuration and workspace members
 # Needs: at least one person and one company in that workspace
 set -euo pipefail
@@ -34,10 +35,11 @@ trap '"${cli[@]}" live session end --json >/dev/null 2>&1 || true; rm -rf "$work
 "${cli[@]}" live store status --json >/dev/null
 node -e '
   const sync = JSON.parse(require("fs").readFileSync(process.argv[1], "utf8"))
-  if (sync.provider !== "attio") throw new Error(`not an attio sync: ${JSON.stringify(sync).slice(0, 200)}`)
-  const kinds = (sync.synced ?? []).filter((one) => one.error === undefined).map((one) => one.kind)
+  const item = sync.item ?? {}
+  if (item.provider !== "attio") throw new Error(`not an attio sync: ${JSON.stringify(sync).slice(0, 200)}`)
+  const kinds = (item.synced ?? []).filter((one) => one.error === undefined && one.saved > 0).map((one) => one.kind)
   for (const kind of ["person", "organization"])
-    if (!kinds.includes(kind)) throw new Error(`${kind} did not sync: ${JSON.stringify(sync.synced).slice(0, 300)}`)
+    if (!kinds.includes(kind)) throw new Error(`no ${kind} saved: ${JSON.stringify(item.synced).slice(0, 300)}`)
 ' "$work/sync.json"
 "${cli[@]}" live doctor --json >/dev/null
 

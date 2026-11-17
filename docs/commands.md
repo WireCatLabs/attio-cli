@@ -2331,6 +2331,47 @@ attio stages list [query]
 
 **Example:** `attio work stages list --json`, `attio work stages list kind:lead`
 
+## `attio users`
+
+the CRM account's users: the people of your own company who own deals
+
+### `attio users list`
+
+the CRM's users, read live, in the CRM's order
+
+```sh
+attio users list [query] [options]
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `query` | optional | field:value terms that narrow the list — the fields are below. |
+
+| Option | What it does |
+|---|---|
+| `--limit <n>` | users per page, 1–250. Default: `50`. |
+| `--page <n>` | which page, starting at 1. Default: `1`. |
+
+**Returns:** crm user — id, name, email, position, active, department_ids, untrusted; every field: attio commands info users list
+
+**Example:** `attio work users list`, `attio work users list active:true --json`
+
+### `attio users show`
+
+one of the CRM's users, read live
+
+```sh
+attio users show <user>
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `user` | required | the CRM's id of the user, as list prints it. |
+
+**Returns:** crm user — id, name, email, position, active, department_ids, untrusted; every field: attio commands info users show
+
+**Example:** `attio work users show 7`
+
 ## `attio changes`
 
 what changed in the CRM's deals, leads, activities and contacts, as the syncs copied it
