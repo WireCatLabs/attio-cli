@@ -94,6 +94,4 @@ export const SOURCE: Readonly<Record<string, unknown>> | undefined = {
   },
 }
 
-import type { CrmManifestHooks } from "@wirecat/cli-core/crm"
-
-export const HOOKS: CrmManifestHooks | undefined = undefined
+export { hooks as HOOKS } from "../hooks.js"

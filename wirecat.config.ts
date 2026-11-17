@@ -59,4 +59,5 @@ export default defineCli({
       },
     },
   },
+  hooks: "./src/hooks.ts",
 })

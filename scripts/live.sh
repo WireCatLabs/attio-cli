@@ -3,10 +3,8 @@
 # the `# Needs:` lines below, passes the token on stdin and records the pass. Every folder is a temporary one and the
 # keyring is out of reach, so nothing touches the owner's store, keyring or settings.
 #   scripts/live.sh < token-file
-# SAMPLE: replace the comments reads with your own commands; checked against the sample, it fails at sign-in.
-# SAMPLE: one `# Needs:` line for each thing the test account must hold, so the owner prepares it before the run.
-# Needs: a token for a test account, never one that matters
-# Needs: at least one comment the token can read
+# Needs: an Attio workspace API key with read access to records, object configuration and workspace members
+# Needs: at least one person and one company in that workspace
 set -euo pipefail
 root=$(cd -- "$(dirname -- "$0")/.." && pwd)
 work=$(mktemp -d)
@@ -32,11 +30,16 @@ mkdir -p "$HOME"
 "${cli[@]}" live session start --credential-storage file --json >/dev/null
 trap '"${cli[@]}" live session end --json >/dev/null 2>&1 || true; rm -rf "$work"' EXIT
 
-"${cli[@]}" live comments list --json >"$work/list.json"
+"${cli[@]}" live sync --max-pages 20 --json >"$work/sync.json"
+"${cli[@]}" live store status --json >/dev/null
 node -e '
-  const list = JSON.parse(require("fs").readFileSync(process.argv[1], "utf8"))
-  if (!Array.isArray(list.items)) throw new Error(`no items: ${JSON.stringify(list).slice(0, 200)}`)' "$work/list.json"
+  const sync = JSON.parse(require("fs").readFileSync(process.argv[1], "utf8"))
+  if (sync.provider !== "attio") throw new Error(`not an attio sync: ${JSON.stringify(sync).slice(0, 200)}`)
+  const kinds = (sync.synced ?? []).filter((one) => one.error === undefined).map((one) => one.kind)
+  for (const kind of ["person", "organization"])
+    if (!kinds.includes(kind)) throw new Error(`${kind} did not sync: ${JSON.stringify(sync.synced).slice(0, 300)}`)
+' "$work/sync.json"
 "${cli[@]}" live doctor --json >/dev/null
 
 "${cli[@]}" live session end --json >/dev/null
-echo "live check passed: describe format 2, sign-in, comments list, doctor, sign-out"
+echo "live check passed: describe format 2, sign-in, sync of people and companies, store status, doctor, sign-out"
