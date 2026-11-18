@@ -53,6 +53,7 @@ it("sync through this CLI keeps the rows under the account session start checked
   const keyring = memoryKeyring()
   const api = fakeServiceApi(FAKE_MANIFEST_TOKEN)
   const source = crmManifestFake(manifest, { api: API.manifest, definitions })
+  fakes.push(source)
   const service = {
     fetch: (input: string | URL | Request, init?: RequestInit) =>
       new URL(input instanceof Request ? input.url : input).pathname === "/v2/self"
@@ -75,5 +76,10 @@ it("sync through this CLI keeps the rows under the account session start checked
   ])
   const status = await runCli(["personal", "store", "status", "--json"], { keyring, service })
   expect(status.code, status.err).toBe(0)
-  expect([...api.refusals, ...source.refusals]).toEqual([])
+  const stored = (status.json().items as { kind: string; stored: number }[]).filter(({ stored }) => stored > 0)
+  expect(stored.map(({ kind, stored }) => [kind, stored])).toEqual([
+    ["organization", 3],
+    ["person", 3],
+  ])
+  expect(api.refusals).toEqual([])
 })
