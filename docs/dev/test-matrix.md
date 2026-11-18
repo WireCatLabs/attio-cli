@@ -7,7 +7,7 @@ ran it · ⛔ not tested offline, with the reason and where it is checked instea
 Measured from the test run (`coverage/argv.jsonl`), not searched for — see
 [TESTING.md](TESTING.md) for how, and for the states and failures that cut across commands.
 
-**354 ✅ · 24 ⛔ · 196 ❌** — 165 commands, 409 options.
+**354 ✅ · 24 ⛔ · 206 ❌** — 169 commands, 415 options.
 
 | Command | Option | | Note |
 |---|---|---|---|
@@ -488,6 +488,16 @@ Measured from the test run (`coverage/argv.jsonl`), not searched for — see
 | `pipelines show` | `--since-time` | ❌ |  |
 | `pipelines show` | `--until-time` | ❌ |  |
 | `stages list` |  | ❌ |  |
+| `people list` |  | ❌ |  |
+| `people list` | `--limit` | ❌ |  |
+| `people list` | `--page` | ❌ |  |
+| `people list` | `--format` | ❌ |  |
+| `people show` |  | ❌ |  |
+| `organizations list` |  | ❌ |  |
+| `organizations list` | `--limit` | ❌ |  |
+| `organizations list` | `--page` | ❌ |  |
+| `organizations list` | `--format` | ❌ |  |
+| `organizations show` |  | ❌ |  |
 | `users list` |  | ❌ |  |
 | `users list` | `--limit` | ❌ |  |
 | `users list` | `--page` | ❌ |  |

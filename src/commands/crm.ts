@@ -87,6 +87,14 @@ const open = async (command: Command, { readOnly }: { readOnly: boolean }): Prom
   }
 }
 
+// The kinds whose entity names a search are read live: `people list` and `organizations list`.
+const searched = Object.fromEntries(
+  Object.entries((SOURCE?.entities ?? {}) as Record<string, { search?: unknown } | undefined>).map(([kind, one]) => [
+    kind,
+    one?.search,
+  ]),
+)
+
 /** cli-core's CRM commands over the source wirecat.config.ts describes: sync, store status, deals, search. */
 export const crmCommands = (): Command[] => {
   const holder = new Command(IDENTITY.command)
@@ -94,8 +102,10 @@ export const crmCommands = (): Command[] => {
     app: IDENTITY,
     open,
     leads: Array.isArray(SOURCE?.kinds) && SOURCE.kinds.includes("lead"),
-    // People and companies have no live list in a manifest source yet; workspace members do.
-    ...(SOURCE?.users ? { live: ["user"] as const } : {}),
+    live: [
+      ...(["person", "organization"] as const).filter((kind) => searched[kind] !== undefined),
+      ...(SOURCE?.users ? (["user"] as const) : []),
+    ],
   })
   return [...holder.commands]
 }

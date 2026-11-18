@@ -1,8 +1,8 @@
 {
   "wcat_manifest": 2,
   "name": "attio",
-  "description": "Attio CRM: people and companies, searchable with your other WireCat data",
-  "docs_url": "https://github.com/WireCatLabs/attio-cli#readme",
+  "description": "Attio CRM: deals, people and companies for you and your AI agent",
+  "docs_url": "https://wirecat.dev/en/docs/attio",
   "package": "@wirecat/attio-cli",
   "bin": "wcat-attio",
   "commands": [
@@ -1655,6 +1655,58 @@
     },
     {
       "path": [
+        "people",
+        "list"
+      ],
+      "summary": "contacts in the CRM, newest first; another client is found here, never in…",
+      "effects": {
+        "remote": "read",
+        "local": "read"
+      },
+      "permission": "people.list",
+      "entity": "crm_person"
+    },
+    {
+      "path": [
+        "people",
+        "show"
+      ],
+      "summary": "one of the CRM's contacts, read live, with its phones and e-mails; one that…",
+      "effects": {
+        "remote": "read",
+        "local": "read"
+      },
+      "permission": "people.show",
+      "entity": "crm_person"
+    },
+    {
+      "path": [
+        "organizations",
+        "list"
+      ],
+      "summary": "companies in the CRM, newest first; another client is found here, never in…",
+      "effects": {
+        "remote": "read",
+        "local": "read"
+      },
+      "permission": "organizations.list",
+      "entity": "crm_organization"
+    },
+    {
+      "path": [
+        "organizations",
+        "show"
+      ],
+      "summary": "one of the CRM's companies, read live, with its phones and e-mails; one that…",
+      "effects": {
+        "remote": "read",
+        "local": "read"
+      },
+      "permission": "organizations.show",
+      "entity": "crm_organization"
+    },
+    {
+      "path": [
         "users",
         "list"
       ],
@@ -2010,6 +2062,31 @@
         "kind"
       ]
     },
+    "crm_person": {
+      "fields": [
+        "id",
+        "name",
+        "first_name",
+        "last_name",
+        "position",
+        "organization_ids",
+        "assigned_to",
+        "created_at",
+        "updated_at"
+      ]
+    },
+    "crm_organization": {
+      "fields": [
+        "id",
+        "name",
+        "type",
+        "own",
+        "person_ids",
+        "assigned_to",
+        "created_at",
+        "updated_at"
+      ]
+    },
     "crm_user": {
       "fields": [
         "id",
@@ -2079,7 +2156,7 @@
     ]
   },
   "desktop": {
-    "tagline": "Attio people and companies for you and your agent",
+    "tagline": "Attio deals, people and companies for your agent",
     "profiles": {
       "args": [
         "session",
@@ -2122,8 +2199,21 @@
       "start"
     ],
     "signIn": {
-      "gives": "Lets your agent read your Attio people and companies and call the Attio API.",
-      "asks": "An access token from your Attio workspace."
+      "gives": "Lets your agent read your Attio deals, people and companies and call the Attio API.",
+      "asks": "An access token: in Attio, Workspace settings → Developers → New access token, with read access to records, object configuration and user management. Only a workspace admin can make one.",
+      "methods": [
+        {
+          "id": "token",
+          "label": "Attio access token",
+          "words": [
+            "{profile}",
+            "session",
+            "start",
+            "--json"
+          ],
+          "stdin": true
+        }
+      ]
     },
     "skill": {
       "status": [
@@ -2211,7 +2301,7 @@
         "--json"
       ],
       "lastShape": "runs",
-      "what": "your companies and people",
+      "what": "your deals, people and companies",
       "note": null
     },
     "storeInfo": null,

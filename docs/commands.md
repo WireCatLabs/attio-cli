@@ -2331,6 +2331,90 @@ attio stages list [query]
 
 **Example:** `attio work stages list --json`, `attio work stages list kind:lead`
 
+## `attio people`
+
+the CRM's contacts, read live: the copy holds only your own
+
+### `attio people list`
+
+contacts in the CRM, newest first; another client is found here, never in the copy
+
+```sh
+attio people list [query] [options]
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `query` | optional | field:value terms that narrow the list — the fields are below. |
+
+| Option | What it does |
+|---|---|
+| `--limit <n>` | contacts per page, 1–250. Default: `50`. |
+| `--page <n>` | which page, starting at 1. Default: `1`. |
+| `--format <format>` | csv: this page as a table for a spreadsheet; --json=a,b picks its columns. One of: `csv`. |
+
+**Returns:** crm person — id, name, first_name, last_name, position, organization_ids, assigned_to, created_at, and 6 more; every field: attio commands info people list
+
+**Example:** `attio work people list`, `attio work people list name:anna* --json`, `attio work people list --format csv > people.csv`
+
+### `attio people show`
+
+one of the CRM's contacts, read live, with its phones and e-mails; one that is not your client counts toward the day's limit when the CRM sets one
+
+```sh
+attio people show <person>
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `person` | required | the CRM's id of the person, as list prints it, or its exact name. |
+
+**Returns:** crm person — id, name, first_name, last_name, position, organization_ids, assigned_to, created_at, and 6 more; every field: attio commands info people show
+
+**Example:** `attio work people show 42`, `attio work people show "Anna Example" --json`
+
+## `attio organizations`
+
+the CRM's companies, read live: the copy holds only your own
+
+### `attio organizations list`
+
+companies in the CRM, newest first; another client is found here, never in the copy
+
+```sh
+attio organizations list [query] [options]
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `query` | optional | field:value terms that narrow the list — the fields are below. |
+
+| Option | What it does |
+|---|---|
+| `--limit <n>` | companies per page, 1–250. Default: `50`. |
+| `--page <n>` | which page, starting at 1. Default: `1`. |
+| `--format <format>` | csv: this page as a table for a spreadsheet; --json=a,b picks its columns. One of: `csv`. |
+
+**Returns:** crm organization — id, name, type, own, person_ids, assigned_to, created_at, updated_at, and 5 more; every field: attio commands info organizations list
+
+**Example:** `attio work organizations list`, `attio work organizations list name:anna* --json`, `attio work organizations list --format csv > organizations.csv`
+
+### `attio organizations show`
+
+one of the CRM's companies, read live, with its phones and e-mails; one that is not your client counts toward the day's limit when the CRM sets one
+
+```sh
+attio organizations show <organization>
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `organization` | required | the CRM's id of the organization, as list prints it, or its exact name. |
+
+**Returns:** crm organization — id, name, type, own, person_ids, assigned_to, created_at, updated_at, and 5 more; every field: attio commands info organizations show
+
+**Example:** `attio work organizations show 42`, `attio work organizations show "Anna Example" --json`
+
 ## `attio users`
 
 the CRM account's users: the people of your own company who own deals
