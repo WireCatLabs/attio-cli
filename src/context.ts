@@ -1,10 +1,10 @@
-import { CliError } from "@wirecat/cli-base"
 import {
   type BaseEnvironment,
   baseContext,
   environmentOf,
   type GlobalFlags,
   ProfileTokenStore,
+  refuseOffline,
 } from "@wirecat/cli-core/cli"
 import type { Command } from "commander"
 import { API, configuration } from "./config.js"
@@ -32,22 +32,15 @@ export const contextOf = (command: Command) => {
     tokens: new ProfileTokenStore({
       app: IDENTITY,
       env: base.env,
-      ...(base.keyring ? { keyring: base.keyring } : {}),
+      keyring: base.keyring,
       warn: base.renderer.warn,
     }),
   }
 }
 
-export const refuseOffline = (flags: GlobalFlags) => {
-  if (flags.offline)
-    throw new CliError("permission_error", `this needs ${API.service}; leave out --offline`, {
-      reason: "offline.refused",
-    })
-}
-
 /** The profile's saved token, or an authentication error that says how to sign in. Read before any request. */
 export const tokenOf = (command: Command): string => {
-  const { flags, profile, tokens } = contextOf(command)
-  refuseOffline(flags)
+  const { profile, tokens } = contextOf(command)
+  refuseOffline(command, API.service)
   return tokens.need(profile)
 }

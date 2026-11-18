@@ -1,7 +1,7 @@
 import { crmSourceFromManifest } from "@wirecat/cli-core/crm"
 import { expect, it } from "vitest"
 import { API } from "./config.js"
-import { HOOKS, SOURCE } from "./generated/wirecat-config.js"
+import { HOOK_OPTIONS, SOURCE } from "./generated/wirecat-config.js"
 
 const at = { active_from: "2026-01-01T00:00:00.000Z", active_until: null }
 
@@ -78,7 +78,7 @@ const source = (calls: { operation: string; body: unknown }[] = []) =>
       expect(operation).toBe("postV2ObjectsByObjectRecordsQuery")
       return { data: Number(body?.offset) ? [] : [RECORDS[String(request.path.object)]] }
     },
-    ...(HOOKS ? { hooks: HOOKS } : {}),
+    ...HOOK_OPTIONS,
   })
 
 it("maps an Attio person", async () => {

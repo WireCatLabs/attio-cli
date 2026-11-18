@@ -1,12 +1,15 @@
 // Generated from wirecat.config.ts by scripts/from-config.ts; run pnpm generate
 
-export const VERIFY: { operation: string; id: string; name?: string } | undefined = {
+export const VERIFY: { operation: string; id: string; name?: string; active?: string } = {
   operation: "getV2Self",
   id: "workspace_id",
   name: "workspace_name",
 }
 
-export const SOURCE: Readonly<Record<string, unknown>> | undefined = {
+export const SOURCE: Readonly<Record<string, unknown>> & {
+  readonly provider: string
+  readonly kinds: readonly string[]
+} = {
   provider: "attio",
   kinds: ["organization", "person", "deal"],
   entities: {
@@ -325,4 +328,8 @@ export const SOURCE: Readonly<Record<string, unknown>> | undefined = {
   },
 }
 
-export { hooks as HOOKS } from "../hooks.js"
+import { hooks } from "../hooks.js"
+
+export const HOOK_OPTIONS = { hooks }
+
+export const LIVE: readonly ("person" | "organization" | "user")[] = ["person", "organization", "user"]

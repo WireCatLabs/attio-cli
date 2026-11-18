@@ -2146,6 +2146,7 @@
   "network": {
     "hosts": [
       "api.attio.com",
+      "app.attio.com",
       "registry.npmjs.org",
       "huggingface.co",
       "*.huggingface.co",

@@ -15,7 +15,7 @@ import { type MessageStore, openStore } from "@wirecat/cli-core/store"
 import { afterEach, describe, expect, it } from "vitest"
 import { API } from "./config.js"
 import { definitions } from "./generated/definitions.js"
-import { HOOKS, SOURCE } from "./generated/wirecat-config.js"
+import { HOOK_OPTIONS, SOURCE } from "./generated/wirecat-config.js"
 import { fakeServiceApi } from "./testing/fake-api.js"
 import { runCli } from "./testing/harness.js"
 
@@ -31,7 +31,7 @@ afterEach(async () => {
 
 describe("crmSourceContract over a fake of the API, from wirecat.config.ts", () => {
   for (const { name, run } of crmSourceContract(() => {
-    const fixture = crmManifestFixture(manifest, { api: API.manifest, definitions, ...(HOOKS ? { hooks: HOOKS } : {}) })
+    const fixture = crmManifestFixture(manifest, { api: API.manifest, definitions, ...HOOK_OPTIONS })
     fakes.push(fixture.fake)
     return fixture
   }))

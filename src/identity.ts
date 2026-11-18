@@ -16,10 +16,11 @@ export const IDENTITY: AppIdentity = {
 }
 
 // What `wcat` and WireCat Desktop show before the tool is installed. The bin passes it to wcatStart before anything else loads; src/wcat.ts adds the permission keys.
-export const DESKTOP: ManifestIdentity = {
+export const DESKTOP = {
   ...IDENTITY,
   docs: "https://github.com/WireCatLabs/attio-cli#readme",
-  hosts: ["api.attio.com"],
+  // app.attio.com is only Attio's OAuth sign-in page, which the API description names; requests go to api.attio.com.
+  hosts: ["api.attio.com", "app.attio.com"],
   tagline: "Attio deals, people and companies for your agent",
   syncs: "your deals, people and companies",
   signIn: {
@@ -31,6 +32,6 @@ export const DESKTOP: ManifestIdentity = {
       { id: "token", label: "Attio access token", words: ["{profile}", "session", "start", "--json"], stdin: true },
     ],
   },
-}
+} satisfies ManifestIdentity
 
 export const SKILL = new URL("../skills/attio-cli/SKILL.md", import.meta.url)
