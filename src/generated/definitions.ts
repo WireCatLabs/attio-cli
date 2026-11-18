@@ -5367,6 +5367,9 @@ export const definitions: Readonly<Record<string, SchemaNode>> = {
         type: "object",
         properties: {},
         required: [],
+        additionalProperties: {
+          type: "unknown",
+        },
       },
       filter_view_id: {
         description:
@@ -16564,6 +16567,9 @@ export const definitions: Readonly<Record<string, SchemaNode>> = {
                       type: "object",
                       properties: {},
                       required: [],
+                      additionalProperties: {
+                        type: "unknown",
+                      },
                     },
                     {
                       type: "string",
@@ -18358,6 +18364,9 @@ export const definitions: Readonly<Record<string, SchemaNode>> = {
         type: "object",
         properties: {},
         required: [],
+        additionalProperties: {
+          type: "unknown",
+        },
       },
       sorts: {
         description:
@@ -28562,6 +28571,9 @@ export const definitions: Readonly<Record<string, SchemaNode>> = {
         type: "object",
         properties: {},
         required: [],
+        additionalProperties: {
+          type: "unknown",
+        },
       },
       filter_view_id: {
         description:
@@ -39756,6 +39768,9 @@ export const definitions: Readonly<Record<string, SchemaNode>> = {
                       type: "object",
                       properties: {},
                       required: [],
+                      additionalProperties: {
+                        type: "unknown",
+                      },
                     },
                     {
                       type: "string",

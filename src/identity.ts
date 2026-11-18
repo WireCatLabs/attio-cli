@@ -22,7 +22,7 @@ export const DESKTOP = {
   // app.attio.com is only Attio's OAuth sign-in page, which the API description names; requests go to api.attio.com.
   hosts: ["api.attio.com", "app.attio.com"],
   tagline: "Attio deals, people and companies for your agent",
-  syncs: "your deals and the people and companies on them",
+  syncs: "your deals and their clients",
   signIn: {
     gives: "Lets your agent read your Attio deals, people and companies and call the Attio API.",
     asks:

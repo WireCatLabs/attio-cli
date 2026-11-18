@@ -44,6 +44,7 @@ export const SOURCE: Readonly<Record<string, unknown>> & {
           current: "active_until",
         },
       },
+      linked: true,
       search: {
         operation: "postV2ObjectsByObjectRecordsQuery",
         path: {
@@ -106,6 +107,7 @@ export const SOURCE: Readonly<Record<string, unknown>> & {
           current: "active_until",
         },
       },
+      linked: true,
       search: {
         operation: "postV2ObjectsByObjectRecordsQuery",
         path: {
@@ -190,6 +192,9 @@ export const SOURCE: Readonly<Record<string, unknown>> & {
           by: "attribute_type",
           current: "active_until",
         },
+      },
+      optional: {
+        message: "the Deals object is off in this Attio workspace; an admin turns it on in its settings",
       },
       map: {
         externalId: "id.record_id",
