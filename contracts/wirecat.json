@@ -423,14 +423,14 @@
     {
       "path": [
         "api",
-        "objects-records-assert"
+        "objects-records-upsert"
       ],
       "summary": "Upsert a record — write (PUT /v2/objects/{object}/records)",
       "effects": {
         "remote": "write",
         "local": "none"
       },
-      "permission": "api.objects-records-assert"
+      "permission": "api.objects-records-upsert"
     },
     {
       "path": [
@@ -567,14 +567,14 @@
     {
       "path": [
         "api",
-        "activities-records-assert"
+        "activities-records-upsert"
       ],
       "summary": "Upsert an activity record — write (PUT /v2/activities/{activity}/records)",
       "effects": {
         "remote": "write",
         "local": "none"
       },
-      "permission": "api.activities-records-assert"
+      "permission": "api.activities-records-upsert"
     },
     {
       "path": [
@@ -771,14 +771,14 @@
     {
       "path": [
         "api",
-        "lists-entries-assert"
+        "lists-entries-upsert"
       ],
       "summary": "Upsert a list entry by parent — write (PUT /v2/lists/{list}/entries)",
       "effects": {
         "remote": "write",
         "local": "none"
       },
-      "permission": "api.lists-entries-assert"
+      "permission": "api.lists-entries-upsert"
     },
     {
       "path": [

@@ -2,19 +2,6 @@
 
 # Attio API: Entries
 
-## `attio api lists-entries-assert [options]`
-
-- What: Upsert a list entry by parent
-- Call: `PUT /v2/lists/{list}/entries`, effect: write
-- Sign-in: oauth2 (list\_entry:read-write, list\_configuration:read)
-- Body: `PutV2ListsByListEntriesRequest`, required
-
-| Flag | Required | What |
-|---|---|---|
-| `--list <value>` | yes | list |
-| `--body <json>` | no | the request body as JSON; - reads it from stdin |
-| `--body-file <path>` | no | the request body from a JSON file; - is stdin |
-
 ## `attio api lists-entries-attributes-values-list [options]`
 
 - What: List attribute values for a list entry
@@ -123,5 +110,18 @@
 |---|---|---|
 | `--list <value>` | yes | list |
 | `--entry-id <value>` | yes | entry\_id |
+| `--body <json>` | no | the request body as JSON; - reads it from stdin |
+| `--body-file <path>` | no | the request body from a JSON file; - is stdin |
+
+## `attio api lists-entries-upsert [options]`
+
+- What: Upsert a list entry by parent
+- Call: `PUT /v2/lists/{list}/entries`, effect: write
+- Sign-in: oauth2 (list\_entry:read-write, list\_configuration:read)
+- Body: `PutV2ListsByListEntriesRequest`, required
+
+| Flag | Required | What |
+|---|---|---|
+| `--list <value>` | yes | list |
 | `--body <json>` | no | the request body as JSON; - reads it from stdin |
 | `--body-file <path>` | no | the request body from a JSON file; - is stdin |

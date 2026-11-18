@@ -2,7 +2,7 @@
 // Source: spec/attio/, checked against provenance.json
 // Run: pnpm generate
 
-import { number } from "@wirecat/cli-base/codegen/runtime"
+import { integer, number } from "@wirecat/cli-base/codegen/runtime"
 import * as v from "valibot"
 import type * as T from "./types.js"
 
@@ -1763,7 +1763,7 @@ export const ViewObjectAttributeRef: v.GenericSchema<unknown, T.ViewObjectAttrib
 
 export const ViewAttributePath: v.GenericSchema<unknown, T.ViewAttributePath> = v.union([
   v.string(),
-  v.array(v.unknown()),
+  v.pipe(v.array(v.union([v.string(), v.lazy(() => ViewObjectAttributeRef)])), v.minLength(2), v.maxLength(5)),
 ])
 
 export const ViewFilterCondition: v.GenericSchema<unknown, T.ViewFilterCondition> = v.looseObject({
@@ -13778,7 +13778,53 @@ export const DeleteV2ActivitiesByActivityRecordsByRecordIdResponse: v.GenericSch
 
 export const PostV2SqlRequest: v.GenericSchema<unknown, T.PostV2SqlRequest> = v.looseObject({
   sql: v.string(),
-  parameters: v.optional(v.looseObject({})),
+  parameters: v.optional(
+    v.record(
+      v.string(),
+      v.union([
+        v.looseObject({
+          type: v.picklist(["null"]),
+        }),
+        v.looseObject({
+          type: v.picklist(["boolean"]),
+          value: v.boolean(),
+        }),
+        v.looseObject({
+          type: v.picklist(["integer"]),
+          value: integer({ minimum: -9007199254740991, maximum: 9007199254740991 }),
+        }),
+        v.looseObject({
+          type: v.picklist(["double"]),
+          value: number(),
+        }),
+        v.looseObject({
+          type: v.picklist(["string"]),
+          value: v.string(),
+        }),
+        v.looseObject({
+          type: v.picklist(["timestamp"]),
+          value: v.string(),
+        }),
+        v.looseObject({
+          type: v.picklist(["date"]),
+          value: v.string(),
+        }),
+        v.looseObject({
+          type: v.picklist(["decimal"]),
+          value: v.pipe(v.string(), v.regex(/^-?\d{1,29}(\.\d{1,9})?$/)),
+        }),
+        v.looseObject({
+          type: v.picklist(["list"]),
+          item_type: v.picklist(["boolean", "integer", "double", "string", "timestamp", "date", "decimal"]),
+          value: v.pipe(v.array(v.unknown()), v.maxLength(100)),
+        }),
+        v.looseObject({
+          type: v.picklist(["struct"]),
+          value: v.record(v.string(), v.looseObject({})),
+        }),
+      ]),
+    ),
+  ),
 })
 
 export const PostV2SqlResponse: v.GenericSchema<unknown, T.PostV2SqlResponse> = v.looseObject({

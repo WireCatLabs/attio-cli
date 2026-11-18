@@ -37,16 +37,7 @@ const artifacts = generate(
     overrides: {},
     // Attio's POST …/records/query, …/entries/query and …/records/search only read.
     readingPosts: true,
-    // A PUT on a collection is Attio's "assert": create or update by a matching attribute, beside the PUT by id.
-    names: {
-      fromPath: true,
-      segments: { v2: "" },
-      commands: {
-        putV2ActivitiesByActivityRecords: "activities-records-assert",
-        putV2ListsByListEntries: "lists-entries-assert",
-        putV2ObjectsByObjectRecords: "objects-records-assert",
-      },
-    },
+    names: { fromPath: true, segments: { v2: "" } },
     // The permission group; Attio deletes only by DELETE, with no deleting flag in a body or query.
     permissions: { group: "attio", deletingFlags: [] },
     // How each read pages, found from the spec; an override's `pagination` wins. `auth` replaces a wrong or

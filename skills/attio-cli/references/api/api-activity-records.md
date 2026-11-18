@@ -2,20 +2,6 @@
 
 # Attio API: Activity records
 
-## `attio api activities-records-assert [options]`
-
-- What: Upsert an activity record
-- Call: `PUT /v2/activities/{activity}/records`, effect: write
-- Sign-in: oauth2 (activity\_record:read-write, activity\_configuration:read, object\_configuration:read, record\_permission:read)
-- Body: `PutV2ActivitiesByActivityRecordsRequest`, required
-
-| Flag | Required | What |
-|---|---|---|
-| `--activity <value>` | yes | activity |
-| `--matching-attribute <value>` | yes | matching\_attribute |
-| `--body <json>` | no | the request body as JSON; - reads it from stdin |
-| `--body-file <path>` | no | the request body from a JSON file; - is stdin |
-
 ## `attio api activities-records-create [options]`
 
 - What: Create an activity record
@@ -92,5 +78,19 @@
 |---|---|---|
 | `--activity <value>` | yes | activity |
 | `--record-id <value>` | yes | record\_id |
+| `--body <json>` | no | the request body as JSON; - reads it from stdin |
+| `--body-file <path>` | no | the request body from a JSON file; - is stdin |
+
+## `attio api activities-records-upsert [options]`
+
+- What: Upsert an activity record
+- Call: `PUT /v2/activities/{activity}/records`, effect: write
+- Sign-in: oauth2 (activity\_record:read-write, activity\_configuration:read, object\_configuration:read, record\_permission:read)
+- Body: `PutV2ActivitiesByActivityRecordsRequest`, required
+
+| Flag | Required | What |
+|---|---|---|
+| `--activity <value>` | yes | activity |
+| `--matching-attribute <value>` | yes | matching\_attribute |
 | `--body <json>` | no | the request body as JSON; - reads it from stdin |
 | `--body-file <path>` | no | the request body from a JSON file; - is stdin |

@@ -7,27 +7,506 @@ ran it · ⛔ not tested offline, with the reason and where it is checked instea
 Measured from the test run (`coverage/argv.jsonl`), not searched for — see
 [TESTING.md](TESTING.md) for how, and for the states and failures that cut across commands.
 
-**71 ✅ · 24 ⛔ · 0 ❌** — 34 commands, 61 options.
+**354 ✅ · 24 ⛔ · 196 ❌** — 165 commands, 409 options.
 
 | Command | Option | | Note |
 |---|---|---|---|
 | `commands` |  | ✅ |  |
 | `commands info` |  | ✅ |  |
 | `session start` |  | ✅ |  |
-| `session start` | `--credential-storage` | ✅ |  |
+| `session start` | `--credential-storage` | ❌ |  |
 | `session status` |  | ✅ |  |
 | `session status` | `--check` | ✅ |  |
 | `session end` |  | ✅ |  |
-| `session list` |  | ✅ |  |
-| `comments list` |  | ✅ |  |
-| `comments list` | `--limit` | ✅ |  |
-| `comments list` | `--page` | ✅ |  |
-| `comments list` | `--all` | ✅ |  |
-| `comments show` |  | ✅ |  |
-| `comments create` |  | ✅ |  |
-| `comments create` | `--text` | ✅ |  |
-| `comments update` |  | ✅ |  |
-| `comments update` | `--text` | ✅ |  |
+| `session list` |  | ❌ |  |
+| `api list` |  | ❌ |  |
+| `api show` |  | ❌ |  |
+| `api objects-list` |  | ✅ |  |
+| `api objects-create` |  | ✅ |  |
+| `api objects-create` | `--body` | ✅ |  |
+| `api objects-create` | `--body-file` | ❌ |  |
+| `api objects-get` |  | ✅ |  |
+| `api objects-get` | `--object` | ✅ |  |
+| `api objects-update` |  | ✅ |  |
+| `api objects-update` | `--object` | ✅ |  |
+| `api objects-update` | `--body` | ✅ |  |
+| `api objects-update` | `--body-file` | ❌ |  |
+| `api objects-delete` |  | ✅ |  |
+| `api objects-delete` | `--object` | ✅ |  |
+| `api objects-views-list` |  | ✅ |  |
+| `api objects-views-list` | `--object` | ✅ |  |
+| `api objects-views-list` | `--show-archived` | ❌ |  |
+| `api objects-views-list` | `--limit` | ❌ |  |
+| `api objects-views-list` | `--cursor` | ❌ |  |
+| `api objects-views-list` | `--all` | ❌ |  |
+| `api objects-views-create` |  | ✅ |  |
+| `api objects-views-create` | `--object` | ✅ |  |
+| `api objects-views-create` | `--body` | ✅ |  |
+| `api objects-views-create` | `--body-file` | ❌ |  |
+| `api objects-views-get` |  | ✅ |  |
+| `api objects-views-get` | `--object` | ✅ |  |
+| `api objects-views-get` | `--view-id` | ✅ |  |
+| `api objects-views-update` |  | ✅ |  |
+| `api objects-views-update` | `--object` | ✅ |  |
+| `api objects-views-update` | `--view-id` | ✅ |  |
+| `api objects-views-update` | `--body` | ✅ |  |
+| `api objects-views-update` | `--body-file` | ❌ |  |
+| `api objects-views-delete` |  | ✅ |  |
+| `api objects-views-delete` | `--object` | ✅ |  |
+| `api objects-views-delete` | `--view-id` | ✅ |  |
+| `api activities-list` |  | ✅ |  |
+| `api activities-list` | `--limit` | ❌ |  |
+| `api activities-list` | `--cursor` | ❌ |  |
+| `api activities-list` | `--all` | ❌ |  |
+| `api activities-create` |  | ✅ |  |
+| `api activities-create` | `--body` | ✅ |  |
+| `api activities-create` | `--body-file` | ❌ |  |
+| `api activities-get` |  | ✅ |  |
+| `api activities-get` | `--activity` | ✅ |  |
+| `api activities-update` |  | ✅ |  |
+| `api activities-update` | `--activity` | ✅ |  |
+| `api activities-update` | `--body` | ✅ |  |
+| `api activities-update` | `--body-file` | ❌ |  |
+| `api activities-delete` |  | ✅ |  |
+| `api activities-delete` | `--activity` | ✅ |  |
+| `api attributes-list` |  | ✅ |  |
+| `api attributes-list` | `--target` | ✅ |  |
+| `api attributes-list` | `--identifier` | ✅ |  |
+| `api attributes-list` | `--limit` | ❌ |  |
+| `api attributes-list` | `--offset` | ❌ |  |
+| `api attributes-list` | `--show-archived` | ❌ |  |
+| `api attributes-list` | `--all` | ❌ |  |
+| `api attributes-create` |  | ✅ |  |
+| `api attributes-create` | `--target` | ✅ |  |
+| `api attributes-create` | `--identifier` | ✅ |  |
+| `api attributes-create` | `--body` | ✅ |  |
+| `api attributes-create` | `--body-file` | ❌ |  |
+| `api attributes-get` |  | ✅ |  |
+| `api attributes-get` | `--target` | ✅ |  |
+| `api attributes-get` | `--identifier` | ✅ |  |
+| `api attributes-get` | `--attribute` | ✅ |  |
+| `api attributes-update` |  | ✅ |  |
+| `api attributes-update` | `--target` | ✅ |  |
+| `api attributes-update` | `--identifier` | ✅ |  |
+| `api attributes-update` | `--attribute` | ✅ |  |
+| `api attributes-update` | `--body` | ✅ |  |
+| `api attributes-update` | `--body-file` | ❌ |  |
+| `api attributes-options-list` |  | ✅ |  |
+| `api attributes-options-list` | `--target` | ✅ |  |
+| `api attributes-options-list` | `--identifier` | ✅ |  |
+| `api attributes-options-list` | `--attribute` | ✅ |  |
+| `api attributes-options-list` | `--show-archived` | ❌ |  |
+| `api attributes-options-create` |  | ✅ |  |
+| `api attributes-options-create` | `--target` | ✅ |  |
+| `api attributes-options-create` | `--identifier` | ✅ |  |
+| `api attributes-options-create` | `--attribute` | ✅ |  |
+| `api attributes-options-create` | `--body` | ✅ |  |
+| `api attributes-options-create` | `--body-file` | ❌ |  |
+| `api attributes-options-update` |  | ✅ |  |
+| `api attributes-options-update` | `--target` | ✅ |  |
+| `api attributes-options-update` | `--identifier` | ✅ |  |
+| `api attributes-options-update` | `--attribute` | ✅ |  |
+| `api attributes-options-update` | `--option` | ✅ |  |
+| `api attributes-options-update` | `--body` | ✅ |  |
+| `api attributes-options-update` | `--body-file` | ❌ |  |
+| `api attributes-statuses-list` |  | ✅ |  |
+| `api attributes-statuses-list` | `--target` | ✅ |  |
+| `api attributes-statuses-list` | `--identifier` | ✅ |  |
+| `api attributes-statuses-list` | `--attribute` | ✅ |  |
+| `api attributes-statuses-list` | `--show-archived` | ❌ |  |
+| `api attributes-statuses-create` |  | ✅ |  |
+| `api attributes-statuses-create` | `--target` | ✅ |  |
+| `api attributes-statuses-create` | `--identifier` | ✅ |  |
+| `api attributes-statuses-create` | `--attribute` | ✅ |  |
+| `api attributes-statuses-create` | `--body` | ✅ |  |
+| `api attributes-statuses-create` | `--body-file` | ❌ |  |
+| `api attributes-statuses-update` |  | ✅ |  |
+| `api attributes-statuses-update` | `--target` | ✅ |  |
+| `api attributes-statuses-update` | `--identifier` | ✅ |  |
+| `api attributes-statuses-update` | `--attribute` | ✅ |  |
+| `api attributes-statuses-update` | `--status` | ✅ |  |
+| `api attributes-statuses-update` | `--body` | ✅ |  |
+| `api attributes-statuses-update` | `--body-file` | ❌ |  |
+| `api objects-records-query` |  | ✅ |  |
+| `api objects-records-query` | `--object` | ✅ |  |
+| `api objects-records-query` | `--body` | ✅ |  |
+| `api objects-records-query` | `--body-file` | ❌ |  |
+| `api objects-records-query` | `--all` | ❌ |  |
+| `api objects-records-create` |  | ✅ |  |
+| `api objects-records-create` | `--object` | ✅ |  |
+| `api objects-records-create` | `--body` | ✅ |  |
+| `api objects-records-create` | `--body-file` | ❌ |  |
+| `api objects-records-upsert` |  | ✅ |  |
+| `api objects-records-upsert` | `--object` | ✅ |  |
+| `api objects-records-upsert` | `--matching-attribute` | ✅ |  |
+| `api objects-records-upsert` | `--body` | ✅ |  |
+| `api objects-records-upsert` | `--body-file` | ❌ |  |
+| `api objects-records-get` |  | ✅ |  |
+| `api objects-records-get` | `--object` | ✅ |  |
+| `api objects-records-get` | `--record-id` | ✅ |  |
+| `api objects-records-replace` |  | ✅ |  |
+| `api objects-records-replace` | `--object` | ✅ |  |
+| `api objects-records-replace` | `--record-id` | ✅ |  |
+| `api objects-records-replace` | `--body` | ✅ |  |
+| `api objects-records-replace` | `--body-file` | ❌ |  |
+| `api objects-records-update` |  | ✅ |  |
+| `api objects-records-update` | `--object` | ✅ |  |
+| `api objects-records-update` | `--record-id` | ✅ |  |
+| `api objects-records-update` | `--body` | ✅ |  |
+| `api objects-records-update` | `--body-file` | ❌ |  |
+| `api objects-records-delete` |  | ✅ |  |
+| `api objects-records-delete` | `--object` | ✅ |  |
+| `api objects-records-delete` | `--record-id` | ✅ |  |
+| `api objects-records-merge` |  | ✅ |  |
+| `api objects-records-merge` | `--object` | ✅ |  |
+| `api objects-records-merge` | `--body` | ✅ |  |
+| `api objects-records-merge` | `--body-file` | ❌ |  |
+| `api objects-records-attributes-values-list` |  | ✅ |  |
+| `api objects-records-attributes-values-list` | `--object` | ✅ |  |
+| `api objects-records-attributes-values-list` | `--record-id` | ✅ |  |
+| `api objects-records-attributes-values-list` | `--attribute` | ✅ |  |
+| `api objects-records-attributes-values-list` | `--show-historic` | ❌ |  |
+| `api objects-records-attributes-values-list` | `--limit` | ❌ |  |
+| `api objects-records-attributes-values-list` | `--offset` | ❌ |  |
+| `api objects-records-attributes-values-list` | `--all` | ❌ |  |
+| `api objects-records-attributes-values-replace` |  | ✅ |  |
+| `api objects-records-attributes-values-replace` | `--object` | ✅ |  |
+| `api objects-records-attributes-values-replace` | `--record-id` | ✅ |  |
+| `api objects-records-attributes-values-replace` | `--attribute` | ✅ |  |
+| `api objects-records-attributes-values-replace` | `--body` | ✅ |  |
+| `api objects-records-attributes-values-replace` | `--body-file` | ❌ |  |
+| `api objects-records-entries-list` |  | ✅ |  |
+| `api objects-records-entries-list` | `--object` | ✅ |  |
+| `api objects-records-entries-list` | `--record-id` | ✅ |  |
+| `api objects-records-entries-list` | `--limit` | ❌ |  |
+| `api objects-records-entries-list` | `--offset` | ❌ |  |
+| `api objects-records-entries-list` | `--all` | ❌ |  |
+| `api objects-records-search` |  | ✅ |  |
+| `api objects-records-search` | `--body` | ✅ |  |
+| `api objects-records-search` | `--body-file` | ❌ |  |
+| `api activities-records-query` |  | ✅ |  |
+| `api activities-records-query` | `--activity` | ✅ |  |
+| `api activities-records-query` | `--body` | ✅ |  |
+| `api activities-records-query` | `--body-file` | ❌ |  |
+| `api activities-records-query` | `--all` | ❌ |  |
+| `api activities-records-create` |  | ✅ |  |
+| `api activities-records-create` | `--activity` | ✅ |  |
+| `api activities-records-create` | `--body` | ✅ |  |
+| `api activities-records-create` | `--body-file` | ❌ |  |
+| `api activities-records-upsert` |  | ✅ |  |
+| `api activities-records-upsert` | `--activity` | ✅ |  |
+| `api activities-records-upsert` | `--matching-attribute` | ✅ |  |
+| `api activities-records-upsert` | `--body` | ✅ |  |
+| `api activities-records-upsert` | `--body-file` | ❌ |  |
+| `api activities-records-get` |  | ✅ |  |
+| `api activities-records-get` | `--activity` | ✅ |  |
+| `api activities-records-get` | `--record-id` | ✅ |  |
+| `api activities-records-replace` |  | ✅ |  |
+| `api activities-records-replace` | `--activity` | ✅ |  |
+| `api activities-records-replace` | `--record-id` | ✅ |  |
+| `api activities-records-replace` | `--body` | ✅ |  |
+| `api activities-records-replace` | `--body-file` | ❌ |  |
+| `api activities-records-update` |  | ✅ |  |
+| `api activities-records-update` | `--activity` | ✅ |  |
+| `api activities-records-update` | `--record-id` | ✅ |  |
+| `api activities-records-update` | `--body` | ✅ |  |
+| `api activities-records-update` | `--body-file` | ❌ |  |
+| `api activities-records-delete` |  | ✅ |  |
+| `api activities-records-delete` | `--activity` | ✅ |  |
+| `api activities-records-delete` | `--record-id` | ✅ |  |
+| `api sql` |  | ✅ |  |
+| `api sql` | `--body` | ✅ |  |
+| `api sql` | `--body-file` | ❌ |  |
+| `api lists-list` |  | ✅ |  |
+| `api lists-create` |  | ✅ |  |
+| `api lists-create` | `--body` | ✅ |  |
+| `api lists-create` | `--body-file` | ❌ |  |
+| `api lists-get` |  | ✅ |  |
+| `api lists-get` | `--list` | ✅ |  |
+| `api lists-update` |  | ✅ |  |
+| `api lists-update` | `--list` | ✅ |  |
+| `api lists-update` | `--body` | ✅ |  |
+| `api lists-update` | `--body-file` | ❌ |  |
+| `api lists-views-list` |  | ✅ |  |
+| `api lists-views-list` | `--list` | ✅ |  |
+| `api lists-views-list` | `--show-archived` | ❌ |  |
+| `api lists-views-list` | `--limit` | ❌ |  |
+| `api lists-views-list` | `--cursor` | ❌ |  |
+| `api lists-views-list` | `--all` | ❌ |  |
+| `api lists-views-create` |  | ✅ |  |
+| `api lists-views-create` | `--list` | ✅ |  |
+| `api lists-views-create` | `--body` | ✅ |  |
+| `api lists-views-create` | `--body-file` | ❌ |  |
+| `api lists-views-get` |  | ✅ |  |
+| `api lists-views-get` | `--list` | ✅ |  |
+| `api lists-views-get` | `--view-id` | ✅ |  |
+| `api lists-views-update` |  | ✅ |  |
+| `api lists-views-update` | `--list` | ✅ |  |
+| `api lists-views-update` | `--view-id` | ✅ |  |
+| `api lists-views-update` | `--body` | ✅ |  |
+| `api lists-views-update` | `--body-file` | ❌ |  |
+| `api lists-views-delete` |  | ✅ |  |
+| `api lists-views-delete` | `--list` | ✅ |  |
+| `api lists-views-delete` | `--view-id` | ✅ |  |
+| `api lists-entries-query` |  | ✅ |  |
+| `api lists-entries-query` | `--list` | ✅ |  |
+| `api lists-entries-query` | `--body` | ✅ |  |
+| `api lists-entries-query` | `--body-file` | ❌ |  |
+| `api lists-entries-query` | `--all` | ❌ |  |
+| `api lists-entries-create` |  | ✅ |  |
+| `api lists-entries-create` | `--list` | ✅ |  |
+| `api lists-entries-create` | `--body` | ✅ |  |
+| `api lists-entries-create` | `--body-file` | ❌ |  |
+| `api lists-entries-upsert` |  | ✅ |  |
+| `api lists-entries-upsert` | `--list` | ✅ |  |
+| `api lists-entries-upsert` | `--body` | ✅ |  |
+| `api lists-entries-upsert` | `--body-file` | ❌ |  |
+| `api lists-entries-get` |  | ✅ |  |
+| `api lists-entries-get` | `--list` | ✅ |  |
+| `api lists-entries-get` | `--entry-id` | ✅ |  |
+| `api lists-entries-replace` |  | ✅ |  |
+| `api lists-entries-replace` | `--list` | ✅ |  |
+| `api lists-entries-replace` | `--entry-id` | ✅ |  |
+| `api lists-entries-replace` | `--body` | ✅ |  |
+| `api lists-entries-replace` | `--body-file` | ❌ |  |
+| `api lists-entries-update` |  | ✅ |  |
+| `api lists-entries-update` | `--list` | ✅ |  |
+| `api lists-entries-update` | `--entry-id` | ✅ |  |
+| `api lists-entries-update` | `--body` | ✅ |  |
+| `api lists-entries-update` | `--body-file` | ❌ |  |
+| `api lists-entries-delete` |  | ✅ |  |
+| `api lists-entries-delete` | `--list` | ✅ |  |
+| `api lists-entries-delete` | `--entry-id` | ✅ |  |
+| `api lists-entries-attributes-values-list` |  | ✅ |  |
+| `api lists-entries-attributes-values-list` | `--list` | ✅ |  |
+| `api lists-entries-attributes-values-list` | `--entry-id` | ✅ |  |
+| `api lists-entries-attributes-values-list` | `--attribute` | ✅ |  |
+| `api lists-entries-attributes-values-list` | `--show-historic` | ❌ |  |
+| `api lists-entries-attributes-values-list` | `--limit` | ❌ |  |
+| `api lists-entries-attributes-values-list` | `--offset` | ❌ |  |
+| `api lists-entries-attributes-values-list` | `--all` | ❌ |  |
+| `api lists-entries-attributes-values-replace` |  | ✅ |  |
+| `api lists-entries-attributes-values-replace` | `--list` | ✅ |  |
+| `api lists-entries-attributes-values-replace` | `--entry-id` | ✅ |  |
+| `api lists-entries-attributes-values-replace` | `--attribute` | ✅ |  |
+| `api lists-entries-attributes-values-replace` | `--body` | ✅ |  |
+| `api lists-entries-attributes-values-replace` | `--body-file` | ❌ |  |
+| `api workspace-members-list` |  | ✅ |  |
+| `api workspace-members-get` |  | ✅ |  |
+| `api workspace-members-get` | `--workspace-member-id` | ✅ |  |
+| `api notes-list` |  | ✅ |  |
+| `api notes-list` | `--limit` | ❌ |  |
+| `api notes-list` | `--offset` | ❌ |  |
+| `api notes-list` | `--parent-object` | ❌ |  |
+| `api notes-list` | `--parent-record-id` | ❌ |  |
+| `api notes-list` | `--all` | ❌ |  |
+| `api notes-create` |  | ✅ |  |
+| `api notes-create` | `--body` | ✅ |  |
+| `api notes-create` | `--body-file` | ❌ |  |
+| `api notes-get` |  | ✅ |  |
+| `api notes-get` | `--note-id` | ✅ |  |
+| `api notes-update` |  | ✅ |  |
+| `api notes-update` | `--note-id` | ✅ |  |
+| `api notes-update` | `--body` | ✅ |  |
+| `api notes-update` | `--body-file` | ❌ |  |
+| `api notes-delete` |  | ✅ |  |
+| `api notes-delete` | `--note-id` | ✅ |  |
+| `api tasks-list` |  | ✅ |  |
+| `api tasks-list` | `--limit` | ❌ |  |
+| `api tasks-list` | `--offset` | ❌ |  |
+| `api tasks-list` | `--sort` | ❌ |  |
+| `api tasks-list` | `--linked-object` | ❌ |  |
+| `api tasks-list` | `--linked-record-id` | ❌ |  |
+| `api tasks-list` | `--assignee` | ❌ |  |
+| `api tasks-list` | `--is-completed` | ❌ |  |
+| `api tasks-list` | `--all` | ❌ |  |
+| `api tasks-create` |  | ✅ |  |
+| `api tasks-create` | `--body` | ✅ |  |
+| `api tasks-create` | `--body-file` | ❌ |  |
+| `api tasks-get` |  | ✅ |  |
+| `api tasks-get` | `--task-id` | ✅ |  |
+| `api tasks-update` |  | ✅ |  |
+| `api tasks-update` | `--task-id` | ✅ |  |
+| `api tasks-update` | `--body` | ✅ |  |
+| `api tasks-update` | `--body-file` | ❌ |  |
+| `api tasks-delete` |  | ✅ |  |
+| `api tasks-delete` | `--task-id` | ✅ |  |
+| `api threads-list` |  | ✅ |  |
+| `api threads-list` | `--record-id` | ❌ |  |
+| `api threads-list` | `--object` | ❌ |  |
+| `api threads-list` | `--entry-id` | ❌ |  |
+| `api threads-list` | `--list` | ❌ |  |
+| `api threads-list` | `--limit` | ❌ |  |
+| `api threads-list` | `--offset` | ❌ |  |
+| `api threads-list` | `--all` | ❌ |  |
+| `api threads-get` |  | ✅ |  |
+| `api threads-get` | `--thread-id` | ✅ |  |
+| `api threads-get` | `--limit` | ❌ |  |
+| `api threads-get` | `--cursor` | ❌ |  |
+| `api threads-get` | `--created-after` | ❌ |  |
+| `api threads-get` | `--all` | ❌ |  |
+| `api comments-create` |  | ✅ |  |
+| `api comments-create` | `--body` | ✅ |  |
+| `api comments-create` | `--body-file` | ❌ |  |
+| `api comments-get` |  | ✅ |  |
+| `api comments-get` | `--comment-id` | ✅ |  |
+| `api comments-delete` |  | ✅ |  |
+| `api comments-delete` | `--comment-id` | ✅ |  |
+| `api emails-list` |  | ✅ |  |
+| `api emails-list` | `--limit` | ❌ |  |
+| `api emails-list` | `--cursor` | ❌ |  |
+| `api emails-list` | `--linked-object` | ❌ |  |
+| `api emails-list` | `--linked-record-ids` | ❌ |  |
+| `api emails-list` | `--participants` | ❌ |  |
+| `api emails-list` | `--domain` | ❌ |  |
+| `api emails-list` | `--sent-after` | ❌ |  |
+| `api emails-list` | `--sent-before` | ❌ |  |
+| `api emails-list` | `--exclude-automated-participants` | ❌ |  |
+| `api emails-list` | `--all` | ❌ |  |
+| `api sequences-unsubscribed-emails` |  | ✅ |  |
+| `api sequences-unsubscribed-emails` | `--body` | ✅ |  |
+| `api sequences-unsubscribed-emails` | `--body-file` | ❌ |  |
+| `api workspace-blocklist-addresses-list` |  | ✅ |  |
+| `api workspace-blocklist-addresses-list` | `--limit` | ❌ |  |
+| `api workspace-blocklist-addresses-list` | `--cursor` | ❌ |  |
+| `api workspace-blocklist-addresses-list` | `--all` | ❌ |  |
+| `api workspace-blocklist-addresses-replace` |  | ✅ |  |
+| `api workspace-blocklist-addresses-replace` | `--body` | ✅ |  |
+| `api workspace-blocklist-addresses-replace` | `--body-file` | ❌ |  |
+| `api workspace-blocklist-addresses-delete` |  | ✅ |  |
+| `api workspace-blocklist-addresses-delete` | `--address` | ✅ |  |
+| `api meetings-list` |  | ✅ |  |
+| `api meetings-list` | `--limit` | ❌ |  |
+| `api meetings-list` | `--cursor` | ❌ |  |
+| `api meetings-list` | `--linked-object` | ❌ |  |
+| `api meetings-list` | `--linked-record-id` | ❌ |  |
+| `api meetings-list` | `--participants` | ❌ |  |
+| `api meetings-list` | `--sort` | ❌ |  |
+| `api meetings-list` | `--ends-from` | ❌ |  |
+| `api meetings-list` | `--starts-before` | ❌ |  |
+| `api meetings-list` | `--timezone` | ❌ |  |
+| `api meetings-list` | `--all` | ❌ |  |
+| `api meetings-create` |  | ✅ |  |
+| `api meetings-create` | `--body` | ✅ |  |
+| `api meetings-create` | `--body-file` | ❌ |  |
+| `api meetings-get` |  | ✅ |  |
+| `api meetings-get` | `--meeting-id` | ✅ |  |
+| `api meetings-replace` |  | ✅ |  |
+| `api meetings-replace` | `--meeting-id` | ✅ |  |
+| `api meetings-replace` | `--body` | ✅ |  |
+| `api meetings-replace` | `--body-file` | ❌ |  |
+| `api meetings-update` |  | ✅ |  |
+| `api meetings-update` | `--meeting-id` | ✅ |  |
+| `api meetings-update` | `--body` | ✅ |  |
+| `api meetings-update` | `--body-file` | ❌ |  |
+| `api meetings-delete` |  | ✅ |  |
+| `api meetings-delete` | `--meeting-id` | ✅ |  |
+| `api meetings-call-recordings-list` |  | ✅ |  |
+| `api meetings-call-recordings-list` | `--meeting-id` | ✅ |  |
+| `api meetings-call-recordings-list` | `--limit` | ❌ |  |
+| `api meetings-call-recordings-list` | `--cursor` | ❌ |  |
+| `api meetings-call-recordings-list` | `--all` | ❌ |  |
+| `api meetings-call-recordings-create` |  | ✅ |  |
+| `api meetings-call-recordings-create` | `--meeting-id` | ✅ |  |
+| `api meetings-call-recordings-create` | `--body` | ✅ |  |
+| `api meetings-call-recordings-create` | `--body-file` | ❌ |  |
+| `api meetings-call-recordings-get` |  | ✅ |  |
+| `api meetings-call-recordings-get` | `--meeting-id` | ✅ |  |
+| `api meetings-call-recordings-get` | `--call-recording-id` | ✅ |  |
+| `api meetings-call-recordings-delete` |  | ✅ |  |
+| `api meetings-call-recordings-delete` | `--meeting-id` | ✅ |  |
+| `api meetings-call-recordings-delete` | `--call-recording-id` | ✅ |  |
+| `api meetings-call-recordings-transcript-list` |  | ✅ |  |
+| `api meetings-call-recordings-transcript-list` | `--meeting-id` | ✅ |  |
+| `api meetings-call-recordings-transcript-list` | `--call-recording-id` | ✅ |  |
+| `api meetings-call-recordings-transcript-list` | `--cursor` | ❌ |  |
+| `api meetings-call-recordings-transcript-list` | `--all` | ❌ |  |
+| `api files-list` |  | ✅ |  |
+| `api files-list` | `--object` | ✅ |  |
+| `api files-list` | `--record-id` | ✅ |  |
+| `api files-list` | `--storage-provider` | ❌ |  |
+| `api files-list` | `--parent-folder-id` | ❌ |  |
+| `api files-list` | `--limit` | ❌ |  |
+| `api files-list` | `--cursor` | ❌ |  |
+| `api files-list` | `--all` | ❌ |  |
+| `api files-create` |  | ✅ |  |
+| `api files-create` | `--body` | ✅ |  |
+| `api files-create` | `--body-file` | ❌ |  |
+| `api files-get` |  | ✅ |  |
+| `api files-get` | `--file-id` | ✅ |  |
+| `api files-delete` |  | ✅ |  |
+| `api files-delete` | `--file-id` | ✅ |  |
+| `api files-download-list` |  | ✅ |  |
+| `api files-download-list` | `--file-id` | ✅ |  |
+| `api webhooks-list` |  | ✅ |  |
+| `api webhooks-list` | `--limit` | ❌ |  |
+| `api webhooks-list` | `--offset` | ❌ |  |
+| `api webhooks-list` | `--all` | ❌ |  |
+| `api webhooks-create` |  | ✅ |  |
+| `api webhooks-create` | `--body` | ✅ |  |
+| `api webhooks-create` | `--body-file` | ❌ |  |
+| `api webhooks-get` |  | ✅ |  |
+| `api webhooks-get` | `--webhook-id` | ✅ |  |
+| `api webhooks-update` |  | ✅ |  |
+| `api webhooks-update` | `--webhook-id` | ✅ |  |
+| `api webhooks-update` | `--body` | ✅ |  |
+| `api webhooks-update` | `--body-file` | ❌ |  |
+| `api webhooks-delete` |  | ✅ |  |
+| `api webhooks-delete` | `--webhook-id` | ✅ |  |
+| `api self-list` |  | ✅ |  |
+| `sync` |  | ✅ |  |
+| `sync` | `--rescan` | ❌ |  |
+| `sync` | `--max-pages` | ❌ |  |
+| `store status` |  | ✅ |  |
+| `store apply` |  | ❌ |  |
+| `store apply` | `--yes` | ❌ |  |
+| `store info` |  | ❌ |  |
+| `store check` |  | ❌ |  |
+| `store migrate` |  | ❌ |  |
+| `store rebuild` |  | ❌ |  |
+| `store backup` |  | ❌ |  |
+| `store backup` | `--encrypt` | ❌ |  |
+| `store restore` |  | ❌ |  |
+| `store decrypt` |  | ❌ |  |
+| `store decrypt` | `--output` | ❌ |  |
+| `store repair` |  | ❌ |  |
+| `store repair` | `--dry-run` | ❌ |  |
+| `store reset` |  | ❌ |  |
+| `store reset` | `--no-backup` | ❌ |  |
+| `store reset` | `--dry-run` | ❌ |  |
+| `store copies delete` |  | ❌ |  |
+| `store tables list` |  | ❌ |  |
+| `store recover` |  | ❌ |  |
+| `store recover run` |  | ❌ |  |
+| `deals list` |  | ❌ |  |
+| `deals list` | `--limit` | ❌ |  |
+| `deals list` | `--page` | ❌ |  |
+| `deals list` | `--format` | ❌ |  |
+| `deals show` |  | ❌ |  |
+| `pipelines list` |  | ❌ |  |
+| `pipelines show` |  | ❌ |  |
+| `pipelines show` | `--since-time` | ❌ |  |
+| `pipelines show` | `--until-time` | ❌ |  |
+| `stages list` |  | ❌ |  |
+| `users list` |  | ❌ |  |
+| `users list` | `--limit` | ❌ |  |
+| `users list` | `--page` | ❌ |  |
+| `users show` |  | ❌ |  |
+| `changes list` |  | ❌ |  |
+| `changes list` | `--limit` | ❌ |  |
+| `changes list` | `--cursor` | ❌ |  |
+| `changes list` | `--format` | ❌ |  |
+| `fields list` |  | ❌ |  |
+| `fields list` | `--limit` | ❌ |  |
+| `fields list` | `--page` | ❌ |  |
+| `fields list` | `--all` | ❌ |  |
+| `search all` |  | ❌ |  |
+| `search all` | `--only` | ❌ |  |
+| `search all` | `--source` | ❌ |  |
+| `search all` | `--limit` | ❌ |  |
+| `search all` | `--page` | ❌ |  |
+| `search all` | `--exact` | ❌ |  |
+| `search all` | `--timezone` | ❌ |  |
 | `doctor` |  | ✅ |  |
 | `doctor` | `--online` | ✅ |  |
 | `doctor reports show` |  | ⛔ | cli-core's appDoctorCommand; its app-mcp-command test creates and shows a report |

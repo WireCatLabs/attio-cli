@@ -2813,8 +2813,20 @@ export const definitions: Readonly<Record<string, SchemaNode>> = {
       {
         type: "array",
         items: {
-          type: "unknown",
+          type: "union",
+          of: [
+            {
+              description: "A slug or ID of an attribute of the view's object.",
+              type: "string",
+            },
+            {
+              type: "ref",
+              ref: "view-object-attribute-ref",
+            },
+          ],
         },
+        minItems: 2,
+        maxItems: 5,
       },
     ],
   },
@@ -27968,9 +27980,182 @@ export const definitions: Readonly<Record<string, SchemaNode>> = {
         type: "string",
       },
       parameters: {
+        description:
+          "Named parameters referenced in the query using `$name` syntax. A maximum of 25 parameters can be provided. Each parameter must declare its type explicitly. Names must start with a letter or underscore, only contain letters, digits and underscores, and be at most 64 characters long. Compare against a list parameter with `= ANY($name)`, not `IN ($name)`, which does not type check. Read a field of a struct parameter with `get_field($name, 'field')`.",
         type: "object",
         properties: {},
         required: [],
+        additionalProperties: {
+          type: "union",
+          of: [
+            {
+              type: "object",
+              properties: {
+                type: {
+                  description: "The type of the parameter.",
+                  type: "string",
+                  enum: ["null"],
+                },
+              },
+              required: ["type"],
+            },
+            {
+              type: "object",
+              properties: {
+                type: {
+                  description: "The type of the parameter.",
+                  type: "string",
+                  enum: ["boolean"],
+                },
+                value: {
+                  type: "boolean",
+                },
+              },
+              required: ["type", "value"],
+            },
+            {
+              type: "object",
+              properties: {
+                type: {
+                  description: "The type of the parameter.",
+                  type: "string",
+                  enum: ["integer"],
+                },
+                value: {
+                  description: "An integer between -(2^53 - 1) and 2^53 - 1.",
+                  type: "integer",
+                  minimum: -9007199254740991,
+                  maximum: 9007199254740991,
+                },
+              },
+              required: ["type", "value"],
+            },
+            {
+              type: "object",
+              properties: {
+                type: {
+                  description: "The type of the parameter.",
+                  type: "string",
+                  enum: ["double"],
+                },
+                value: {
+                  type: "number",
+                },
+              },
+              required: ["type", "value"],
+            },
+            {
+              type: "object",
+              properties: {
+                type: {
+                  description: "The type of the parameter.",
+                  type: "string",
+                  enum: ["string"],
+                },
+                value: {
+                  type: "string",
+                },
+              },
+              required: ["type", "value"],
+            },
+            {
+              type: "object",
+              properties: {
+                type: {
+                  description: "The type of the parameter.",
+                  type: "string",
+                  enum: ["timestamp"],
+                },
+                value: {
+                  description:
+                    "An ISO 8601 timestamp with a time zone, either `Z` or an offset such as `+02:00` or `+0200`, e.g. `2023-01-01T15:00:00.123456Z`. Seconds and fractional seconds are optional. Truncated to microseconds.",
+                  type: "string",
+                },
+              },
+              required: ["type", "value"],
+            },
+            {
+              type: "object",
+              properties: {
+                type: {
+                  description: "The type of the parameter.",
+                  type: "string",
+                  enum: ["date"],
+                },
+                value: {
+                  description: "A calendar date in the format YYYY-MM-DD.",
+                  type: "string",
+                },
+              },
+              required: ["type", "value"],
+            },
+            {
+              type: "object",
+              properties: {
+                type: {
+                  description: "The type of the parameter.",
+                  type: "string",
+                  enum: ["decimal"],
+                },
+                value: {
+                  description:
+                    "A decimal number in plain notation, with at most 29 digits before and 9 digits after the decimal point.",
+                  type: "string",
+                  pattern: "^-?\\d{1,29}(\\.\\d{1,9})?$",
+                },
+              },
+              required: ["type", "value"],
+            },
+            {
+              type: "object",
+              properties: {
+                type: {
+                  description: "The type of the parameter.",
+                  type: "string",
+                  enum: ["list"],
+                },
+                item_type: {
+                  description: "The type of every item in the list.",
+                  type: "string",
+                  enum: ["boolean", "integer", "double", "string", "timestamp", "date", "decimal"],
+                },
+                value: {
+                  description:
+                    "The items of the list, each a valid value for `item_type`. A maximum of 100 items can be provided.",
+                  type: "array",
+                  items: {
+                    type: "unknown",
+                  },
+                  maxItems: 100,
+                },
+              },
+              required: ["type", "item_type", "value"],
+            },
+            {
+              type: "object",
+              properties: {
+                type: {
+                  description: "The type of the parameter.",
+                  type: "string",
+                  enum: ["struct"],
+                },
+                value: {
+                  description:
+                    "A map of field names to parameter objects, with at least one and a maximum of 25 fields. Names must start with a letter or underscore, only contain letters, digits and underscores, and be at most 64 characters long. Structs can contain other structs, up to 2 levels of structs in total.",
+                  type: "object",
+                  properties: {},
+                  required: [],
+                  additionalProperties: {
+                    type: "object",
+                    properties: {},
+                    required: [],
+                  },
+                },
+              },
+              required: ["type", "value"],
+            },
+          ],
+        },
       },
     },
     required: ["sql"],

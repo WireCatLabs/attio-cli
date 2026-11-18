@@ -607,14 +607,14 @@ attio api objects-records-create [options]
 
 **Example:** `attio personal api objects-records-create --object <value>`
 
-### `attio api objects-records-assert`
+### `attio api objects-records-upsert`
 
 Upsert a record — write (PUT /v2/objects/{object}/records)
 
 **Changes something in the service.**
 
 ```sh
-attio api objects-records-assert [options]
+attio api objects-records-upsert [options]
 ```
 
 | Option | What it does |
@@ -624,7 +624,7 @@ attio api objects-records-assert [options]
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Example:** `attio personal api objects-records-assert --object <value> --matching-attribute <value>`
+**Example:** `attio personal api objects-records-upsert --object <value> --matching-attribute <value>`
 
 ### `attio api objects-records-get`
 
@@ -822,14 +822,14 @@ attio api activities-records-create [options]
 
 **Example:** `attio personal api activities-records-create --activity <value>`
 
-### `attio api activities-records-assert`
+### `attio api activities-records-upsert`
 
 Upsert an activity record — write (PUT /v2/activities/{activity}/records)
 
 **Changes something in the service.**
 
 ```sh
-attio api activities-records-assert [options]
+attio api activities-records-upsert [options]
 ```
 
 | Option | What it does |
@@ -839,7 +839,7 @@ attio api activities-records-assert [options]
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Example:** `attio personal api activities-records-assert --activity <value> --matching-attribute <value>`
+**Example:** `attio personal api activities-records-upsert --activity <value> --matching-attribute <value>`
 
 ### `attio api activities-records-get`
 
@@ -1109,14 +1109,14 @@ attio api lists-entries-create [options]
 
 **Example:** `attio personal api lists-entries-create --list <value>`
 
-### `attio api lists-entries-assert`
+### `attio api lists-entries-upsert`
 
 Upsert a list entry by parent — write (PUT /v2/lists/{list}/entries)
 
 **Changes something in the service.**
 
 ```sh
-attio api lists-entries-assert [options]
+attio api lists-entries-upsert [options]
 ```
 
 | Option | What it does |
@@ -1125,7 +1125,7 @@ attio api lists-entries-assert [options]
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Example:** `attio personal api lists-entries-assert --list <value>`
+**Example:** `attio personal api lists-entries-upsert --list <value>`
 
 ### `attio api lists-entries-get`
 
