@@ -18,8 +18,8 @@ export const IDENTITY: AppIdentity = {
 // What `wcat` and WireCat Desktop show before the tool is installed. The bin passes it to wcatStart before anything else loads; src/wcat.ts adds the permission keys.
 export const DESKTOP: ManifestIdentity = {
   ...IDENTITY,
-  docs: "https://wirecat.dev/en/docs/attio",
-  hosts: ["api.attio.com", "app.attio.com"],
+  docs: "https://github.com/WireCatLabs/attio-cli#readme",
+  hosts: ["api.attio.com"],
   tagline: "Attio deals, people and companies for your agent",
   syncs: "your deals, people and companies",
   signIn: {

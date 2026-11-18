@@ -149,7 +149,7 @@ These read Attio itself, so they need the network.
 ### Your own attributes and search
 
 ```sh
-attio work fields list deals                 # the attributes your workspace added, with their options
+attio work fields list deals                 # the attributes your workspace added, with their type
 attio work search all "Example LLC"          # deals next to your messages, notes and meetings
 ```
 

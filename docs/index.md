@@ -85,7 +85,7 @@ Agent:  (runs attio work changes list change:won "at>=7d")
 - **What changed:** deals created, moved, won and lost, and a morning digest. [Use it](usage.md#what-changed)
 - **People, companies and members:** search Attio by name or e-mail, show one, export a list.
   [Use it](usage.md#people-companies-and-members)
-- **Your own attributes:** the workspace's custom attributes on deals, people and companies, with their options.
+- **Your own attributes:** the workspace's custom attributes on deals, people and companies, with their values.
   [Use it](usage.md#your-own-attributes)
 - **Search across your tools:** deals next to messages, notes, events and meetings from other WireCat tools.
   [Use it](usage.md#search-everything)

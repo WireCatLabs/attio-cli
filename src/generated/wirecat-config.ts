@@ -18,6 +18,12 @@ export const SOURCE: Readonly<Record<string, unknown>> | undefined = {
         },
         body: {
           limit: 500,
+          sorts: [
+            {
+              direction: "desc",
+              attribute: "created_at",
+            },
+          ],
         },
       },
       get: {
@@ -32,6 +38,7 @@ export const SOURCE: Readonly<Record<string, unknown>> | undefined = {
         from: "values",
         typed: {
           by: "attribute_type",
+          current: "active_until",
         },
       },
       search: {
@@ -41,6 +48,12 @@ export const SOURCE: Readonly<Record<string, unknown>> | undefined = {
         },
         body: {
           limit: 100,
+          sorts: [
+            {
+              direction: "desc",
+              attribute: "created_at",
+            },
+          ],
           filter: {
             name: {
               $contains: "{query}",
@@ -67,6 +80,12 @@ export const SOURCE: Readonly<Record<string, unknown>> | undefined = {
         },
         body: {
           limit: 500,
+          sorts: [
+            {
+              direction: "desc",
+              attribute: "created_at",
+            },
+          ],
         },
       },
       get: {
@@ -81,6 +100,7 @@ export const SOURCE: Readonly<Record<string, unknown>> | undefined = {
         from: "values",
         typed: {
           by: "attribute_type",
+          current: "active_until",
         },
       },
       search: {
@@ -90,6 +110,12 @@ export const SOURCE: Readonly<Record<string, unknown>> | undefined = {
         },
         body: {
           limit: 100,
+          sorts: [
+            {
+              direction: "desc",
+              attribute: "created_at",
+            },
+          ],
           filter: {
             $or: [
               {
@@ -139,6 +165,12 @@ export const SOURCE: Readonly<Record<string, unknown>> | undefined = {
         },
         body: {
           limit: 500,
+          sorts: [
+            {
+              direction: "desc",
+              attribute: "created_at",
+            },
+          ],
         },
       },
       get: {
@@ -153,6 +185,7 @@ export const SOURCE: Readonly<Record<string, unknown>> | undefined = {
         from: "values",
         typed: {
           by: "attribute_type",
+          current: "active_until",
         },
       },
       map: {
@@ -183,6 +216,9 @@ export const SOURCE: Readonly<Record<string, unknown>> | undefined = {
           target: "objects",
           identifier: "deals",
           attribute: "stage",
+        },
+        query: {
+          show_archived: true,
         },
         items: "data",
       },

@@ -29,7 +29,7 @@ describe("each remote command runs inside cli-core's run", () => {
       ...Object.fromEntries(
         ["people list", "people show", "organizations list", "organizations show"].map((command) => [
           command,
-          "cli-core's addCrmCommands runs it in its run; the live list contract in src/crm-contracts.test.ts reads it",
+          "cli-core's addCrmCommands runs it in its run; src/attio-map.test.ts and crmSourceContract read the live list",
         ]),
       ),
       doctor:

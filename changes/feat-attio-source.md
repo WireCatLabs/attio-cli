@@ -2,7 +2,7 @@
 
 - Built from one file, `wirecat.config.ts`.
 - **`attio <profile> sync` copies your Attio deals into WireCat's local store**, with their stage, owner, amount,
-  company, people and the workspace's own attributes, and the people and companies they name. Attio cannot list what
+  company, people and the workspace's own attributes, and your people and companies. Attio cannot list what
   changed since a time, so each sync lists every record.
 - **`attio <profile> deals`, `pipelines`, `changes`, `fields` and `search all` read the copy**, offline too. Attio's
   one deal pipeline is `Deals`: a stage Attio celebrates is won, one titled "Lost" is lost.

@@ -43,6 +43,17 @@ const deal = {
   },
 }
 
+const company = {
+  id: { workspace_id: "w1", object_id: "o2", record_id: "c1" },
+  created_at: "2026-01-10T08:00:00.000Z",
+  web_url: "https://app.attio.com/acme/company/c1",
+  values: {
+    name: [{ ...at, attribute_type: "text", value: "Example Kitchens" }],
+    domains: [{ ...at, attribute_type: "domain", domain: "example.test", root_domain: "example.test" }],
+    team: [{ ...at, attribute_type: "record-reference", target_object: "people", target_record_id: "p1" }],
+  },
+}
+
 const statuses = [
   { id: { status_id: "s1" }, title: "Lead", celebration_enabled: false },
   { id: { status_id: "s2" }, title: "In Progress", celebration_enabled: false },
@@ -50,10 +61,14 @@ const statuses = [
   { id: { status_id: "s4" }, title: "Lost", celebration_enabled: false },
 ]
 
-const source = () =>
+const RECORDS = { deals: deal, companies: company, people: person } as Record<string, unknown>
+
+const source = (calls: { operation: string; body: unknown }[] = []) =>
   crmSourceFromManifest(SOURCE, {
     api: API.manifest,
     call: async (operation, request) => {
+      const body = typeof request.body === "string" ? JSON.parse(request.body) : request.body
+      calls.push({ operation, body })
       if (operation === "getV2ByTargetByIdentifierAttributesByAttributeStatuses") return { data: statuses }
       // Attributes page by offset: the second page is empty.
       if (operation === "getV2ByTargetByIdentifierAttributes")
@@ -61,7 +76,7 @@ const source = () =>
           ? { data: [{ api_slug: "priority", title: "Priority", type: "select", is_system_attribute: false }] }
           : { data: [] }
       expect(operation).toBe("postV2ObjectsByObjectRecordsQuery")
-      return { data: [request.path.object === "deals" ? deal : person] }
+      return { data: Number(body?.offset) ? [] : [RECORDS[String(request.path.object)]] }
     },
     ...(HOOKS ? { hooks: HOOKS } : {}),
   })
@@ -72,6 +87,7 @@ it("maps an Attio person", async () => {
     expect.objectContaining({
       externalId: "p1",
       name: "Ann Lee",
+      firstName: "Ann",
       lastName: "Lee",
       emails: ["ann@acme.test"],
       email: "ann@acme.test",
@@ -93,6 +109,9 @@ it("maps an Attio deal with its stage, amount, owner, links and own field", asyn
       organization: "c1",
       people: [{ externalId: "p1", role: "contact" }],
       assignee: "m1",
+      amount: "15000",
+      currency: "EUR",
+      createdAt: Date.parse("2026-03-01T09:00:00.000Z"),
       url: "https://app.attio.com/acme/deals/d1",
       metadata: { priority: { label: "Priority", value: "High" } },
     }),
@@ -107,4 +126,38 @@ it("reads Attio's one deal pipeline: won where it celebrates, lost by the title"
     ["Won 🎉", "won"],
     ["Lost", "lost"],
   ])
+})
+
+it("maps an Attio company with its domain and team", async () => {
+  const page = await source().changes("organization", null)
+  expect("items" in page && page.items).toEqual([
+    expect.objectContaining({
+      externalId: "c1",
+      name: "Example Kitchens",
+      url: "example.test",
+      people: ["p1"],
+      createdAt: Date.parse("2026-01-10T08:00:00.000Z"),
+    }),
+  ])
+})
+
+it("lists people live, newest first: words search names and emails, none list them all", async () => {
+  const calls: { operation: string; body: unknown }[] = []
+  const live = source(calls)
+  const found = await live.list?.("person", { conditions: [], text: "ann", limit: 10 })
+  expect(found?.items.map((one) => one.externalId)).toEqual(["p1"])
+  const query = () => calls.find((one) => one.operation === "postV2ObjectsByObjectRecordsQuery")?.body
+  expect(query()).toMatchObject({
+    sorts: [{ direction: "desc", attribute: "created_at" }],
+    filter: {
+      $or: [
+        { name: { full_name: { $contains: "ann" } } },
+        { email_addresses: { email_address: { $contains: "ann" } } },
+      ],
+    },
+  })
+  calls.length = 0
+  await live.list?.("person", { conditions: [], limit: 10 })
+  expect(query()).not.toHaveProperty("filter")
+  expect(query()).toMatchObject({ sorts: [{ direction: "desc", attribute: "created_at" }] })
 })

@@ -80,9 +80,9 @@ it("sync through this CLI keeps the rows under the account session start checked
   const stored = Object.fromEntries(
     (status.json().items as { kind: string; stored: number }[]).map(({ kind, stored }) => [kind, stored]),
   )
-  expect(stored).toMatchObject({ organization: 3, deal: 3 })
-  // A deal's people the fake links by ids it never lists are kept too, as links.
-  expect(stored.person).toBeGreaterThanOrEqual(3)
+  // The fake's 3 people, and the 3 people its deals name by ids it never lists, kept as cli-core keeps a deal's
+  // people (person ties). A deal's company the fake never lists stays a reference on the deal.
+  expect(stored).toEqual({ organization: 3, person: 6, deal: 3, lead: 0 })
 
   expect(api.refusals).toEqual([])
 })

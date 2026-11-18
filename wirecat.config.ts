@@ -1,13 +1,15 @@
 import { defineCli } from "@wirecat/cli-core/manifest"
 
 const QUERY = "postV2ObjectsByObjectRecordsQuery"
+// Newest first, and a fixed order, so offset pages neither skip nor repeat a record.
+const NEWEST = [{ direction: "desc", attribute: "created_at" }]
 
-// Attio answers each attribute as a list of typed entries, the current ones only, and its attribute definitions say
-// which are the workspace's own.
+// Attio answers each attribute as a list of typed entries, by its docs the current ones only; `current` keeps that so
+// should one come with history. Its attribute definitions say which are the workspace's own.
 const records = (object: string) => ({
-  list: { operation: QUERY, path: { object }, body: { limit: 500 } },
+  list: { operation: QUERY, path: { object }, body: { limit: 500, sorts: NEWEST } },
   get: { operation: "getV2ObjectsByObjectRecordsByRecordId", path: { object, record_id: "{id}" }, items: "data" },
-  custom: { from: "values", typed: { by: "attribute_type" } },
+  custom: { from: "values", typed: { by: "attribute_type", current: "active_until" } },
 })
 
 const attributes = (object: string) => ({
@@ -36,7 +38,7 @@ export default defineCli({
         search: {
           operation: QUERY,
           path: { object: "companies" },
-          body: { limit: 100, filter: { name: { $contains: "{query}" } } },
+          body: { limit: 100, sorts: NEWEST, filter: { name: { $contains: "{query}" } } },
         },
         map: {
           externalId: "id.record_id",
@@ -53,6 +55,7 @@ export default defineCli({
           path: { object: "people" },
           body: {
             limit: 100,
+            sorts: NEWEST,
             filter: {
               $or: [
                 { name: { full_name: { $contains: "{query}" } } },
@@ -96,6 +99,8 @@ export default defineCli({
         call: {
           operation: "getV2ByTargetByIdentifierAttributesByAttributeStatuses",
           path: { target: "objects", identifier: "deals", attribute: "stage" },
+          // A deal may still stand in a stage archived since.
+          query: { show_archived: true },
           items: "data",
         },
         map: { externalId: { value: "deals" }, name: { value: "Deals" } },

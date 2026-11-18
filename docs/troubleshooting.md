@@ -32,9 +32,10 @@ attio work session status --check    # asks Attio which workspace the token belo
 | A command fails with 403, or "missing scope" | The token lacks a scope. Edit it in Workspace settings → Developers, or make a new one, with `record_permission:read`, `object_configuration:read` and `user_management:read`. |
 | `rate_limited` | Attio documents 100 reads and 25 writes a second ([Attio's page](https://docs.attio.com/rest-api/guides/rate-limiting)). Wait a moment and run it again. |
 | `deals list` is empty | Run `attio work sync` first. Deals are read from the copy it makes. |
+| `sync` fails with `not_found` | The Deal object is off in your workspace. An admin turns it on in Attio's objects settings ([Attio's docs](https://docs.attio.com/docs/standard-objects/standard-objects-deals)). |
 | A won or lost deal shows as open | A won stage must be the one Attio celebrates, and a lost stage's title must start with "Lost". See [deals](usage.md#deals). |
 | A new person or company is missing from `search all` | Run `attio work sync`. `attio work people list anna` reads Attio itself and finds them at once. |
-| `people list name:anna` is refused | A live list takes words only: `attio work people list anna`. |
+| `people list assigned_to:…` is refused | A live list takes words (`attio work people list anna`), not other fields. |
 | The settings file does not read | `doctor` lists every problem in the file under `config.issues`. Run the `config unset` each one gives, or fix the file by hand. |
 | `doctor` lists `files.problems` | Other users of the computer can read `config.json` or enter its folder. Run each `chmod` that `doctor` prints after "to make it private:". `doctor` never changes a file mode itself. |
 | "the OS keyring did not answer" | The computer has no keyring running. Sign in with `attio work session start --credential-storage file`. |

@@ -2,7 +2,7 @@
   "wcat_manifest": 2,
   "name": "attio",
   "description": "Attio CRM: deals, people and companies for you and your AI agent",
-  "docs_url": "https://wirecat.dev/en/docs/attio",
+  "docs_url": "https://github.com/WireCatLabs/attio-cli#readme",
   "package": "@wirecat/attio-cli",
   "bin": "wcat-attio",
   "commands": [
@@ -2146,7 +2146,6 @@
   "network": {
     "hosts": [
       "api.attio.com",
-      "app.attio.com",
       "registry.npmjs.org",
       "huggingface.co",
       "*.huggingface.co",

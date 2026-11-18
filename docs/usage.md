@@ -122,7 +122,7 @@ attio work fields list people --json
 ```
 
 `fields list` shows the attributes your workspace added on deals, people or companies (`organizations`), with their
-type and a select attribute's options, as the last `sync` stored them. Attio's own attributes are left out.
+type, as the last `sync` stored them. A select attribute's options are not listed yet. Attio's own attributes are left out.
 
 ## Search everything
 

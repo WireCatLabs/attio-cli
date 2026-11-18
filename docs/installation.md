@@ -19,6 +19,8 @@ Once it is done, an agent on this computer reads your deals, people and companie
 
 - An Attio workspace, and an admin of it. Only a workspace admin can make an access token. If you are not one, ask
   an admin to make the token for you with the scopes below.
+- Deals switched on, if you want them. Attio has the Deal object in every workspace but leaves it off until an admin
+  turns it on in the objects settings ([Attio's docs](https://docs.attio.com/docs/standard-objects/standard-objects-deals)).
 - For the command line: Node.js 22.16 or a later 22.x, or Node.js 24 or later. Node 23 is not supported.
 
 ## In WireCat Desktop
