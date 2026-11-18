@@ -47,8 +47,8 @@ Agent:  (runs attio work changes list change:won "at>=7d")
 
 ## Why attio
 
-- **A copy of your CRM on your computer.** `sync` copies your deals, people and companies into a local store. Lists,
-  the pipeline board and search answer from it with no request to Attio, also offline.
+- **A copy of your CRM on your computer.** `sync` copies your deals and the people and companies on them into a local
+  store. Lists, the pipeline board and search answer from it with no request to Attio, also offline.
 - **A permission on every action.** Each command and each Attio API operation has its own level: allow, ask, read
   only or deny. `WCATTIO_READ_ONLY=1` stops every write.
 - **The token stays in your system keyring.** It never appears in output, errors or run records, and is never taken
@@ -68,7 +68,7 @@ a terminal:
 npm install -g @wirecat/attio-cli
 attio skill install                # the agent skill, for Claude Code, Codex, Gemini CLI and OpenClaw
 attio work session start           # paste your Attio access token
-attio work sync                    # copy your deals, people and companies
+attio work sync                    # copy your deals and their people and companies
 attio work deals list status:open
 ```
 
@@ -167,8 +167,9 @@ More: [using attio](https://github.com/WireCatLabs/attio-cli/blob/main/docs/usag
 
 - **An access token.** A workspace admin makes it in Attio. It is kept in the system keyring, or in a private file
   on a computer without one.
-- **A local copy.** `sync` copies the workspace's deals, people and companies, with the stages of Attio's deal
-  pipeline, into the WireCat local store. Attio cannot list only what changed, so each sync reads every record.
+- **A local copy.** `sync` copies the workspace's deals and the people and companies they name, with the stages of
+  Attio's deal pipeline, into the WireCat local store. Attio cannot list only what changed, so each sync reads every
+  record.
 - **Live where it matters.** `people`, `organizations` and `users` ask Attio each time, so they show the newest data.
 - **Made for scripts.** `--json` prints one JSON value for every command, and an error comes as JSON with a code to
   branch on.

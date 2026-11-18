@@ -93,8 +93,8 @@ Agent:  (runs attio work changes list change:won "at>=7d")
 
 ## How it works
 
-- **A copy on your computer.** `sync` puts your deals, people and companies into the WireCat local store, the one
-  file on your computer that every WireCat tool shares. Lists, the pipeline and search read it, also offline.
+- **A copy on your computer.** `sync` puts your deals and the people and companies on them into the WireCat local store,
+  the one file on your computer that every WireCat tool shares. Lists, the pipeline and search read it, also offline.
 - **Sign-in with an access token.** It is kept in the system keyring, or in a private file on a computer without one.
 - **Made for scripts and agents.** `--json` gives a JSON answer, and an error comes with a code to branch on.
   [MCP](mcp.md)
@@ -114,7 +114,7 @@ Or in a terminal:
 npm install -g @wirecat/attio-cli
 attio skill install          # teaches Claude Code, Codex and Gemini CLI to use attio
 attio work session start     # paste the Attio access token when it asks
-attio work sync              # copy your deals, people and companies
+attio work sync              # copy your deals and their people and companies
 attio work deals list status:open
 ```
 
