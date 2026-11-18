@@ -607,14 +607,14 @@ attio api objects-records-create [options]
 
 **Example:** `attio personal api objects-records-create --object <value>`
 
-### `attio api objects-records-assert`
+### `attio api objects-records-upsert`
 
 Upsert a record — write (PUT /v2/objects/{object}/records)
 
 **Changes something in the service.**
 
 ```sh
-attio api objects-records-assert [options]
+attio api objects-records-upsert [options]
 ```
 
 | Option | What it does |
@@ -624,7 +624,7 @@ attio api objects-records-assert [options]
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Example:** `attio personal api objects-records-assert --object <value> --matching-attribute <value>`
+**Example:** `attio personal api objects-records-upsert --object <value> --matching-attribute <value>`
 
 ### `attio api objects-records-get`
 
@@ -822,14 +822,14 @@ attio api activities-records-create [options]
 
 **Example:** `attio personal api activities-records-create --activity <value>`
 
-### `attio api activities-records-assert`
+### `attio api activities-records-upsert`
 
 Upsert an activity record — write (PUT /v2/activities/{activity}/records)
 
 **Changes something in the service.**
 
 ```sh
-attio api activities-records-assert [options]
+attio api activities-records-upsert [options]
 ```
 
 | Option | What it does |
@@ -839,7 +839,7 @@ attio api activities-records-assert [options]
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Example:** `attio personal api activities-records-assert --activity <value> --matching-attribute <value>`
+**Example:** `attio personal api activities-records-upsert --activity <value> --matching-attribute <value>`
 
 ### `attio api activities-records-get`
 
@@ -1109,14 +1109,14 @@ attio api lists-entries-create [options]
 
 **Example:** `attio personal api lists-entries-create --list <value>`
 
-### `attio api lists-entries-assert`
+### `attio api lists-entries-upsert`
 
 Upsert a list entry by parent — write (PUT /v2/lists/{list}/entries)
 
 **Changes something in the service.**
 
 ```sh
-attio api lists-entries-assert [options]
+attio api lists-entries-upsert [options]
 ```
 
 | Option | What it does |
@@ -1125,7 +1125,7 @@ attio api lists-entries-assert [options]
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Example:** `attio personal api lists-entries-assert --list <value>`
+**Example:** `attio personal api lists-entries-upsert --list <value>`
 
 ### `attio api lists-entries-get`
 
@@ -2330,6 +2330,131 @@ attio stages list [query]
 **Returns:** stage — name, position, outcome, external_id, open, pipeline, pipeline_name, kind, and 7 more; every field: attio commands info stages list
 
 **Example:** `attio work stages list --json`, `attio work stages list kind:lead`
+
+## `attio people`
+
+the CRM's contacts, read live: the copy holds only your own
+
+### `attio people list`
+
+contacts in the CRM, newest first; another client is found here, never in the copy
+
+```sh
+attio people list [query] [options]
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `query` | optional | field:value terms that narrow the list — the fields are below. |
+
+| Option | What it does |
+|---|---|
+| `--limit <n>` | contacts per page, 1–250. Default: `50`. |
+| `--page <n>` | which page, starting at 1. Default: `1`. |
+| `--format <format>` | csv: this page as a table for a spreadsheet; --json=a,b picks its columns. One of: `csv`. |
+
+**Returns:** crm person — id, name, first_name, last_name, position, organization_ids, assigned_to, created_at, and 6 more; every field: attio commands info people list
+
+**Example:** `attio work people list`, `attio work people list name:anna* --json`, `attio work people list --format csv > people.csv`
+
+### `attio people show`
+
+one of the CRM's contacts, read live, with its phones and e-mails; one that is not your client counts toward the day's limit when the CRM sets one
+
+```sh
+attio people show <person>
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `person` | required | the CRM's id of the person, as list prints it, or its exact name. |
+
+**Returns:** crm person — id, name, first_name, last_name, position, organization_ids, assigned_to, created_at, and 6 more; every field: attio commands info people show
+
+**Example:** `attio work people show 42`, `attio work people show "Anna Example" --json`
+
+## `attio organizations`
+
+the CRM's companies, read live: the copy holds only your own
+
+### `attio organizations list`
+
+companies in the CRM, newest first; another client is found here, never in the copy
+
+```sh
+attio organizations list [query] [options]
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `query` | optional | field:value terms that narrow the list — the fields are below. |
+
+| Option | What it does |
+|---|---|
+| `--limit <n>` | companies per page, 1–250. Default: `50`. |
+| `--page <n>` | which page, starting at 1. Default: `1`. |
+| `--format <format>` | csv: this page as a table for a spreadsheet; --json=a,b picks its columns. One of: `csv`. |
+
+**Returns:** crm organization — id, name, type, own, person_ids, assigned_to, created_at, updated_at, and 5 more; every field: attio commands info organizations list
+
+**Example:** `attio work organizations list`, `attio work organizations list name:anna* --json`, `attio work organizations list --format csv > organizations.csv`
+
+### `attio organizations show`
+
+one of the CRM's companies, read live, with its phones and e-mails; one that is not your client counts toward the day's limit when the CRM sets one
+
+```sh
+attio organizations show <organization>
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `organization` | required | the CRM's id of the organization, as list prints it, or its exact name. |
+
+**Returns:** crm organization — id, name, type, own, person_ids, assigned_to, created_at, updated_at, and 5 more; every field: attio commands info organizations show
+
+**Example:** `attio work organizations show 42`, `attio work organizations show "Anna Example" --json`
+
+## `attio users`
+
+the CRM account's users: the people of your own company who own deals
+
+### `attio users list`
+
+the CRM's users, read live, in the CRM's order
+
+```sh
+attio users list [query] [options]
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `query` | optional | field:value terms that narrow the list — the fields are below. |
+
+| Option | What it does |
+|---|---|
+| `--limit <n>` | users per page, 1–250. Default: `50`. |
+| `--page <n>` | which page, starting at 1. Default: `1`. |
+
+**Returns:** crm user — id, name, email, position, active, department_ids, untrusted; every field: attio commands info users list
+
+**Example:** `attio work users list`, `attio work users list active:true --json`
+
+### `attio users show`
+
+one of the CRM's users, read live
+
+```sh
+attio users show <user>
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `user` | required | the CRM's id of the user, as list prints it. |
+
+**Returns:** crm user — id, name, email, position, active, department_ids, untrusted; every field: attio commands info users show
+
+**Example:** `attio work users show 7`
 
 ## `attio changes`
 

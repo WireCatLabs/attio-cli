@@ -33,23 +33,14 @@ const artifacts = generate(
   ],
   {
     banner: ["Source: spec/attio/, checked against provenance.json", "Run: pnpm generate"],
-    // SAMPLE: operation id → { effect, reason } where the HTTP method misleads, as a POST that deletes.
+    // Operation id → { effect, reason } where the HTTP method misleads; none found in Attio's description.
     overrides: {},
     // Attio's POST …/records/query, …/entries/query and …/records/search only read.
     readingPosts: true,
-    // A PUT on a collection is Attio's "assert": create or update by a matching attribute, beside the PUT by id.
-    names: {
-      fromPath: true,
-      segments: { v2: "" },
-      commands: {
-        putV2ActivitiesByActivityRecords: "activities-records-assert",
-        putV2ListsByListEntries: "lists-entries-assert",
-        putV2ObjectsByObjectRecords: "objects-records-assert",
-      },
-    },
-    // SAMPLE: the permission group, and the body fields or query parameters that delete when true.
+    names: { fromPath: true, segments: { v2: "" } },
+    // The permission group; Attio deletes only by DELETE, with no deleting flag in a body or query.
     permissions: { group: "attio", deletingFlags: [] },
-    // SAMPLE: how each read pages, found from the spec; an override's `pagination` wins. `auth` replaces a wrong or
+    // How each read pages, found from the spec; an override's `pagination` wins. `auth` replaces a wrong or
     // missing sign-in in the spec: { securitySchemes, security, reason }.
     pagination: true,
   },

@@ -29,10 +29,13 @@ const update = appUpdate({
   command: IDENTITY.command,
   version: IDENTITY.version,
   entry: import.meta.url,
+  // These two run only for a terminal in pretty output (cli-base's mayNotify), which no test of run() is.
+  /* v8 ignore start */
   statePath: (env) =>
     join(resolvePaths({ appName: IDENTITY.appName, prefix: IDENTITY.envPrefix, env }).state, "update-check.json"),
   // biome-ignore lint/plugin/no-own-settings: the update check runs before any command exists to give baseContext
   enabled: (env) => configuration.resolveSettings({}, { env, needsProfile: false }).updateCheck,
+  /* v8 ignore stop */
   offVariables: [`${IDENTITY.envPrefix}_NO_UPDATE_CHECK`],
 })
 
@@ -42,8 +45,7 @@ const mcpCommand = () =>
     untrusted: ["record names and attribute values", "workspace member names"],
     permissionExample: "api.objects-records-delete=deny",
     skill: SKILL,
-    signedIn: (profile, env, keyring) =>
-      new ProfileTokenStore({ app: IDENTITY, env, ...(keyring ? { keyring } : {}) }).signedIn(profile),
+    signedIn: (profile, env, keyring) => new ProfileTokenStore({ app: IDENTITY, env, keyring }).signedIn(profile),
   })
 
 export const definition = (): ProgramDefinition => ({

@@ -1343,7 +1343,7 @@ export const operations: readonly ManifestOperation[] = [
   },
   {
     id: "putV2ObjectsByObjectRecords",
-    command: "objects-records-assert",
+    command: "objects-records-upsert",
     binding: {
       kind: "http",
       method: "PUT",
@@ -1974,7 +1974,7 @@ export const operations: readonly ManifestOperation[] = [
   },
   {
     id: "putV2ActivitiesByActivityRecords",
-    command: "activities-records-assert",
+    command: "activities-records-upsert",
     binding: {
       kind: "http",
       method: "PUT",
@@ -2738,7 +2738,7 @@ export const operations: readonly ManifestOperation[] = [
   },
   {
     id: "putV2ListsByListEntries",
-    command: "lists-entries-assert",
+    command: "lists-entries-upsert",
     binding: {
       kind: "http",
       method: "PUT",

@@ -1,4 +1,4 @@
-attio — Attio CRM: people and companies, searchable with your other WireCat data
+attio — Attio CRM: deals, people and companies for you and your AI agent
 
 Usage: attio <profile> <command> [options]
 Account commands start with your profile, a name you choose; none is ever assumed.
@@ -15,6 +15,7 @@ Works with:
   b24                     Bitrix24 CRM: deals, leads and pipelines, searchable with your other WireCat data
   pbx                     Asterisk PBX calls and recordings, searchable with your other WireCat data
   notion                  Notion pages and databases as local text, searchable with your other WireCat data
+  ydisk                   Yandex Disk folders as local text, searchable with your other WireCat data
 
 Next:         attio commands      every command, by section
               attio help options  output, offline, timeouts, dry run

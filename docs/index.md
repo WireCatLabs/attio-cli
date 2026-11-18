@@ -1,20 +1,145 @@
-# attio
+# Attio
 
-`attio` is a WireCat command-line tool for Attio, for the terminal, for scripts and for AI agents.
+Know where every deal stands without opening Attio. `attio` gives the AI agent you already use, such as Claude Code,
+Codex or Claude Desktop, a copy of your Attio deals on your computer, so it answers from that copy, even offline. It
+looks up people and companies in Attio when you ask about them.
 
-- `attio <profile> sync` copies your workspace's people and companies into WireCat's local store, where `search`
-  and the other WireCat CLIs find them.
-- `attio <profile> api …` runs any operation of the Attio API, each with its own flags, help and `--json`.
-- It also has the commands every WireCat CLI shares: `doctor`, `commands`, `config`, `skill`, `mcp`, `runs` and
-  `upgrade`.
+Ask which deals are stuck in a stage, what was won or lost this week, or how your pipeline looks today. The agent
+answers with the deal, its amount, its company and its owner. You need an Attio workspace and an admin who can make an
+access token.
 
-## What sync copies, and what it leaves out
+**On this page:**
 
-- **People and companies, with their current values only.** Attio keeps the history of each attribute; a value that
-  was replaced is not copied.
-- **Every sync lists all records again.** Attio has no way to ask for the records changed since a time, so a sync
-  reads the full list and then every id, to find deleted records.
-- **Not copied yet:** deals, your workspace's own attributes, and custom objects. A custom object has no kind in
-  WireCat's CRM store (people, companies, deals, leads), so its records stay in Attio; read them with `attio api`.
+1. [What you get](#what-you-get)
+2. [Things a newcomer would not guess](#things-a-newcomer-would-not-guess)
+3. [How it looks](#how-it-looks)
+4. [Why attio](#why-attio)
+5. [What it can do](#what-it-can-do)
+6. [How it works](#how-it-works)
+7. [Start in a few minutes](#start-in-a-few-minutes)
+8. [Limits](#limits)
+9. [Find a guide for your task](#find-a-guide-for-your-task)
 
-Start with [installation](installation.md), then [usage](usage.md).
+## What you get
+
+- **The answer, not the search.** Ask about a deal in your own words. The agent finds it with its stage, amount,
+  company and people, read from your computer, with no clicking through Attio.
+- **Your pipeline at a glance.** How many deals stand in each stage, their total per currency, how many went on to
+  the next stage, and your win rate.
+- **What changed since yesterday.** Deals created, moved, won and lost, as a list or as a short morning digest.
+- **People and companies on demand.** "Who is Anna at Example LLC?" reads Attio right then, with e-mails, phones and
+  the company.
+- **A deals export in one line.** Any list of deals, people or companies becomes a CSV file for a spreadsheet.
+- **Your CRM beside your chats.** One search finds a deal next to the messages, mail and meetings about it that the
+  other WireCat tools keep on your computer.
+
+## Things a newcomer would not guess
+
+- **An access token is your key.** Attio lets a program in with a token that a workspace admin makes in Workspace
+  settings → Developers. It reads the whole workspace, not only your own records. [Install](installation.md) shows
+  where to click and which scopes to tick.
+- **`work` is a name you choose.** It names one Attio workspace, and it is the first word of every command. No
+  command picks a workspace for you.
+- **The deal commands read a copy, the people commands read Attio.** `sync` copies the workspace's deals, people and
+  companies, with the stages of the deal pipeline. `deals`, `pipelines` and `changes` answer from that copy. `people`,
+  `organizations` and `users` ask Attio each time, so they always show the newest data and need the internet.
+- **The deal commands only read, the `api` group can write.** `deals`, `people` and the other CRM commands never
+  change Attio. `attio work api …` reaches every operation of the Attio API, writes and deletes included, as far as
+  the token's scopes and your [permissions](permissions.md) allow.
+- **Over MCP, "ask" goes ahead.** MCP is the way apps such as Claude Desktop call a tool, and nobody sits at a terminal
+  there to answer a question. Lock the `api` group before you connect such an app: [MCP](mcp.md).
+
+## How it looks
+
+```text
+You:    Which deals are in Negotiation?
+Agent:  (runs attio work deals list stage:Negotiation status:open)
+        · "Example LLC renewal", 24 000 USD, owner Anna Example
+        · "Sample Inc pilot", 6 500 USD, owner Bob Sample
+You:    What did we win this week?
+Agent:  (runs attio work changes list change:won "at>=7d")
+        One deal: "Example Corp expansion", 12 000 USD, won on Tuesday.
+```
+
+*Invented deals, illustrative output.*
+
+## Why attio
+
+- **A copy of your deals on your computer.** Lists, the pipeline board and search answer from it with no request to
+  Attio, also offline.
+- **Safe to hand to an agent.** The CRM commands only read. Each command and each Attio API operation has its own
+  permission: allow, ask, read only or refuse. One line keeps every write away from an agent.
+- **The token stays in your system keyring.** It never shows in output, errors or logs.
+- **Polite to Attio.** Most answers need no request at all, so your workspace's rate limit is left for your other
+  apps.
+- **Ready for any agent.** A skill for agents with a terminal, an MCP server for Claude Desktop and Cursor, and a
+  secure link for ChatGPT and Claude in the browser.
+- **Free and open source.** Apache 2.0.
+
+## What it can do
+
+- **Deals:** list them by stage, status or company, show one with its people and company, export a page to CSV.
+  [Use it](usage.md#deals)
+- **The pipeline:** each stage of Attio's deal pipeline with its count and total, and the win rate over a window you
+  choose. [Use it](usage.md#the-pipeline)
+- **What changed:** deals created, moved, won and lost, and a morning digest. [Use it](usage.md#what-changed)
+- **People, companies and members:** search Attio by name or e-mail, show one, export a list.
+  [Use it](usage.md#people-companies-and-members)
+- **Your own attributes:** the workspace's custom attributes on deals, people and companies, with their values.
+  [Use it](usage.md#your-own-attributes)
+- **Search across your tools:** deals next to messages, notes, events and meetings from other WireCat tools.
+  [Use it](usage.md#search-everything)
+- **Any Attio API operation** from a terminal, with the same permission checks. [Use it](usage.md#the-attio-api)
+
+## How it works
+
+- **A copy on your computer.** `sync` puts your deals, people and companies into the WireCat local store, the one
+  file on your computer that every WireCat tool shares. Lists, the pipeline and search read it, also offline.
+- **Sign-in with an access token.** It is kept in the system keyring, or in a private file on a computer without one.
+- **Made for scripts and agents.** `--json` gives a JSON answer, and an error comes with a code to branch on.
+  [MCP](mcp.md)
+- **What is stored and what goes over the network.** [Security](security.md)
+
+## Start in a few minutes
+
+In WireCat Desktop, add Attio from the tool list and paste the token when it asks. Or paste this into your agent:
+
+```text prompt
+Install attio with npm install -g @wirecat/attio-cli. Help me make an Attio access token and run attio work session start to connect my workspace, then sync and show my open deals.
+```
+
+Or in a terminal:
+
+```sh
+npm install -g @wirecat/attio-cli
+attio skill install          # teaches Claude Code, Codex and Gemini CLI to use attio
+attio work session start     # paste the Attio access token when it asks
+attio work sync              # copy your deals, people and companies
+attio work deals list status:open
+```
+
+You need Node.js 22.16 or a later 22.x, or Node.js 24 or later. [Install](installation.md) shows how to make the
+token.
+
+## Limits
+
+- Deals are read and never changed by the deal commands. Moving or closing a deal is on the [roadmap](roadmap.md).
+- Notes, tasks, lists and custom objects have no commands of their own yet. `attio work api` reaches them.
+- People, companies and workspace members are read from Attio each time, so they need the internet.
+- Attio cannot list only what changed since a time, so each sync lists every deal again. A large workspace takes
+  longer to sync.
+- Only a workspace admin can make the token, and it reads the whole workspace.
+
+## Find a guide for your task
+
+| Task | Guide |
+|---|---|
+| Install and connect a workspace | [Install](installation.md) |
+| Read deals, the pipeline, what changed | [Use it](usage.md) |
+| Connect an app that uses MCP | [MCP](mcp.md) |
+| Decide what an agent may change | [Permissions](permissions.md) |
+| An exact command or option | [Commands](commands.md) |
+| Change a setting | [Settings](configuration.md) |
+| Something does not work | [When something goes wrong](troubleshooting.md) |
+| What is stored and sent | [Security](security.md) |
+| What comes next | [Roadmap](roadmap.md) |

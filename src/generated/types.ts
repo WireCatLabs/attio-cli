@@ -1912,7 +1912,7 @@ export type ViewObjectAttributeRef = {
 }
 
 /** A slug or ID of an attribute of the view's object, or an array that follows record references. The array starts with a slug or ID of an attribute of the view's object. Each later item is an `{object, attribute}` pair. Use a slug or ID, not an array, for a single attribute. Responses use IDs only. */
-export type ViewAttributePath = string | Array<unknown>
+export type ViewAttributePath = string | Array<string | ViewObjectAttributeRef>
 
 /** A condition on one attribute. */
 export type ViewFilterCondition = {
@@ -15856,7 +15856,67 @@ export type DeleteV2ActivitiesByActivityRecordsByRecordIdResponse = Record<strin
 export type PostV2SqlRequest = {
   /** The SQL query to be executed. Use `$name` placeholders to reference values from `parameters` instead of inlining them into the query. */
   sql: string
-  parameters?: Record<string, unknown>
+  /** Named parameters referenced in the query using `$name` syntax. A maximum of 25 parameters can be provided. Each parameter must declare its type explicitly. Names must start with a letter or underscore, only contain letters, digits and underscores, and be at most 64 characters long. Compare against a list parameter with `= ANY($name)`, not `IN ($name)`, which does not type check. Read a field of a struct parameter with `get_field($name, 'field')`. */
+  parameters?: {
+    [key: string]:
+      | {
+          /** The type of the parameter. */
+          type: "null"
+        }
+      | {
+          /** The type of the parameter. */
+          type: "boolean"
+          value: boolean
+        }
+      | {
+          /** The type of the parameter. */
+          type: "integer"
+          /** An integer between -(2^53 - 1) and 2^53 - 1. */
+          value: number
+        }
+      | {
+          /** The type of the parameter. */
+          type: "double"
+          value: number
+        }
+      | {
+          /** The type of the parameter. */
+          type: "string"
+          value: string
+        }
+      | {
+          /** The type of the parameter. */
+          type: "timestamp"
+          /** An ISO 8601 timestamp with a time zone, either `Z` or an offset such as `+02:00` or `+0200`, e.g. `2023-01-01T15:00:00.123456Z`. Seconds and fractional seconds are optional. Truncated to microseconds. */
+          value: string
+        }
+      | {
+          /** The type of the parameter. */
+          type: "date"
+          /** A calendar date in the format YYYY-MM-DD. */
+          value: string
+        }
+      | {
+          /** The type of the parameter. */
+          type: "decimal"
+          /** A decimal number in plain notation, with at most 29 digits before and 9 digits after the decimal point. */
+          value: string
+        }
+      | {
+          /** The type of the parameter. */
+          type: "list"
+          /** The type of every item in the list. */
+          item_type: "boolean" | "integer" | "double" | "string" | "timestamp" | "date" | "decimal"
+          /** The items of the list, each a valid value for `item_type`. A maximum of 100 items can be provided. */
+          value: Array<unknown>
+        }
+      | {
+          /** The type of the parameter. */
+          type: "struct"
+          /** A map of field names to parameter objects, with at least one and a maximum of 25 fields. Names must start with a letter or underscore, only contain letters, digits and underscores, and be at most 64 characters long. Structs can contain other structs, up to 2 levels of structs in total. */
+          value: { [key: string]: Record<string, unknown> }
+        }
+  }
 }
 
 /** Success */

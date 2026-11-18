@@ -24,6 +24,14 @@ describe("each remote command runs inside cli-core's run", () => {
       ),
       "mcp serve": "listens until stopped",
       sync: "cli-core's addCrmCommands runs it in its run; src/crm-contracts.test.ts runs crmSyncContract",
+      "users list": "cli-core's addCrmCommands runs it in its run, over the source's users",
+      "users show": "cli-core's addCrmCommands runs it in its run, over the source's users",
+      ...Object.fromEntries(
+        ["people list", "people show", "organizations list", "organizations show"].map((command) => [
+          command,
+          "cli-core's addCrmCommands runs it in its run; src/attio-map.test.ts and crmSourceContract read the live list",
+        ]),
+      ),
       doctor:
         "cli-core's appDoctorCommand answers --online outside a run of its own; drop this once core runs it inside",
     },

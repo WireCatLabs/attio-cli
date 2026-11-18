@@ -85,3 +85,45 @@ it.runIf(destructive.length > 0)(
     expect(service.calls).toEqual([])
   },
 )
+
+// Every option the spec offers, with a body from a file; the CLI's test matrix names each one.
+it.each(API.manifest.operations.map((operation) => [operation.command, operation] as const))(
+  "takes every option of %s, its body from a file",
+  async (_, operation) => {
+    writeFileSync(upload, new Uint8Array([0x89, 0x50, 0x4e, 0x47]))
+    withPermissions({ api: "allow", ...Object.fromEntries(deleteKeys.map((key) => [key, "allow"])) })
+    const service = fake()
+    const options = operation.parameters.flatMap((parameter) => [
+      `--${apiFlagOf(parameter.name)}`,
+      String(sampleOf(parameter.schema, definitions)),
+    ])
+    const body = operation.request?.schema
+      ? sampleOf({ type: "ref", ref: operation.request.schema }, definitions)
+      : undefined
+    const bodyFile = join(upload, "..", `${operation.command}.json`)
+    if (body !== undefined && !sendsBytes(operation)) writeFileSync(bodyFile, JSON.stringify(body))
+    const argv = [
+      ...options,
+      ...(sendsBytes(operation) ? ["--body-file", upload] : body === undefined ? [] : ["--body-file", bodyFile]),
+      ...(operation.effect === "destructive" ? ["--yes"] : []),
+    ]
+    const ran = await runCli(["personal", "api", operation.command, ...argv, "--json"], { service })
+    expect(ran.code, ran.err).toBe(0)
+    expect(service.refusals).toEqual([])
+    if (!operation.pagination) return
+    // The fake answers every page with a row; past the first page this one answers none, so --all reaches the end.
+    const ending = {
+      fetch: async (input: string | URL | Request, init?: RequestInit) => {
+        const url = new URL(input instanceof Request ? input.url : input)
+        const sent = typeof init?.body === "string" ? (JSON.parse(init.body) as { offset?: number }) : {}
+        return Number(url.searchParams.get("offset") ?? sent.offset ?? 0) > 0
+          ? Response.json({ data: [] })
+          : service.fetch(input, init)
+      },
+    }
+    const all = await runCli(["personal", "api", operation.command, ...argv, "--all", "--json"], { service: ending })
+    if (operation.pagination.style === "offset") expect(all.code, all.err).toBe(0)
+    // A cursor list the fake answers with the same next cursor every time: --all must stop there, not loop.
+    else expect(all.err).toContain("provider.invalid-response")
+  },
+)

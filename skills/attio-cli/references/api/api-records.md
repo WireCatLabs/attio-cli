@@ -2,20 +2,6 @@
 
 # Attio API: Records
 
-## `attio api objects-records-assert [options]`
-
-- What: Upsert a record
-- Call: `PUT /v2/objects/{object}/records`, effect: write
-- Sign-in: oauth2 (record\_permission:read-write, object\_configuration:read)
-- Body: `PutV2ObjectsByObjectRecordsRequest`, required
-
-| Flag | Required | What |
-|---|---|---|
-| `--object <value>` | yes | object |
-| `--matching-attribute <value>` | yes | matching\_attribute |
-| `--body <json>` | no | the request body as JSON; - reads it from stdin |
-| `--body-file <path>` | no | the request body from a JSON file; - is stdin |
-
 ## `attio api objects-records-attributes-values-list [options]`
 
 - What: List record attribute values
@@ -164,5 +150,19 @@
 |---|---|---|
 | `--object <value>` | yes | object |
 | `--record-id <value>` | yes | record\_id |
+| `--body <json>` | no | the request body as JSON; - reads it from stdin |
+| `--body-file <path>` | no | the request body from a JSON file; - is stdin |
+
+## `attio api objects-records-upsert [options]`
+
+- What: Upsert a record
+- Call: `PUT /v2/objects/{object}/records`, effect: write
+- Sign-in: oauth2 (record\_permission:read-write, object\_configuration:read)
+- Body: `PutV2ObjectsByObjectRecordsRequest`, required
+
+| Flag | Required | What |
+|---|---|---|
+| `--object <value>` | yes | object |
+| `--matching-attribute <value>` | yes | matching\_attribute |
 | `--body <json>` | no | the request body as JSON; - reads it from stdin |
 | `--body-file <path>` | no | the request body from a JSON file; - is stdin |

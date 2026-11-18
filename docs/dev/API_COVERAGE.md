@@ -37,7 +37,7 @@ Run: pnpm generate
 | `patchV2ByTargetByIdentifierAttributesByAttributeStatusesByStatus` | `PATCH /v2/{target}/{identifier}/attributes/{attribute}/statuses/{status}` | `attio <profile> api attributes-statuses-update` | write | contract | generated | Update a status |
 | `postV2ObjectsByObjectRecordsQuery` | `POST /v2/objects/{object}/records/query` | `attio <profile> api objects-records-query` | read | contract | generated | List records |
 | `postV2ObjectsByObjectRecords` | `POST /v2/objects/{object}/records` | `attio <profile> api objects-records-create` | write | contract | generated | Create a record |
-| `putV2ObjectsByObjectRecords` | `PUT /v2/objects/{object}/records` | `attio <profile> api objects-records-assert` | write | contract | generated | Upsert a record |
+| `putV2ObjectsByObjectRecords` | `PUT /v2/objects/{object}/records` | `attio <profile> api objects-records-upsert` | write | contract | generated | Upsert a record |
 | `getV2ObjectsByObjectRecordsByRecordId` | `GET /v2/objects/{object}/records/{record_id}` | `attio <profile> api objects-records-get` | read | — | generated | Get a record |
 | `putV2ObjectsByObjectRecordsByRecordId` | `PUT /v2/objects/{object}/records/{record_id}` | `attio <profile> api objects-records-replace` | write | contract | generated | Update a record (overwrite multiselect values) |
 | `patchV2ObjectsByObjectRecordsByRecordId` | `PATCH /v2/objects/{object}/records/{record_id}` | `attio <profile> api objects-records-update` | write | contract | generated | Update a record (append multiselect values) |
@@ -49,7 +49,7 @@ Run: pnpm generate
 | `postV2ObjectsRecordsSearch` | `POST /v2/objects/records/search` | `attio <profile> api objects-records-search` | read | contract | generated | Search records |
 | `postV2ActivitiesByActivityRecordsQuery` | `POST /v2/activities/{activity}/records/query` | `attio <profile> api activities-records-query` | read | contract | generated | List activity records |
 | `postV2ActivitiesByActivityRecords` | `POST /v2/activities/{activity}/records` | `attio <profile> api activities-records-create` | write | contract | generated | Create an activity record |
-| `putV2ActivitiesByActivityRecords` | `PUT /v2/activities/{activity}/records` | `attio <profile> api activities-records-assert` | write | contract | generated | Upsert an activity record |
+| `putV2ActivitiesByActivityRecords` | `PUT /v2/activities/{activity}/records` | `attio <profile> api activities-records-upsert` | write | contract | generated | Upsert an activity record |
 | `getV2ActivitiesByActivityRecordsByRecordId` | `GET /v2/activities/{activity}/records/{record_id}` | `attio <profile> api activities-records-get` | read | — | generated | Get an activity record |
 | `putV2ActivitiesByActivityRecordsByRecordId` | `PUT /v2/activities/{activity}/records/{record_id}` | `attio <profile> api activities-records-replace` | write | contract | generated | Update an activity record (overwrite multiselect values) |
 | `patchV2ActivitiesByActivityRecordsByRecordId` | `PATCH /v2/activities/{activity}/records/{record_id}` | `attio <profile> api activities-records-update` | write | contract | generated | Update an activity record (append multiselect values) |
@@ -66,7 +66,7 @@ Run: pnpm generate
 | `deleteV2ListsByListViewsByViewId` | `DELETE /v2/lists/{list}/views/{view_id}` | `attio <profile> api lists-views-delete` | destructive | — | generated | Delete a list view |
 | `postV2ListsByListEntriesQuery` | `POST /v2/lists/{list}/entries/query` | `attio <profile> api lists-entries-query` | read | contract | generated | List entries |
 | `postV2ListsByListEntries` | `POST /v2/lists/{list}/entries` | `attio <profile> api lists-entries-create` | write | contract | generated | Create an entry (add record to list) |
-| `putV2ListsByListEntries` | `PUT /v2/lists/{list}/entries` | `attio <profile> api lists-entries-assert` | write | contract | generated | Upsert a list entry by parent |
+| `putV2ListsByListEntries` | `PUT /v2/lists/{list}/entries` | `attio <profile> api lists-entries-upsert` | write | contract | generated | Upsert a list entry by parent |
 | `getV2ListsByListEntriesByEntryId` | `GET /v2/lists/{list}/entries/{entry_id}` | `attio <profile> api lists-entries-get` | read | — | generated | Get a list entry |
 | `putV2ListsByListEntriesByEntryId` | `PUT /v2/lists/{list}/entries/{entry_id}` | `attio <profile> api lists-entries-replace` | write | contract | generated | Update a list entry (overwrite multiselect values) |
 | `patchV2ListsByListEntriesByEntryId` | `PATCH /v2/lists/{list}/entries/{entry_id}` | `attio <profile> api lists-entries-update` | write | contract | generated | Update a list entry (append multiselect values) |
@@ -173,10 +173,3 @@ Run: pnpm generate
 | `deleteV2MeetingsByMeetingIdCallRecordingsByCallRecordingId` | `attio.delete` | always |
 | `deleteV2FilesByFileId` | `attio.delete` | always |
 | `deleteV2WebhooksByWebhookId` | `attio.delete` | always |
-
-## Spec corrections
-
-- patched /components/schemas/view-attribute-path/anyOf/1: the generator does not read this form yet; a looser schema of the same answer
-- patched /components/schemas/object-view-with-definition/allOf/1/properties/kanban/properties/status_attribute: the generator does not read this form yet; a looser schema of the same answer
-- patched /components/schemas/list-view-with-definition/allOf/1/properties/kanban/properties/status_attribute: the generator does not read this form yet; a looser schema of the same answer
-- patched /paths/~1v2~1sql/post/requestBody/content/application~1json/schema/properties/parameters: the generator does not read this form yet; a looser schema of the same answer

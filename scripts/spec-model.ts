@@ -24,21 +24,7 @@ export const parseSpec = (text: string): unknown => {
   }
 }
 
-// cli-base's generator refuses these JSON Schema forms; each is loosened to what it can read, the answers unchanged.
-const LOOSER = "the generator does not read this form yet; a looser schema of the same answer"
-const PATCHES: SpecPatch[] = [
-  { pointer: "/components/schemas/view-attribute-path/anyOf/1", value: { type: "array", items: {} }, reason: LOOSER },
-  ...["object-view-with-definition", "list-view-with-definition"].map((view) => ({
-    pointer: `/components/schemas/${view}/allOf/1/properties/kanban/properties/status_attribute`,
-    value: { $ref: "#/components/schemas/view-attribute-path" },
-    reason: LOOSER,
-  })),
-  {
-    pointer: "/paths/~1v2~1sql/post/requestBody/content/application~1json/schema/properties/parameters",
-    value: { type: "object", additionalProperties: {} },
-    reason: LOOSER,
-  },
-]
+const PATCHES: SpecPatch[] = []
 
 /**
  * The documents as committed, checked against provenance.json, a Swagger one upgraded to OpenAPI 3, joined when there

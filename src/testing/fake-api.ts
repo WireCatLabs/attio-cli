@@ -16,17 +16,3 @@ export const fakeServiceApi = (token = FAKE_API_TOKEN) =>
     securitySchemes: API.manifest.securitySchemes,
     token,
   })
-
-type Fetch = (input: string | URL | Request, init?: RequestInit) => Promise<Response>
-
-/** The API's host goes to fakeServiceApi, any other to `rest` (the sample's fake while the sample stays). */
-export const withServiceApi = (rest: { fetch: Fetch }, token: string): { fetch: Fetch } => {
-  const api = fakeServiceApi(token)
-  const host = new URL(manifestBaseUrl(API.manifest)).host
-  return {
-    fetch: (input, init) =>
-      new URL(input instanceof Request ? input.url : input).host === host
-        ? api.fetch(input, init)
-        : rest.fetch(input, init),
-  }
-}

@@ -2,9 +2,34 @@ const SHARED_MCP =
   "cli-core's appMcpCommand; its app-mcp-command and mcp-server-command tests drive it, and src/mcp.test.ts runs " +
   "this CLI's own server, config, revoke and refusals"
 const SHARED_REPORTS = "cli-core's appDoctorCommand; its app-mcp-command test creates and shows a report"
+const SHARED_STORE =
+  "cli-core's addStoreMaintenanceCommands, mounted by addCrmCommands; its store and src/crm/cli/store-file tests " +
+  "drive them on a CRM program"
 const LONG_RUNNING = `starts an HTTP server or a background process that runs until stopped; ${SHARED_MCP}`
 
 export const UNTESTED: { command: string; option?: string; reason: string }[] = [
+  ...[
+    ["store apply"],
+    ["store apply", "--yes"],
+    ["store info"],
+    ["store check"],
+    ["store migrate"],
+    ["store rebuild"],
+    ["store backup"],
+    ["store backup", "--encrypt"],
+    ["store restore"],
+    ["store decrypt"],
+    ["store decrypt", "--output"],
+    ["store repair"],
+    ["store repair", "--dry-run"],
+    ["store reset"],
+    ["store reset", "--no-backup"],
+    ["store reset", "--dry-run"],
+    ["store copies delete"],
+    ["store tables list"],
+    ["store recover"],
+    ["store recover run"],
+  ].map(([command, option]) => ({ command: command ?? "", ...(option ? { option } : {}), reason: SHARED_STORE })),
   {
     command: "",
     option: "--help-all",

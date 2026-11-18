@@ -45,14 +45,14 @@ it("mcp serve refuses a --permission that names no command, and a --profiles thi
 })
 
 it("mcp config prints an entry that serves the named profile, or every profile only when told", async () => {
-  const one = await runCli(["personal", "mcp", "config", "--permission", "comments.create=deny", "--json"])
+  const one = await runCli(["personal", "mcp", "config", "--permission", "api.objects-records-delete=deny", "--json"])
   const entry = one.json().item as { config: { mcpServers: Record<string, { args: string[] }> } }
   expect(entry.config.mcpServers["attio-personal"]?.args.slice(-5)).toEqual([
     "personal",
     "mcp",
     "serve",
     "--permission",
-    "comments.create=deny",
+    "api.objects-records-delete=deny",
   ])
   const all = await runCli(["mcp", "config", "--profiles", "all", "--json"])
   expect(JSON.stringify(all.json())).toContain('"--profiles","all"')
