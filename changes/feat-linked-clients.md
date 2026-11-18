@@ -1,4 +1,4 @@
-### Changed
+### Changed — may break callers
 
 - **`attio <profile> sync` copies only the people and companies your deals name**, as bitrix24-cli does. Attio adds a
   person and a company for every address in your mail, and a full copy held thousands you never sell to. Every other
