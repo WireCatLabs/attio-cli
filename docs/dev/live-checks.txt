@@ -1,2 +1,3 @@
 # version commit date script tree — one line per passed live check
 0.0.0 9fb9e9b4c7b130c230ec470b6997eb98ae980cab 2026-11-18 scripts/live.sh v2:bcecdc6c78f330e20db1ae5121dea074362ec207c91002b2fef2ae12d9252e37
+0.0.0 566a4c49762f2a040aedea214d599f6901adfc49 2026-11-18 scripts/live.sh v2:801aaeff341e47af83c63f58dd20a61343e5034469ec3275b6bcc157d4492789
