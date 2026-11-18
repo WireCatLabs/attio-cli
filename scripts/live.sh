@@ -37,9 +37,10 @@ node -e '
   const sync = JSON.parse(require("fs").readFileSync(process.argv[1], "utf8"))
   const item = sync.item ?? {}
   if (item.provider !== "attio") throw new Error(`not an attio sync: ${JSON.stringify(sync).slice(0, 200)}`)
-  const kinds = (item.synced ?? []).filter((one) => one.error === undefined && one.saved > 0).map((one) => one.kind)
-  for (const kind of ["person", "organization"])
-    if (!kinds.includes(kind)) throw new Error(`no ${kind} saved: ${JSON.stringify(item.synced).slice(0, 300)}`)
+  // People and companies are copied only as a deal names them, so a workspace with no deals saves none.
+  const failed = (item.synced ?? []).filter((one) => one.error !== undefined)
+  if (failed.length || !(item.synced ?? []).length)
+    throw new Error(`sync failed: ${JSON.stringify(item.synced).slice(0, 300)}`)
 ' "$work/sync.json"
 # Totals only: the record is public, the workspace's data is not.
 "${cli[@]}" live pipelines list --json >"$work/pipelines.json"
@@ -51,6 +52,8 @@ node -e '
   const kinds = synced.map((one) => `${one.kind} ${one.error ? `error ${one.error.code ?? one.error}` : one.saved}`)
   const stages = (read("pipelines").items ?? []).map((one) => (one.stages ?? []).length)
   const live = ["people", "organizations"].map((name) => `${name} ${(read(name).items ?? []).length}`)
+  for (const name of ["people", "organizations"])
+    if (!(read(name).items ?? []).length) throw new Error(`no ${name} listed live`)
   process.stdout.write(`synced: ${kinds.join(", ")}; pipelines: ${stages.length} with ${stages.join("+")} stages; live: ${live.join(", ")}\n`)
 ' "$work"
 "${cli[@]}" live doctor --json >/dev/null
