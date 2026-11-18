@@ -41,7 +41,19 @@ node -e '
   for (const kind of ["person", "organization"])
     if (!kinds.includes(kind)) throw new Error(`no ${kind} saved: ${JSON.stringify(item.synced).slice(0, 300)}`)
 ' "$work/sync.json"
+# Totals only: the record is public, the workspace's data is not.
+"${cli[@]}" live pipelines list --json >"$work/pipelines.json"
+"${cli[@]}" live people list --limit 1 --json >"$work/people.json"
+"${cli[@]}" live organizations list --limit 1 --json >"$work/organizations.json"
+node -e '
+  const read = (name) => JSON.parse(require("fs").readFileSync(`${process.argv[1]}/${name}.json`, "utf8"))
+  const synced = read("sync").item.synced ?? []
+  const kinds = synced.map((one) => `${one.kind} ${one.error ? `error ${one.error.code ?? one.error}` : one.saved}`)
+  const stages = (read("pipelines").items ?? []).map((one) => (one.stages ?? []).length)
+  const live = ["people", "organizations"].map((name) => `${name} ${(read(name).items ?? []).length}`)
+  process.stdout.write(`synced: ${kinds.join(", ")}; pipelines: ${stages.length} with ${stages.join("+")} stages; live: ${live.join(", ")}\n`)
+' "$work"
 "${cli[@]}" live doctor --json >/dev/null
 
 "${cli[@]}" live session end --json >/dev/null
-echo "live check passed: describe format 2, sign-in, sync of people and companies, store status, doctor, sign-out"
+echo "live check passed: describe format 2, sign-in, sync, store status, pipelines, live people and companies, doctor, sign-out"
