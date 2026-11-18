@@ -75,13 +75,15 @@ const source = (calls: { operation: string; body: unknown }[] = []) =>
         return request.path.identifier === "deals" && !Number(request.query.offset)
           ? { data: [{ api_slug: "priority", title: "Priority", type: "select", is_system_attribute: false }] }
           : { data: [] }
+      // A person or a company is copied as a deal names it, each read by id.
+      if (operation === "getV2ObjectsByObjectRecordsByRecordId") return { data: RECORDS[String(request.path.object)] }
       expect(operation).toBe("postV2ObjectsByObjectRecordsQuery")
       return { data: Number(body?.offset) ? [] : [RECORDS[String(request.path.object)]] }
     },
     ...HOOK_OPTIONS,
   })
 
-it("maps an Attio person", async () => {
+it("copies the person a deal names, mapped from Attio", async () => {
   const page = await source().changes("person", null)
   expect("items" in page && page.items).toEqual([
     expect.objectContaining({
@@ -128,7 +130,7 @@ it("reads Attio's one deal pipeline: won where it celebrates, lost by the title"
   ])
 })
 
-it("maps an Attio company with its domain and team", async () => {
+it("copies the company a deal names, with its domain and team", async () => {
   const page = await source().changes("organization", null)
   expect("items" in page && page.items).toEqual([
     expect.objectContaining({

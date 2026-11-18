@@ -38,10 +38,10 @@ agent asks. Attio's tokens do not expire, so delete one you no longer use.
 
 ## What the copy holds
 
-`sync` stores the workspace's deals, people and companies in the WireCat local store on this computer, where every
-WireCat tool can read them: a deal's stage, amount, company, people and owner, and a person's name, e-mails, phones
-and job title. Each record keeps its current values only. `people` and `organizations` read Attio live and add
-nothing to the copy.
+`sync` stores the workspace's deals, and the people and companies they name, in the WireCat local store on this
+computer, where every WireCat tool can read them: a deal's stage, amount, company, people and owner, and a person's
+name, e-mails, phones and job title. Each record keeps its current values only. `people` and `organizations` read Attio
+live and add nothing to the copy.
 
 Text from Attio, such as deal titles, names and attribute values, reaches an agent marked `untrusted`, so the agent
 reads it as data, not as an instruction.

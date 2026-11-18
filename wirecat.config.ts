@@ -33,8 +33,11 @@ export default defineCli({
     provider: "attio",
     kinds: ["organization", "person", "deal"],
     entities: {
+      // Only the clients a deal names are copied, as Bitrix24's are: Attio adds a person and a company for every
+      // address in the owner's mail. The rest are read live.
       organization: {
         ...records("companies"),
+        linked: true,
         search: {
           operation: QUERY,
           path: { object: "companies" },
@@ -50,6 +53,7 @@ export default defineCli({
       },
       person: {
         ...records("people"),
+        linked: true,
         search: {
           operation: QUERY,
           path: { object: "people" },
@@ -78,6 +82,7 @@ export default defineCli({
       },
       deal: {
         ...records("deals"),
+        optional: { message: "the Deals object is off in this Attio workspace; an admin turns it on in its settings" },
         map: {
           externalId: "id.record_id",
           title: "values.name.0.value",

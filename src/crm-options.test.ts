@@ -55,9 +55,7 @@ it("every option of the CRM commands runs against the fake workspace", async () 
     ["pipelines", "show", "Deals"],
     ["pipelines", "show", "Deals", "--since-time", "2026-01-01", "--until-time", "2026-12-31"],
     ["people", "list", "--limit", "1", "--page", "2"],
-    // Words go through Attio's filter `$or`, which its API description leaves out (an open object): src/attio-map.test.ts
-    // checks that search.
-    ["people", "list", "--format", "csv"],
+    ["people", "list", "name", "--format", "csv"],
     ["people", "show", refs.person],
     ["organizations", "list", "--limit", "1", "--page", "1"],
     ["organizations", "list", "--format", "csv"],

@@ -83,7 +83,7 @@ does not land in your shell history.
 
 ```sh
 attio work session status --check   # asks Attio which workspace the token belongs to
-attio work sync                     # copies your deals, people and companies
+attio work sync                     # copies your deals and their people and companies
 attio work deals list status:open
 ```
 

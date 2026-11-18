@@ -2301,7 +2301,7 @@
         "--json"
       ],
       "lastShape": "runs",
-      "what": "your deals, people and companies",
+      "what": "your deals and their clients",
       "note": null
     },
     "storeInfo": null,
@@ -2316,6 +2316,24 @@
       "app": "attio-cli",
       "env": "WCATTIO"
     },
-    "settings": null
+    "settings": null,
+    "accountRemove": {
+      "signOut": [
+        "{profile}",
+        "session",
+        "end",
+        "--record",
+        "--json"
+      ],
+      "remove": null,
+      "removes": [
+        "signIn"
+      ],
+      "keeps": [
+        "settings",
+        "data",
+        "listed"
+      ]
+    }
   }
 }

@@ -2675,7 +2675,7 @@ export const PostV2ObjectsByObjectRecordsQueryRequest: v.GenericSchema<
   unknown,
   T.PostV2ObjectsByObjectRecordsQueryRequest
 > = v.looseObject({
-  filter: v.optional(v.looseObject({})),
+  filter: v.optional(v.record(v.string(), v.unknown())),
   filter_view_id: v.optional(v.string()),
   sorts: v.optional(
     v.array(
@@ -8193,7 +8193,7 @@ export const PutV2ObjectsByObjectRecordsByRecordIdAttributesByAttributeValuesReq
     values: v.pipe(
       v.array(
         v.looseObject({
-          value: v.union([v.looseObject({}), v.string(), number(), v.boolean()]),
+          value: v.union([v.record(v.string(), v.unknown()), v.string(), number(), v.boolean()]),
           active_from: v.string(),
           active_until: v.nullable(v.string()),
         }),
@@ -9050,7 +9050,7 @@ export const PostV2ActivitiesByActivityRecordsQueryRequest: v.GenericSchema<
   unknown,
   T.PostV2ActivitiesByActivityRecordsQueryRequest
 > = v.looseObject({
-  filter: v.optional(v.looseObject({})),
+  filter: v.optional(v.record(v.string(), v.unknown())),
   sorts: v.optional(
     v.array(
       v.union([
@@ -13951,7 +13951,7 @@ export const DeleteV2ListsByListViewsByViewIdResponse: v.GenericSchema<
 
 export const PostV2ListsByListEntriesQueryRequest: v.GenericSchema<unknown, T.PostV2ListsByListEntriesQueryRequest> =
   v.looseObject({
-    filter: v.optional(v.looseObject({})),
+    filter: v.optional(v.record(v.string(), v.unknown())),
     filter_view_id: v.optional(v.string()),
     sorts: v.optional(
       v.array(
@@ -19461,7 +19461,7 @@ export const PutV2ListsByListEntriesByEntryIdAttributesByAttributeValuesRequest:
     values: v.pipe(
       v.array(
         v.looseObject({
-          value: v.union([v.looseObject({}), v.string(), number(), v.boolean()]),
+          value: v.union([v.record(v.string(), v.unknown()), v.string(), number(), v.boolean()]),
           active_from: v.string(),
           active_until: v.nullable(v.string()),
         }),

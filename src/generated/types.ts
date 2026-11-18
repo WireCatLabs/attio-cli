@@ -2968,7 +2968,7 @@ export type PatchV2ByTargetByIdentifierAttributesByAttributeStatusesByStatusResp
 
 export type PostV2ObjectsByObjectRecordsQueryRequest = {
   /** An object used to filter results to a subset of results. Cannot be used together with `filter_view_id`. See the [full guide to filtering and sorting here](/rest-api/guides/filtering-and-sorting). */
-  filter?: Record<string, unknown>
+  filter?: { [key: string]: unknown }
   /** UUID of a saved view on this object or list. When set, results are filtered using that view's filter configuration. Cannot be used together with `filter`. Note: sorts, limits, and offsets are applied independently and are not taken from the view. All attributes are returned regardless of which attributes are visible in the view. */
   filter_view_id?: string
   /** An object used to sort results. See the [full guide to filtering and sorting here](/rest-api/guides/filtering-and-sorting). */
@@ -9374,7 +9374,7 @@ export type PutV2ObjectsByObjectRecordsByRecordIdAttributesByAttributeValuesRequ
     /** The complete value history to write, replacing any existing values. Values may be supplied in any order. Gaps between intervals are allowed. At least one value is required, and a maximum of 400 values may be written in one request. */
     values: Array<{
       /** The value itself, in the same form accepted when updating a record or list entry. For complete documentation on values for all attribute types, please see our [attribute type docs](/docs/attribute-types). */
-      value: Record<string, unknown> | string | number | boolean
+      value: { [key: string]: unknown } | string | number | boolean
       /** An RFC 3339 timestamp for when this value became active. May not be in the future. */
       active_from: string
       /** An RFC 3339 timestamp for when this value stopped being active, or `null` if it is still active. Must be after `active_from` and may not be in the future. This key is required: omitting it is almost always a mistake in a migration. */
@@ -10372,7 +10372,7 @@ export type PostV2ObjectsRecordsSearchResponse = {
 
 export type PostV2ActivitiesByActivityRecordsQueryRequest = {
   /** An object used to filter results to a subset of results. Cannot be used together with `filter_view_id`. See the [full guide to filtering and sorting here](/rest-api/guides/filtering-and-sorting). */
-  filter?: Record<string, unknown>
+  filter?: { [key: string]: unknown }
   /** An object used to sort results. See the [full guide to filtering and sorting here](/rest-api/guides/filtering-and-sorting). */
   sorts?: Array<
     | {
@@ -16064,7 +16064,7 @@ export type DeleteV2ListsByListViewsByViewIdResponse = Record<string, unknown>
 
 export type PostV2ListsByListEntriesQueryRequest = {
   /** An object used to filter results to a subset of results. Cannot be used together with `filter_view_id`. See the [full guide to filtering and sorting here](/rest-api/guides/filtering-and-sorting). */
-  filter?: Record<string, unknown>
+  filter?: { [key: string]: unknown }
   /** UUID of a saved view on this object or list. When set, results are filtered using that view's filter configuration. Cannot be used together with `filter`. Note: sorts, limits, and offsets are applied independently and are not taken from the view. All attributes are returned regardless of which attributes are visible in the view. */
   filter_view_id?: string
   /** An object used to sort results. See the [full guide to filtering and sorting here](/rest-api/guides/filtering-and-sorting). */
@@ -22473,7 +22473,7 @@ export type PutV2ListsByListEntriesByEntryIdAttributesByAttributeValuesRequest =
     /** The complete value history to write, replacing any existing values. Values may be supplied in any order. Gaps between intervals are allowed. At least one value is required, and a maximum of 400 values may be written in one request. */
     values: Array<{
       /** The value itself, in the same form accepted when updating a record or list entry. For complete documentation on values for all attribute types, please see our [attribute type docs](/docs/attribute-types). */
-      value: Record<string, unknown> | string | number | boolean
+      value: { [key: string]: unknown } | string | number | boolean
       /** An RFC 3339 timestamp for when this value became active. May not be in the future. */
       active_from: string
       /** An RFC 3339 timestamp for when this value stopped being active, or `null` if it is still active. Must be after `active_from` and may not be in the future. This key is required: omitting it is almost always a mistake in a migration. */
