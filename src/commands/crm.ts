@@ -68,6 +68,8 @@ export const crmCommands = (): Command[] => {
     leads: SOURCE.kinds.includes("lead"),
     // People and companies whose entity names a search, and the users when the source names a call for them.
     live: LIVE,
+    // Attio's own record search takes words, not field conditions.
+    liveQuery: "words",
   })
   return [...holder.commands]
 }

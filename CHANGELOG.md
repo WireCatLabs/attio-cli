@@ -2,6 +2,17 @@
 
 Notable changes to `@wirecat/attio-cli`. One section per version, newest first.
 
+## 0.2.2 — 19.11.2026
+
+### Fixed
+
+- **The start page, installation, usage and troubleshooting pages say what `sync` reads**: every deal, then the
+  people and companies they name. A person on no deal is found live with `people list`.
+- **`people list` and `organizations list` say they take words**, since Attio's own search finds records by words. Their
+  help no longer offers `field:value` conditions, and a condition on a field other than `name` is refused with that
+  reason.
+- **`people show Anna` finds Anna by name.** Attio refused a name in place of a record id, and `show` stopped there.
+
 ## 0.2.1 — 19.11.2026
 
 ### Fixed

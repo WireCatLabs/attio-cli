@@ -1410,7 +1410,7 @@
         "store",
         "apply"
       ],
-      "summary": "apply scope mine to the contacts already stored: remove those no deal or…",
+      "summary": "apply scope mine to the contacts already stored: remove those no deal of the…",
       "effects": {
         "remote": "none",
         "local": "write"
@@ -1736,7 +1736,7 @@
         "changes",
         "list"
       ],
-      "summary": "deals and leads made, moved, won, lost and given another owner, activities…",
+      "summary": "deals made, moved, won, lost and given another owner, activities added and…",
       "effects": {
         "remote": "none",
         "local": "read"
@@ -1762,7 +1762,7 @@
         "search",
         "all"
       ],
-      "summary": "search stored deals and leads, messages, notes, calendar events and meetings",
+      "summary": "search stored deals, messages, notes, calendar events and meetings",
       "effects": {
         "remote": "none",
         "local": "read"
@@ -2064,27 +2064,12 @@
     },
     "crm_person": {
       "fields": [
-        "id",
-        "name",
-        "first_name",
-        "last_name",
-        "position",
-        "organization_ids",
-        "assigned_to",
-        "created_at",
-        "updated_at"
+        "name"
       ]
     },
     "crm_organization": {
       "fields": [
-        "id",
-        "name",
-        "type",
-        "own",
-        "person_ids",
-        "assigned_to",
-        "created_at",
-        "updated_at"
+        "name"
       ]
     },
     "crm_user": {

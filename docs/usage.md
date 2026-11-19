@@ -47,7 +47,8 @@ attio work sync --rescan       # start over, dropping a sync that stopped half w
 attio work store status        # how far each kind is, and how many are stored
 ```
 
-Attio cannot list only the records changed since a time, so each sync reads every record and every id. A sync stops
+Attio cannot list only the records changed since a time, so each sync reads every deal again, then the people and
+companies they name. A sync stops
 before its deadline or `--max-pages`, and the next one goes on from there. Records deleted in Attio leave the copy.
 
 Each record keeps its current values only. Attio keeps the history of each attribute, and a value that was replaced is
