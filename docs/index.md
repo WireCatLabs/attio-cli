@@ -40,8 +40,8 @@ access token.
   where to click and which scopes to tick.
 - **`work` is a name you choose.** It names one Attio workspace, and it is the first word of every command. No
   command picks a workspace for you.
-- **The deal commands read a copy, the people commands read Attio.** `sync` copies the workspace's deals, people and
-  companies, with the stages of the deal pipeline. `deals`, `pipelines` and `changes` answer from that copy. `people`,
+- **The deal commands read a copy, the people commands read Attio.** `sync` copies the workspace's deals and the
+  people and companies they name, with the stages of the deal pipeline. `deals`, `pipelines` and `changes` answer from that copy. `people`,
   `organizations` and `users` ask Attio each time, so they always show the newest data and need the internet.
 - **The deal commands only read, the `api` group can write.** `deals`, `people` and the other CRM commands never
   change Attio. `attio work api …` reaches every operation of the Attio API, writes and deletes included, as far as

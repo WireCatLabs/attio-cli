@@ -87,7 +87,8 @@ attio work sync                     # copies your deals and their people and com
 attio work deals list status:open
 ```
 
-The first sync reads every deal, person and company in the workspace, so a large workspace takes a while. If
+The first sync reads every deal in the workspace and the people and companies they name, so a large workspace
+takes a while. If
 something fails, see [when something goes wrong](troubleshooting.md).
 
 ## Sign out or change the token
