@@ -6,9 +6,9 @@ API speaks in record ids, attribute slugs and status ids, and `attio` takes stag
 You find the deals in a stage, the week's wins or a person's e-mail in one line. An agent does the same from your
 request.
 
-Every command starts with a profile, the name you gave one workspace's sign-in. `sync` copies your deals, people and
-companies into the WireCat local store, where the deal commands read them. You need a signed-in profile: [install](installation.md) sets
-one up.
+Every command starts with a profile, the name you gave one workspace's sign-in. `sync` copies your deals and the people
+and companies they name into the WireCat local store, where the deal commands read them. You need a signed-in profile:
+[install](installation.md) sets one up.
 
 **On this page:**
 
@@ -42,7 +42,7 @@ Deals, the pipeline and its stages are read from the local WireCat store, the on
 brings it up to date:
 
 ```sh
-attio work sync                # every deal, person and company again
+attio work sync                # every deal and the people and companies it names, again
 attio work sync --rescan       # start over, dropping a sync that stopped half way
 attio work store status        # how far each kind is, and how many are stored
 ```

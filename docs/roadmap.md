@@ -15,8 +15,8 @@ order is approximate and can change. To suggest something, open an
 
 ## What works today
 
-`attio` signs in to an Attio workspace with an access token. `sync` copies the workspace's deals, people and
-companies into the local WireCat store, with the stages of the deal pipeline, so `deals`,
+`attio` signs in to an Attio workspace with an access token. `sync` copies the workspace's deals and the people and
+companies they name into the local WireCat store, with the stages of the deal pipeline, so `deals`,
 `pipelines`, `stages` and `changes` work offline, and `search all` finds deals next to your messages, notes and
 meetings. `pipelines show` is the pipeline board: each stage's deals, their number, their total per currency and the
 win rate. `changes list` shows deals created, moved, won and lost, and `--format report` makes it a digest.

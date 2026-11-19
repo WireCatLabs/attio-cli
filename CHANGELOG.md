@@ -2,6 +2,13 @@
 
 Notable changes to `@wirecat/attio-cli`. One section per version, newest first.
 
+## 0.2.1 — 19.11.2026
+
+### Fixed
+
+- **The usage page, the roadmap and the command reference say what `sync` copies**: your deals and the people and
+  companies they name. The command reference opens with what you find there and a list of its main sections.
+
 ## 0.2.0 — 19.11.2026
 
 ### Changed — may break callers
