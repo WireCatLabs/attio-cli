@@ -149,9 +149,9 @@ attio api show <operation>
 
 | Argument | | What it is |
 |---|---|---|
-| `operation` | required | the operation, as api list prints it. |
+| `operation` | required | the operation as api list prints it (quoted), its old name, or its operation id. |
 
-**Example:** `attio personal api show objects-list --json`
+**Example:** `attio personal api show "objects-list" --json`
 
 ### `attio api objects-list`
 
@@ -1982,7 +1982,7 @@ attio api self-list
 
 ## `attio sync`
 
-bring the CRM's copy in the local store up to date: pipelines, companies, contacts, deals and leads that changed since the last sync, or everything with --rescan; a run stops before its deadline or --max-pages and the next one goes on from there
+bring the CRM's copy in the local store up to date: pipelines, companies, contacts, deals that changed since the last sync, or everything with --rescan; a run stops before its deadline or --max-pages and the next one goes on from there
 
 **Changes something on this computer only.**
 
@@ -2017,7 +2017,7 @@ attio store status
 
 ### `attio store apply`
 
-apply scope mine to the contacts already stored: remove those no deal or lead of the chosen users and no kept company names, and the people they leave empty; counts only unless --yes, under scope all too. A sync that narrows the scope, or sync --rescan under mine, does this itself
+apply scope mine to the contacts already stored: remove those no deal of the chosen users and no kept company names, and the people they leave empty; counts only unless --yes, under scope all too. A sync that narrows the scope, or sync --rescan under mine, does this itself
 
 **Changes something on this computer only.**
 
@@ -2302,7 +2302,7 @@ attio pipelines list [query]
 
 **Returns:** pipeline — id, ref, name, kind, account, external_id, stages, created_at, and 9 more; every field: attio commands info pipelines list
 
-**Example:** `attio work pipelines list --json`, `attio work pipelines list kind:lead`
+**Example:** `attio work pipelines list --json`
 
 ### `attio pipelines show`
 
@@ -2343,7 +2343,7 @@ attio stages list [query]
 
 **Returns:** stage — name, position, outcome, external_id, open, pipeline, pipeline_name, kind, and 7 more; every field: attio commands info stages list
 
-**Example:** `attio work stages list --json`, `attio work stages list kind:lead`
+**Example:** `attio work stages list --json`
 
 ## `attio people`
 
@@ -2359,7 +2359,7 @@ attio people list [query] [options]
 
 | Argument | | What it is |
 |---|---|---|
-| `query` | optional | field:value terms that narrow the list — the fields are below. |
+| `query` | optional | words the CRM's own search looks for in contacts. |
 
 | Option | What it does |
 |---|---|
@@ -2369,7 +2369,7 @@ attio people list [query] [options]
 
 **Returns:** crm person — id, name, first_name, last_name, position, organization_ids, assigned_to, created_at, and 6 more; every field: attio commands info people list
 
-**Example:** `attio work people list`, `attio work people list name:anna* --json`, `attio work people list --format csv > people.csv`
+**Example:** `attio work people list`, `attio work people list anna --json`, `attio work people list --format csv > people.csv`
 
 ### `attio people show`
 
@@ -2401,7 +2401,7 @@ attio organizations list [query] [options]
 
 | Argument | | What it is |
 |---|---|---|
-| `query` | optional | field:value terms that narrow the list — the fields are below. |
+| `query` | optional | words the CRM's own search looks for in companies. |
 
 | Option | What it does |
 |---|---|
@@ -2411,7 +2411,7 @@ attio organizations list [query] [options]
 
 **Returns:** crm organization — id, name, type, own, person_ids, assigned_to, created_at, updated_at, and 5 more; every field: attio commands info organizations list
 
-**Example:** `attio work organizations list`, `attio work organizations list name:anna* --json`, `attio work organizations list --format csv > organizations.csv`
+**Example:** `attio work organizations list`, `attio work organizations list anna --json`, `attio work organizations list --format csv > organizations.csv`
 
 ### `attio organizations show`
 
@@ -2472,11 +2472,11 @@ attio users show <user>
 
 ## `attio changes`
 
-what changed in the CRM's deals, leads, activities and contacts, as the syncs copied it
+what changed in the CRM's deals, activities and contacts, as the syncs copied it
 
 ### `attio changes list`
 
-deals and leads made, moved, won, lost and given another owner, activities added and done, and contacts added, newest first; the last day unless at: says otherwise
+deals made, moved, won, lost and given another owner, activities added and done, and contacts added, newest first; the last day unless at: says otherwise
 
 ```sh
 attio changes list [query] [options]
@@ -2498,7 +2498,7 @@ attio changes list [query] [options]
 
 ## `attio fields`
 
-the CRM's own fields on deals, leads, people and organizations, as last synced
+the CRM's own fields on deals, people and organizations, as last synced
 
 ### `attio fields list`
 
@@ -2529,7 +2529,7 @@ search what the local store holds
 
 ### `attio search all`
 
-search the CRM's deals and leads by the words of their title, company, contacts and activities, and the messages, notes, calendar events and meetings other WireCat tools stored — best match first. Use it when you do not know where something was written
+search the CRM's deals by the words of their title, company, contacts and activities, and the messages, notes, calendar events and meetings other WireCat tools stored — best match first. Use it when you do not know where something was written
 
 ```sh
 attio search all <query> [options]
@@ -2537,7 +2537,7 @@ attio search all <query> [options]
 
 | Argument | | What it is |
 |---|---|---|
-| `query` | required | words and "phrases"; deals and leads match the words of their title, company, contacts and activities. |
+| `query` | required | words and "phrases"; deals match the words of their title, company, contacts and activities. |
 
 | Option | What it does |
 |---|---|
