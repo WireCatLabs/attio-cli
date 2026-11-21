@@ -105,7 +105,10 @@ const check = async (account, version, args) => {
 }
 
 const main = async () => {
-  const [account, ...args] = process.argv.slice(2)
+  const [account, ...rest] = process.argv.slice(2)
+  // --again runs the check even when this version has a record, as after a change to scripts/live.sh.
+  const again = rest.includes("--again")
+  const args = rest.filter((arg) => arg !== "--again")
   if (!account || account === "--help" || account === "-h") {
     process.stdout.write(`Usage: ${join(ROOT, "bin/live")} <keyring account> [arguments for scripts/live.sh]\n`)
     process.exitCode = account ? 0 : 2
@@ -113,7 +116,7 @@ const main = async () => {
   }
   if (existsSync(KIT)) fail("this is cli-template itself, which has no service to check")
   const { version } = JSON.parse(readFileSync(PACKAGE_JSON, "utf8"))
-  const current = run("pnpm", ["exec", "cli-dev", "live", "check", "--version", version], { stdio: "ignore" })
+  const current = again ? { status: 1 } : run("pnpm", ["exec", "cli-dev", "live", "check", "--version", version], { stdio: "ignore" })
   const record = current.status === 0 ? recordOf(version) : await check(account, version, args)
   if (!record) fail(`no record for ${version} in ${RECORDS}`)
 
