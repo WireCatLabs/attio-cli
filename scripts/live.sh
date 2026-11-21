@@ -61,7 +61,7 @@ node -e '
 pick() { node -e '
   const items = JSON.parse(require("fs").readFileSync(process.argv[1], "utf8")).items ?? []
   const one = items.find((item) => (item.name ?? item.title)?.trim())
-  if (one) process.stdout.write(process.argv[2] === "id" ? String(one.id ?? one.externalId) : (one.name ?? one.title))
+  if (one) process.stdout.write(process.argv[2] === "id" ? String(one.ref ?? one.id ?? one.externalId) : (one.name ?? one.title))
 ' "$1" "$2"; }
 by_name=""
 for kind in people organizations; do
@@ -84,12 +84,14 @@ deal=$(pick "$work/deals.json" id)
 deals="no deals to check"
 if [ -n "$deal" ]; then
   "${cli[@]}" live deals show "$deal" --json >"$work/deal.json"
-  "${cli[@]}" live search all "$(pick "$work/deals.json" name)" --json >"$work/search.json"
+  # The first word of its name, as an agent asks ("Northwind"), not the whole title with its brackets.
+  word=$(pick "$work/deals.json" name | cut -d" " -f1)
+  "${cli[@]}" live search all "$word" --json >"$work/search.json"
   deals=$(node -e '
     const read = (name) => JSON.parse(require("fs").readFileSync(`${process.argv[1]}/${name}.json`, "utf8"))
     const deal = read("deal").item ?? {}
     const found = (read("search").items ?? []).length
-    if (!found) throw new Error("search found nothing for the name of a stored deal")
+    if (!found) throw new Error("search found nothing for a word of the name of a stored deal")
     const linked = (deal.people ?? deal.contacts ?? []).length + (deal.organization || deal.company ? 1 : 0)
     process.stdout.write(`deal shown with ${linked} people and companies, search found ${found}`)
   ' "$work")
