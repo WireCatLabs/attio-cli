@@ -6,6 +6,7 @@
 # Needs: a key the owner chose for this check (keyring service attio, read access only is enough)
 # Needs: an Attio workspace API key with read access to records, object configuration and workspace members
 # Needs: at least one person and one company in that workspace
+# Needs: for the deal checks, at least one deal with a person or a company on it (without deals they are skipped)
 set -euo pipefail
 root=$(cd -- "$(dirname -- "$0")/.." && pwd)
 work=$(mktemp -d)
@@ -56,7 +57,47 @@ node -e '
     if (!(read(name).items ?? []).length) throw new Error(`no ${name} listed live`)
   process.stdout.write(`synced: ${kinds.join(", ")}; pipelines: ${stages.length} with ${stages.join("+")} stages; live: ${live.join(", ")}\n`)
 ' "$work"
+# A person and a company shown by name, as an agent asks for them (cli-core 0.708.0 answers a name, not only an id).
+pick() { node -e '
+  const items = JSON.parse(require("fs").readFileSync(process.argv[1], "utf8")).items ?? []
+  const one = items.find((item) => (item.name ?? item.title)?.trim())
+  if (one) process.stdout.write(process.argv[2] === "id" ? String(one.ref ?? one.id ?? one.externalId) : (one.name ?? one.title))
+' "$1" "$2"; }
+by_name=""
+for kind in people organizations; do
+  name=$(pick "$work/$kind.json" name)
+  if [ -n "$name" ]; then
+    "${cli[@]}" live "$kind" show "$name" --json >/dev/null
+    by_name="$by_name $kind"
+  fi
+done
+node -e '
+  const keys = (kind) => {
+    const one = (JSON.parse(require("fs").readFileSync(`${process.argv[1]}/${kind}.json`, "utf8")).items ?? [])[0] ?? {}
+    return Object.entries(one).filter(([, value]) => value !== null && value !== "" && !(Array.isArray(value) && !value.length)).map(([key]) => key).join(",")
+  }
+  process.stdout.write(`filled fields: people ${keys("people")}; organizations ${keys("organizations")}\n`)
+' "$work"
+echo "shown by name:${by_name:- nothing (no names)}"
+"${cli[@]}" live deals list --limit 1 --json >"$work/deals.json"
+deal=$(pick "$work/deals.json" id)
+deals="no deals to check"
+if [ -n "$deal" ]; then
+  "${cli[@]}" live deals show "$deal" --json >"$work/deal.json"
+  # The first word of its name, as an agent asks ("Northwind"), not the whole title with its brackets.
+  word=$(pick "$work/deals.json" name | cut -d" " -f1)
+  "${cli[@]}" live search all "$word" --json >"$work/search.json"
+  deals=$(node -e '
+    const read = (name) => JSON.parse(require("fs").readFileSync(`${process.argv[1]}/${name}.json`, "utf8"))
+    const deal = read("deal").item ?? {}
+    const found = (read("search").items ?? []).length
+    if (!found) throw new Error("search found nothing for a word of the name of a stored deal")
+    const linked = (deal.people ?? deal.contacts ?? []).length + (deal.organization || deal.company ? 1 : 0)
+    process.stdout.write(`deal shown with ${linked} people and companies, search found ${found}`)
+  ' "$work")
+fi
+echo "deals: $deals"
 "${cli[@]}" live doctor --json >/dev/null
 
 "${cli[@]}" live session end --json >/dev/null
-echo "live check passed: describe format 2, sign-in, sync, store status, pipelines, live people and companies, doctor, sign-out"
+echo "live check passed: describe format 2, sign-in, sync, store status, pipelines, live people and companies, people and companies by name, a stored deal and search for it, doctor, sign-out"
