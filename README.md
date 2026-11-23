@@ -65,8 +65,8 @@ Agent:  (runs attio work changes list change:won "at>=7d")
 
 ## Quick start
 
-In [WireCat Desktop](https://wirecat.dev/en/download), add Attio from the tool list and paste the access token when it asks. Or in
-a terminal:
+In [WireCat Desktop](https://wirecat.dev/en/download), add Attio from the tool list and paste the access token when
+it asks. Or in a terminal:
 
 ```sh
 npm install -g @wirecat/attio-cli
