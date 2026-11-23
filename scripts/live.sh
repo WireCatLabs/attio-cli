@@ -117,9 +117,13 @@ sweep() {
       "${cli[@]}" live api objects-records-delete --object "$object" --record-id "$id" --yes --json >/dev/null 2>&1 || true
     done
 }
+# A run that passed deleted its records and signed out, so only a failed one sweeps.
+passed=""
 cleanup() {
-  sweep deals "{\"name\":{\"\$contains\":\"$stamp\"}}" || true
-  sweep people "{\"email_addresses\":\"live-$stamp@example.com\"}" || true
+  if [ -z "$passed" ]; then
+    sweep deals "{\"name\":{\"\$contains\":\"$stamp\"}}" || true
+    sweep people "{\"email_addresses\":\"live-$stamp@example.com\"}" || true
+  fi
   "${cli[@]}" live session end --json >/dev/null 2>&1 || true
   rm -rf "$work"
 }
@@ -169,4 +173,5 @@ node -e '
   "$work/pipelines.json" "$work/deal-read.json" "$work/person-read.json"
 
 "${cli[@]}" live session end --json >/dev/null
+passed=1
 echo "live check passed: describe format 2, sign-in, sync, store status, pipelines, live people and companies, people and companies by name, a stored deal and search for it, doctor, deal create, update, move, close and delete, person create, update and delete, sign-out"
