@@ -54,6 +54,7 @@ const company = {
     name: [{ ...at, attribute_type: "text", value: "Example Kitchens" }],
     domains: [{ ...at, attribute_type: "domain", domain: "example.test", root_domain: "example.test" }],
     team: [{ ...at, attribute_type: "record-reference", target_object: "people", target_record_id: "p1" }],
+    description: [{ ...at, attribute_type: "text", value: "Kitchens for bakeries in Valencia" }],
   },
 }
 
@@ -144,7 +145,7 @@ it("reads Attio's one deal pipeline: won where it celebrates or by the title, lo
   ])
 })
 
-it("copies the company a deal names, with its domain and team", async () => {
+it("copies the company a deal names, with its domain, team and description", async () => {
   const calls: Call[] = []
   const page = await source(calls).changes("organization", null)
   expect(calls).not.toContainEqual(
@@ -157,6 +158,7 @@ it("copies the company a deal names, with its domain and team", async () => {
       url: "example.test",
       people: ["p1"],
       createdAt: Date.parse("2026-01-10T08:00:00.000Z"),
+      metadata: { description: { label: "Description", value: "Kitchens for bakeries in Valencia" } },
     }),
   ])
 })
