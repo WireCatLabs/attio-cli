@@ -15,11 +15,13 @@ export const IDENTITY: AppIdentity = {
   contentLanguages: ["en"],
 }
 
-// What `wcat` and WireCat Desktop show before the tool is installed. The bin passes it to wcatStart before anything else loads; src/wcat.ts adds the permission keys.
+// What `wcat` and WireCat Desktop show before the tool is installed. The bin passes it to wcatStart before anything
+// else loads; src/wcat.ts adds the permission keys.
 export const DESKTOP = {
   ...IDENTITY,
   docs: "https://github.com/WireCatLabs/attio-cli#readme",
-  // app.attio.com is only Attio's OAuth sign-in page, which the API description names; requests go to api.attio.com.
+  // The API description names app.attio.com for its OAuth sign-in, and `cli-dev lint` wants every host it names. No
+  // request goes there: the CLI signs in with an access token against api.attio.com.
   hosts: ["api.attio.com", "app.attio.com"],
   tagline: "Attio deals, people and companies for your agent",
   syncs: "your deals and their clients",

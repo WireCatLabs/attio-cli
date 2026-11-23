@@ -5,9 +5,33 @@ const SHARED_REPORTS = "cli-core's appDoctorCommand; its app-mcp-command test cr
 const SHARED_STORE =
   "cli-core's addStoreMaintenanceCommands, mounted by addCrmCommands; its store and src/crm/cli/store-file tests " +
   "drive them on a CRM program"
+const SHARED_SCHEDULE =
+  "cli-core's scheduleCommandFor; its schedule tests drive every timer and option, and src/schedule.test.ts installs, " +
+  "lists and removes attio's sync timer"
 const LONG_RUNNING = `starts an HTTP server or a background process that runs until stopped; ${SHARED_MCP}`
 
 export const UNTESTED: { command: string; option?: string; reason: string }[] = [
+  ...[
+    ...["--at", "--at-time", "--notify-on", "--deliver-to"].map((option) => ({ command: "schedule command", option })),
+    { command: "schedule agent" },
+    ...[
+      "--model",
+      "--max-cost",
+      "--allow-dangerous",
+      "--max-cost-per-day",
+      "--every",
+      "--at",
+      "--at-time",
+      "--notify-on",
+      "--deliver-to",
+    ].map((option) => ({ command: "schedule agent", option })),
+    { command: "schedule run" },
+    ...["--no-notify", "--deliver-to"].map((option) => ({ command: "schedule run", option })),
+    { command: "schedule exec" },
+    { command: "schedule pause" },
+    { command: "schedule resume" },
+    { command: "schedule agents list" },
+  ].map((one) => ({ ...one, reason: SHARED_SCHEDULE })),
   ...[
     ["store apply"],
     ["store apply", "--yes"],

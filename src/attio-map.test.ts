@@ -39,7 +39,10 @@ const deal = {
       { ...at, attribute_type: "record-reference", target_object: "companies", target_record_id: "c1" },
     ],
     associated_people: [{ ...at, attribute_type: "record-reference", target_object: "people", target_record_id: "p1" }],
-    priority: [{ ...at, attribute_type: "select", option: { title: "High" } }],
+    priority: [
+      { ...at, active_until: "2026-02-01T00:00:00.000Z", attribute_type: "select", option: { title: "Low" } },
+      { ...at, attribute_type: "select", option: { title: "High" } },
+    ],
   },
 }
 
@@ -63,12 +66,14 @@ const statuses = [
 
 const RECORDS = { deals: deal, companies: company, people: person } as Record<string, unknown>
 
-const source = (calls: { operation: string; body: unknown }[] = []) =>
+type Call = { operation: string; object: unknown; body: unknown }
+
+const source = (calls: Call[] = []) =>
   crmSourceFromManifest(SOURCE, {
     api: API.manifest,
     call: async (operation, request) => {
       const body = typeof request.body === "string" ? JSON.parse(request.body) : request.body
-      calls.push({ operation, body })
+      calls.push({ operation, object: request.path.object, body })
       if (operation === "getV2ByTargetByIdentifierAttributesByAttributeStatuses") return { data: statuses }
       // Attributes page by offset: the second page is empty.
       if (operation === "getV2ByTargetByIdentifierAttributes")
@@ -84,7 +89,14 @@ const source = (calls: { operation: string; body: unknown }[] = []) =>
   })
 
 it("copies the person a deal names, mapped from Attio", async () => {
-  const page = await source().changes("person", null)
+  const calls: Call[] = []
+  const page = await source(calls).changes("person", null)
+  expect(calls).toContainEqual(
+    expect.objectContaining({ operation: "getV2ObjectsByObjectRecordsByRecordId", object: "people" }),
+  )
+  expect(calls).not.toContainEqual(
+    expect.objectContaining({ operation: "postV2ObjectsByObjectRecordsQuery", object: "people" }),
+  )
   expect("items" in page && page.items).toEqual([
     expect.objectContaining({
       externalId: "p1",
@@ -100,7 +112,7 @@ it("copies the person a deal names, mapped from Attio", async () => {
   ])
 })
 
-it("maps an Attio deal with its stage, amount, owner, links and own field", async () => {
+it("maps an Attio deal with its stage, amount, owner, links and own field's current value", async () => {
   const page = await source().changes("deal", null)
   expect("items" in page && page.items).toEqual([
     expect.objectContaining({
@@ -131,7 +143,11 @@ it("reads Attio's one deal pipeline: won where it celebrates, lost by the title"
 })
 
 it("copies the company a deal names, with its domain and team", async () => {
-  const page = await source().changes("organization", null)
+  const calls: Call[] = []
+  const page = await source(calls).changes("organization", null)
+  expect(calls).not.toContainEqual(
+    expect.objectContaining({ operation: "postV2ObjectsByObjectRecordsQuery", object: "companies" }),
+  )
   expect("items" in page && page.items).toEqual([
     expect.objectContaining({
       externalId: "c1",
@@ -144,7 +160,7 @@ it("copies the company a deal names, with its domain and team", async () => {
 })
 
 it("lists people live, newest first: words search names and emails, none list them all", async () => {
-  const calls: { operation: string; body: unknown }[] = []
+  const calls: Call[] = []
   const live = source(calls)
   const found = await live.list?.("person", { conditions: [], text: "ann", limit: 10 })
   expect(found?.items.map((one) => one.externalId)).toEqual(["p1"])

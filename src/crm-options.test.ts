@@ -1,24 +1,13 @@
 import { memoryKeyring } from "@wirecat/cli-base"
-import { parseCrmManifest } from "@wirecat/cli-core/crm"
-import { crmManifestFake, FAKE_MANIFEST_TOKEN } from "@wirecat/cli-core/crm/testing"
+import { FAKE_MANIFEST_TOKEN } from "@wirecat/cli-core/crm/testing"
 import { expect, it } from "vitest"
-import { API } from "./config.js"
-import { definitions } from "./generated/definitions.js"
-import { SOURCE } from "./generated/wirecat-config.js"
-import { fakeServiceApi } from "./testing/fake-api.js"
+import { crmFake, signInAndCrm } from "./testing/crm-service.js"
 import { runCli } from "./testing/harness.js"
 
-// The sign-in check goes to the fake of the whole API, the source's reads to the manifest's fake, which ends its lists.
 const signedInAndSynced = async () => {
   const keyring = memoryKeyring()
-  const api = fakeServiceApi(FAKE_MANIFEST_TOKEN)
-  const source = crmManifestFake(parseCrmManifest(SOURCE, API.manifest), { api: API.manifest, definitions })
-  const service = {
-    fetch: (input: string | URL | Request, init?: RequestInit) =>
-      new URL(input instanceof Request ? input.url : input).pathname === "/v2/self"
-        ? api.fetch(input, init)
-        : source.fetch(input, init),
-  }
+  const source = crmFake()
+  const service = signInAndCrm(source)
   const started = await runCli(["personal", "session", "start", "--json"], {
     keyring,
     service,

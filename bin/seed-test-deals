@@ -7,12 +7,13 @@
 //   bin/seed-test-deals <keyring account> --delete   delete what the CSV lists
 import { spawnSync } from "node:child_process"
 import { appendFileSync, existsSync, mkdtempSync, readFileSync, rmSync } from "node:fs"
-import { tmpdir } from "node:os"
+import { homedir, tmpdir } from "node:os"
 import { join } from "node:path"
+import { fileURLToPath } from "node:url"
 
-const ROOT = "/home/leemour/Projects/AI/attio-cli"
-const CLI = "/home/leemour/Projects/AI/attio-cli/dist/bin/attio.js"
-const STATUS = "/home/leemour/.local/state/wirecat/attio-seed-test-deals.csv"
+const ROOT = fileURLToPath(new URL("..", import.meta.url))
+const CLI = join(ROOT, "dist/bin/attio.js")
+const STATUS = join(homedir(), ".local/state/wirecat/attio-seed-test-deals.csv")
 const TAG = "(WireCat test)"
 
 const [account, mode] = process.argv.slice(2)
@@ -34,18 +35,24 @@ const attio = (args, input) => {
   const out = spawnSync("node", [CLI, "seed", ...args, "--json"], { cwd: ROOT, env, input, encoding: "utf8" })
   const text = out.stdout.trim()
   const json = text ? JSON.parse(text.slice(text.indexOf("{"))) : {}
-  if (out.status !== 0 || json.error) throw new Error(`${args.slice(0, 2).join(" ")}: ${JSON.stringify(json.error ?? text).slice(0, 400)} ${out.stderr.trim().slice(0, 400)}`)
+  if (out.status !== 0 || json.error) {
+    const why = `${JSON.stringify(json.error ?? text).slice(0, 400)} ${out.stderr.trim().slice(0, 400)}`
+    throw new Error(`${args.slice(0, 2).join(" ")}: ${why}`)
+  }
   return json
 }
+const flags = (options) => Object.entries(options).flatMap(([k, v]) => (v === true ? [`--${k}`] : [`--${k}`, v]))
 const api = (command, options, body) =>
-  attio(["api", command, ...Object.entries(options).flatMap(([k, v]) => (v === true ? [`--${k}`] : [`--${k}`, v])), ...(body ? ["--body", "-"] : [])], body && JSON.stringify(body))
-const done = () => (existsSync(STATUS) ? readFileSync(STATUS, "utf8").trim().split("\n").slice(1).map((line) => line.split(",")) : [])
+  attio(["api", command, ...flags(options), ...(body ? ["--body", "-"] : [])], body && JSON.stringify(body))
+const done = () =>
+  existsSync(STATUS) ? readFileSync(STATUS, "utf8").trim().split("\n").slice(1).map((line) => line.split(",")) : []
 const row = (key, object, id, status) => {
   if (!existsSync(STATUS)) appendFileSync(STATUS, "key,object,id,status,time\n")
   appendFileSync(STATUS, `${key},${object},${id},${status},${new Date().toISOString()}\n`)
 }
 
-const token = spawnSync("secret-tool", ["lookup", "service", "attio", "account", account], { encoding: "utf8" }).stdout.trim()
+const lookup = ["lookup", "service", "attio", "account", account]
+const token = spawnSync("secret-tool", lookup, { encoding: "utf8" }).stdout.trim()
 if (!token) throw new Error(`no keyring entry service attio account ${account}`)
 process.stdout.write(`status file: ${STATUS}\n`)
 try {
@@ -71,7 +78,7 @@ try {
       const title = values.name[0].value ?? values.name[0].full_name
       const filter = object === "people" ? { name: { full_name: { $eq: title } } } : { name: { $eq: title } }
       const found = api("objects-records-query", { object }, { filter, limit: 1 })
-      const existing = (found.items ?? found.item?.data ?? [])[0]?.id?.record_id
+      const existing = found.items?.[0]?.id?.record_id
       const made = existing ? undefined : api("objects-records-create", { object }, { data: { values } })
       const id = existing ?? recordOf(made)
       if (!id) throw new Error(`${key}: no record id in the answer`)
@@ -80,8 +87,10 @@ try {
       process.stdout.write(`${existing ? "found" : "created"} ${key}\n`)
       return id
     }
-    const members = api("workspace-members-list", {})
-    const owner = (members.items ?? members.item?.data ?? [])[0]?.email_address
+    // The token's own member owns the test deals, never whoever comes first in the list.
+    const me = self.authorized_by_workspace_member_id
+    const members = me ? api("workspace-members-list", {}) : {}
+    const owner = (members.items ?? []).find((one) => one.id?.workspace_member_id === me)?.email_address
     const answer = api("attributes-statuses-list", { target: "objects", identifier: "deals", attribute: "stage" })
     const list = answer.items ?? answer.item?.data ?? answer.data ?? []
     const stages = list
@@ -108,13 +117,11 @@ try {
         associated_people: people.map((id) => ({ target_object: "people", target_record_id: id })),
         associated_company: [{ target_object: "companies", target_record_id: companyId }],
       })
-    process.stdout.write(`stage titles: ${stages.map((one) => one ?? "(none)").join(" | ")}; owner: ${owner ? "yes" : "no"}\n`)
-    {
+    process.stdout.write(`stage titles: ${stages.join(" | ")}; owner: ${owner ? "yes" : "no"}\n`)
     deal("deal-northwind-renewal", "Northwind annual renewal", stages[0], 12000, [anna], northwind)
     deal("deal-northwind-expansion", "Northwind expansion", stages[1], 4500, [anna, marco], northwind)
     deal("deal-bluebird-pilot", "Bluebird pilot", stages.at(-1), 8000, [lena], bluebird)
     process.stdout.write(`stages used: ${stages[0]}, ${stages[1]}, ${stages.at(-1)}\n`)
-    }
   }
 } finally {
   try {

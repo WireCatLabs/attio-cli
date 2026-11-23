@@ -3,8 +3,7 @@
 # the `# Needs:` lines below, passes the token on stdin and records the pass. Every folder is a temporary one and the
 # keyring is out of reach, so nothing touches the owner's store, keyring or settings.
 #   scripts/live.sh < token-file
-# Needs: a key the owner chose for this check (keyring service attio, read access only is enough)
-# Needs: an Attio workspace API key with read access to records, object configuration and workspace members
+# Needs: an Attio access token (keyring service attio) reading records, object configuration and workspace members
 # Needs: at least one person and one company in that workspace
 # Needs: for the deal checks, at least one deal with a person or a company on it (without deals they are skipped)
 set -euo pipefail
@@ -57,7 +56,7 @@ node -e '
     if (!(read(name).items ?? []).length) throw new Error(`no ${name} listed live`)
   process.stdout.write(`synced: ${kinds.join(", ")}; pipelines: ${stages.length} with ${stages.join("+")} stages; live: ${live.join(", ")}\n`)
 ' "$work"
-# A person and a company shown by name, as an agent asks for them (cli-core 0.708.0 answers a name, not only an id).
+# A person and a company shown by name, as an agent asks for them.
 pick() { node -e '
   const items = JSON.parse(require("fs").readFileSync(process.argv[1], "utf8")).items ?? []
   const one = items.find((item) => (item.name ?? item.title)?.trim())

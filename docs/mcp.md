@@ -46,8 +46,9 @@ The server has three tools:
 
 A command is named as on the command line, without the profile, and checks the same permission key.
 
-Text from Attio comes marked `untrusted`: deal titles, stage names, names of people and companies, attribute values,
-and what `search all` finds. The agent is told it is data, never instructions.
+Text from Attio comes marked `untrusted`: names of people, companies and deals, pipeline and stage names, workspace
+member names, attribute values, e-mail addresses, phone numbers and links, the notes, e-mails, comments and transcripts
+the `api` commands read, and what `search all` finds. The agent is told it is data, never instructions.
 
 ## Keep writes yours
 

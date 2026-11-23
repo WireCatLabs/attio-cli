@@ -3,10 +3,10 @@ import { expect, it } from "vitest"
 import { FAKE_API_TOKEN, fakeServiceApi } from "./testing/fake-api.js"
 import { runCli } from "./testing/harness.js"
 
-it("sync without a sign-in says how to sign in, and reaches nothing", async () => {
+it("sync on a profile this computer does not know says how to sign in, and reaches nothing", async () => {
   const fake = fakeServiceApi()
   const ran = await runCli(["personal", "sync", "--json"], { keyring: memoryKeyring(), service: fake })
-  expect(ran.json()).toMatchObject({ error: { code: "authentication_error" } })
+  expect(ran.json()).toMatchObject({ error: { code: "not_found", reason: "profile.unknown" } })
   expect(ran.err + JSON.stringify(ran.json())).toContain("attio personal session start")
   expect(fake.calls).toEqual([])
 })
