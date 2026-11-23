@@ -43,7 +43,7 @@ access token.
 - **The deal commands read a copy, the people commands read Attio.** `sync` copies the workspace's deals and the
   people and companies they name, with the stages of the deal pipeline. `deals`, `pipelines` and `changes` answer from that copy. `people`,
   `organizations` and `users` ask Attio each time, so they always show the newest data and need the internet.
-- **Every change asks you first.** `deals create`, `update`, `move`, `close` and `delete`, and `people create` and
+- **Every change asks you first in a terminal.** `deals create`, `update`, `move`, `close` and `delete`, and `people create` and
   `update`, change Attio and store its answer. In a terminal each asks yes or no first, and so does every write
   through `api`. A new deal with no `--owner` is yours. Companies, notes and tasks go through `attio work api …`,
   which reaches every operation of the Attio API, as far as the token's scopes and your
@@ -104,7 +104,8 @@ Agent:  (runs attio work changes list change:won "at>=7d")
 
 ## Start in a few minutes
 
-In WireCat Desktop, add Attio from the tool list and paste the token when it asks. Or paste this into your agent:
+In WireCat Desktop, install Attio on the **Tools** page and sign in under **Manage**, as
+[install](./installation.md#in-wirecat-desktop) shows. Or paste this into your agent:
 
 ```text prompt
 Install attio with npm install -g @wirecat/attio-cli. Help me make an Attio access token and run attio work session start to connect my workspace, then sync and show my open deals.

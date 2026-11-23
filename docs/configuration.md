@@ -29,7 +29,7 @@ common ones:
 
 | Setting | Default | What it does |
 |---|---|---|
-| `limit` | `20` | How many items a list shows at once. |
+| `limit` | `20` | How many items a command shows at once when it has no `--limit` of its own. The lists of deals, people and companies show 50; their `--limit` changes that. |
 | `permissions` | none set | What each command may do. See [Permissions](#permissions). |
 | `record` | `true` | Keep every run. `false` keeps failed runs only. |
 | `record_input` | `true` | Keep the words you typed in a run. |

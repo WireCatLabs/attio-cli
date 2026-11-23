@@ -25,8 +25,8 @@
   Codex, Claude Desktop or any app that speaks MCP.
 - **Your pipeline, offline.** Deals, stages and what changed since yesterday are read from your computer, with no
   request to Attio.
-- **Safe to hand to an agent.** Every change to Attio asks you first in a terminal, and one line keeps every write
-  away from an agent.
+- **Safe to hand to an agent.** Every change to Attio asks you first in a terminal. Over MCP nobody is there to
+  answer, so a change runs without asking, and one line keeps every write away from an agent.
 
 ## What you get
 
