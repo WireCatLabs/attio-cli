@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="https://raw.githubusercontent.com/WireCatLabs/attio-cli/main/docs/images/social-preview.png" alt="Attio CRM CLI for AI agents" width="100%">
+</p>
+
 # attio: Attio CRM CLI and MCP server for AI agents
 
 <p align="center">
@@ -6,8 +10,8 @@
 </p>
 
 <p align="center">
-  <a href="https://github.com/WireCatLabs/attio-cli/blob/main/docs/index.md">Docs</a> ·
-  <a href="https://github.com/WireCatLabs/attio-cli/blob/main/docs/installation.md">Install</a> ·
+  <a href="https://wirecat.dev/en/docs/attio">Docs</a> ·
+  <a href="https://wirecat.dev/en/docs/attio/installation">Install</a> ·
   <a href="https://github.com/WireCatLabs/attio-cli/blob/main/docs/usage.md">Usage</a> ·
   <a href="https://discord.gg/DebENqbRrJ">Discord</a>
 </p>
@@ -61,7 +65,7 @@ Agent:  (runs attio work changes list change:won "at>=7d")
 
 ## Quick start
 
-In [WireCat Desktop](https://wirecat.dev), add Attio from the tool list and paste the access token when it asks. Or in
+In [WireCat Desktop](https://wirecat.dev/en/download), add Attio from the tool list and paste the access token when it asks. Or in
 a terminal:
 
 ```sh
