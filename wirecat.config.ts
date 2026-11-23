@@ -165,7 +165,7 @@ export default defineCli({
           lastName: { to: "name", list: true, each: { last_name: "{value}" } },
           position: { to: "job_title", list: true, each: text },
           emails: { to: "email_addresses", list: true, each: { email_address: "{value}" } },
-          phones: { to: "phone_numbers", list: true, each: { original_phone_number: "{value}" } },
+          phones: { to: "phone_numbers", list: true, each: { original_phone_number: "{value}", country_code: null } },
         },
       },
     },

@@ -103,8 +103,8 @@ attio work mcp add claude-code --allow-writes    # or: codex
 attio work mcp config                            # the entry for Claude Desktop, Cursor and others
 ```
 
-Over MCP nobody is at a terminal to answer a question, so a write set to `ask` goes ahead and the app asks you
-before each tool call. The first line above keeps every write away from the agent.
+Over MCP nobody is at a terminal to answer a question, so a write set to `ask` goes ahead. Your MCP client, such as
+Claude Desktop, can ask you before each tool call. The first line above keeps every write away from the agent.
 
 More: [agents and MCP](https://github.com/WireCatLabs/attio-cli/blob/main/docs/mcp.md) ·
 [permissions](https://github.com/WireCatLabs/attio-cli/blob/main/docs/permissions.md)

@@ -24,12 +24,13 @@ export const API = {
 const api = serviceApiPermissions(API)
 const writeKeys = crmManifestWriteKeys(SOURCE, API.manifest)
 
-// Every change to Attio asks first (owner's ruling, 2026-11-22); a profile's config may loosen one to `allow`.
+// Every change to Attio asks first, through the api group too (owner's ruling, 2026-11-22); a profile's config may
+// loosen one to `allow`.
 const ASK = Object.fromEntries(
-  ["deals.create", "deals.update", "deals.move", "deals.close", "people.create", "people.update"].map((key) => [
-    key,
-    "ask" as const,
-  ]),
+  [
+    ...CRM_WRITE_KEYS.filter((key) => CRM_WRITE_DEFAULTS[key] === "allow"),
+    ...API.manifest.operations.filter((one) => one.effect === "write").map((one) => `api.${one.command}`),
+  ].map((key) => [key, "ask" as const]),
 )
 
 export const permissions = commandPermissions({

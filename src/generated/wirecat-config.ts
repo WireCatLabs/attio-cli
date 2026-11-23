@@ -479,6 +479,7 @@ export const SOURCE: Readonly<Record<string, unknown>> & {
           list: true,
           each: {
             original_phone_number: "{value}",
+            country_code: null,
           },
         },
       },

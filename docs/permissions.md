@@ -48,8 +48,9 @@ run it yourself in a terminal.
 | `attio.delete` | `ask` | One key for every delete. Set it to `deny` to stop them all. |
 | `deals.create`, `deals.update`, `deals.move`, `deals.close`, `deals.delete` | `ask` | Each changes a deal colleagues see. |
 | `people.create`, `people.update` | `ask` | Each changes a person colleagues see. |
-| `crm.assign-others` | `deny` | Giving a deal to another workspace member waits until you allow it. |
-| Every other command, `api` writes included | `allow` | |
+| `api.<operation>` that writes, such as `api.objects-records-create` | `ask` | Each changes what colleagues see. |
+| `crm.assign-others` | `deny` | Giving a deal or a person to another workspace member waits until you allow it. A new deal with no `--owner` is yours. |
+| Every other command | `allow` | |
 
 A deal or person write also checks the `api` key of the Attio operation it sends, such as
 `api.objects-records-replace`, so a `readonly` on `api` stops it too. The pipeline, stage, change, field and search

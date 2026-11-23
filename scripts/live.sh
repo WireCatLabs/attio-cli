@@ -101,19 +101,25 @@ echo "deals: $deals"
 "${cli[@]}" live doctor --json >/dev/null
 
 # The write round trip. A run without a terminal refuses `ask`, so each write here confirms with --yes.
-made="$work/made"
-mkdir -p "$made"
+stamp=$(date -u +%Y%m%dT%H%M%SZ)
+# Found again by the run's stamp, not by the id a create answered: an answer lost after Attio made the record leaves
+# no id to delete.
+sweep() {
+  local object=$1 filter=$2
+  "${cli[@]}" live api objects-records-query --object "$object" --body "{\"filter\":$filter}" --json 2>/dev/null |
+    node -e 'for (const one of JSON.parse(require("fs").readFileSync(0, "utf8")).item?.data ?? []) console.log(one.id.record_id)' |
+    while read -r id; do
+      "${cli[@]}" live api objects-records-delete --object "$object" --record-id "$id" --yes --json >/dev/null 2>&1 || true
+    done
+}
 cleanup() {
-  [ -f "$made/person" ] && "${cli[@]}" live api objects-records-delete --object people \
-    --record-id "$(cat "$made/person")" --yes --json >/dev/null 2>&1 || true
-  [ -f "$made/deal" ] && "${cli[@]}" live deals delete "$(cat "$made/deal")" --yes --json >/dev/null 2>&1 || true
+  sweep deals "{\"name\":{\"\$contains\":\"$stamp\"}}" || true
+  sweep people "{\"email_addresses\":\"live-$stamp@example.com\"}" || true
   "${cli[@]}" live session end --json >/dev/null 2>&1 || true
   rm -rf "$work"
 }
 trap cleanup EXIT
 field() { node -e 'let v = JSON.parse(require("fs").readFileSync(0, "utf8")); for (const k of process.argv[1].split(".")) v = v?.[k]; if (v === undefined || v === null) process.exit(1); console.log(v)' "$1"; }
-
-stamp=$(date -u +%Y%m%dT%H%M%SZ)
 stages=$(node -e '
   const [deals] = JSON.parse(require("fs").readFileSync(process.argv[1], "utf8")).items ?? []
   const open = (deals?.stages ?? []).filter((one) => one.outcome === "open")
@@ -126,7 +132,6 @@ IFS=$'\t' read -r first_stage second_stage <<<"$stages"
 # The ref names the deal in the copy, the record id in Attio: the commands take one, api the other.
 deal=$(field item.deal.ref <"$work/made-deal.json")
 deal_id=$(field item.deal.external_id <"$work/made-deal.json")
-echo "$deal" >"$made/deal"
 "${cli[@]}" live deals update "$deal" --title "WireCat live test $stamp, renamed" --yes --json >/dev/null
 "${cli[@]}" live deals move "$deal" "$second_stage" --yes --json >/dev/null
 "${cli[@]}" live deals close "$deal" won --yes --json >/dev/null
@@ -134,14 +139,13 @@ echo "$deal" >"$made/deal"
 
 "${cli[@]}" live people create --first-name WireCat --last-name "Live test $stamp" \
   --email "live-$stamp@example.com" --yes --json >"$work/made-person.json"
-field item.person.id <"$work/made-person.json" >"$made/person"
-"${cli[@]}" live people update "$(cat "$made/person")" --first-name Wirecat --yes --json >"$work/person-read.json"
-"${cli[@]}" live api objects-records-delete --object people --record-id "$(cat "$made/person")" --yes \
-  --json >/dev/null
-rm "$made/person"
+person=$(field item.person.id <"$work/made-person.json")
+"${cli[@]}" live people update "$person" --first-name Wirecat --phone +34600000001 --yes --json >"$work/person-read.json"
+# One word is a first name alone: Attio takes a name only with all three parts.
+"${cli[@]}" live people update "$person" --name Wirecat --yes --json >/dev/null
+"${cli[@]}" live api objects-records-delete --object people --record-id "$person" --yes --json >/dev/null
 
 "${cli[@]}" live deals delete "$deal" --yes --json >/dev/null
-rm "$made/deal"
 node -e '
   const fs = require("fs")
   const read = (file) => JSON.parse(fs.readFileSync(file, "utf8"))

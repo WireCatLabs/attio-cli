@@ -11,6 +11,12 @@ afterEach(() => {
   expect(fakes.splice(0).flatMap((fake) => fake.refusals)).toEqual([])
 })
 
+// The fake takes any value shape the config names, so what Attio's docs require is checked on the body sent.
+const sent = (fake: CrmManifestFake, operation: string) =>
+  fake.calls.filter((call) => call.operation === operation).map((call) => call.body)
+const CREATE = "postV2ObjectsByObjectRecords"
+const PUT = "putV2ObjectsByObjectRecordsByRecordId"
+
 const synced = async () => {
   const keyring = memoryKeyring()
   const source = crmFake()
@@ -23,14 +29,14 @@ const synced = async () => {
     stages: { name: string; outcome: string }[]
   }[]
   const open = (pipelines[0]?.stages ?? []).filter((stage) => stage.outcome === "open").map((stage) => stage.name)
-  return { attio, open }
+  return { attio, open, source }
 }
 
 const refused = (answer: { json: () => unknown }, code: string) =>
   expect(answer.json()).toMatchObject({ error: { code } })
 
 it("a deal is created, changed, moved, closed and deleted, each with --yes", async () => {
-  const { attio, open } = await synced()
+  const { attio, open, source } = await synced()
   const made = await attio([
     "deals",
     "create",
@@ -51,6 +57,12 @@ it("a deal is created, changed, moved, closed and deleted, each with --yes", asy
   expect(made.code, made.err).toBe(0)
   const deal = (made.json() as { item: { deal: { ref: string; title: string } } }).item.deal
   expect(deal.title).toBe("Example deal")
+  // Attio refuses a deal with no owner: one left out is the member who made the token.
+  expect(sent(source, CREATE).at(-1)).toMatchObject({
+    data: {
+      values: { owner: [{ referenced_actor_type: "workspace-member", referenced_actor_id: expect.any(String) }] },
+    },
+  })
   const updated = await attio([
     "deals",
     "update",
@@ -91,7 +103,7 @@ it("what Attio has no place for is refused before anything is sent", async () =>
 })
 
 it("a person is created and changed; a name part changed alone keeps the other", async () => {
-  const { attio } = await synced()
+  const { attio, source } = await synced()
   const made = await attio([
     "people",
     "create",
@@ -110,6 +122,14 @@ it("a person is created and changed; a name part changed alone keeps the other",
     "--yes",
   ])
   expect(made.code, made.err).toBe(0)
+  expect(sent(source, CREATE).at(-1)).toMatchObject({
+    data: {
+      values: {
+        name: [{ first_name: "Anna", last_name: "Example", full_name: "Anna Example" }],
+        phone_numbers: [{ original_phone_number: "+34600000001", country_code: null }],
+      },
+    },
+  })
   const { id } = (made.json() as { item: { person: { id: string } } }).item.person
   const renamed = await attio(["people", "update", id, "--first-name", "Ann", "--yes"])
   expect(renamed.code, renamed.err).toBe(0)
@@ -138,6 +158,11 @@ it("a person is created and changed; a name part changed alone keeps the other",
   expect(changed.code, changed.err).toBe(0)
   const named = await attio(["people", "create", "--name", "Marco Example", "--yes"])
   expect(named.code, named.err).toBe(0)
+  // Attio takes a name only with all three parts, so one left out is sent empty.
+  expect((await attio(["people", "update", id, "--name", "Madonna", "--yes"])).code).toBe(0)
+  expect(sent(source, PUT).at(-1)).toMatchObject({
+    data: { values: { name: [{ first_name: "Madonna", last_name: "", full_name: "Madonna" }] } },
+  })
   refused(await attio(["people", "create", "--name", "Owned", "--owner", "7001", "--yes"]), "permission_error")
   refused(await attio(["people", "update", id, "--owner", "7001", "--yes"]), "permission_error")
 })

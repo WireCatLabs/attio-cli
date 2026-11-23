@@ -46,6 +46,13 @@ const open = async (command: Command, { readOnly }: { readOnly: boolean }): Prom
   const call = serviceApiCall(sending)
   let source: ReturnType<typeof crmSourceFromManifest> | undefined
   const crm = () => (source ??= crmSourceFromManifest(SOURCE, { api: API.manifest, call, ...HOOK_OPTIONS }))
+  // The member who made the token, asked only when a write names an owner; an app's own token has none.
+  let member: Promise<string | undefined> | undefined
+  const self = () =>
+    (member ??= call("getV2Self", { path: {}, query: {}, headers: {}, fields: {} }).then((answer) => {
+      const id = (answer as { authorized_by_workspace_member_id?: unknown }).authorized_by_workspace_member_id
+      return typeof id === "string" ? id : undefined
+    }))
   return {
     profile,
     account,
@@ -61,6 +68,9 @@ const open = async (command: Command, { readOnly }: { readOnly: boolean }): Prom
         source: crm,
         app: IDENTITY,
         env,
+        self,
+        // Attio refuses a deal with no owner.
+        ownedByDefault: ["deal"],
         warn: outputFor(command).renderer.warn,
         settings: () => ({ ...contextOf(command).settings, permissionDefaults: permissions.defaults }),
       }),
