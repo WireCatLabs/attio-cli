@@ -127,8 +127,11 @@ stages=$(node -e '
   console.log([open[0].name, open[1].name].join("\t"))' "$work/pipelines.json")
 IFS=$'\t' read -r first_stage second_stage <<<"$stages"
 
-"${cli[@]}" live deals create --title "WireCat live test $stamp" --stage "$first_stage" --amount 100 --yes \
-  --json >"$work/made-deal.json"
+# Attio keeps one currency for every deal, set on the value attribute.
+currency=$("${cli[@]}" live api attributes-get --target objects --identifier deals --attribute value --json |
+  field item.data.config.currency.default_currency_code)
+"${cli[@]}" live deals create --title "WireCat live test $stamp" --stage "$first_stage" --amount 100 \
+  --currency "$currency" --yes --json >"$work/made-deal.json"
 # The ref names the deal in the copy, the record id in Attio: the commands take one, api the other.
 deal=$(field item.deal.ref <"$work/made-deal.json")
 deal_id=$(field item.deal.external_id <"$work/made-deal.json")
