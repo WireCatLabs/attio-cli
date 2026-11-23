@@ -105,8 +105,13 @@ stamp=$(date -u +%Y%m%dT%H%M%SZ)
 # Found again by the run's stamp, not by the id a create answered: an answer lost after Attio made the record leaves
 # no id to delete.
 sweep() {
-  local object=$1 filter=$2
-  "${cli[@]}" live api objects-records-query --object "$object" --body "{\"filter\":$filter}" --json 2>/dev/null |
+  local object=$1 filter=$2 found
+  if ! found=$("${cli[@]}" live api objects-records-query --object "$object" --body "{\"filter\":$filter}" \
+    --json 2>&1); then
+    echo "live: could not look for $object left by this run: ${found:0:300}" >&2
+    return 0
+  fi
+  printf '%s' "$found" |
     node -e 'for (const one of JSON.parse(require("fs").readFileSync(0, "utf8")).item?.data ?? []) console.log(one.id.record_id)' |
     while read -r id; do
       "${cli[@]}" live api objects-records-delete --object "$object" --record-id "$id" --yes --json >/dev/null 2>&1 || true
