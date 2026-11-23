@@ -2,6 +2,42 @@
 
 Notable changes to `@wirecat/attio-cli`. One section per version, newest first.
 
+## 0.3.0 — 23.11.2026
+
+### Added
+
+- **Deals and people are written to Attio, each change asking you first.** `deals create`, `update`, `move`, `close`
+  and `delete`, and `people create` and `update`, send the change to Attio and store its answer, as the other WireCat
+  CRM CLIs do. Each key asks at a terminal, and so does every `api` write. Without a terminal a write waits for
+  `--yes`. Over MCP it goes ahead, so your MCP client is what asks. A write also checks the `api` key of the operation
+  it sends, so `permissions.api readonly` stops it. `--email` and `--phone` replace the whole list. A deal's currency
+  is the workspace's, and another one is refused. A new deal with no `--owner` is yours, as Attio needs an owner on
+  every deal. Companies are not written here: an Attio company has no e-mail or phone attribute. Example:
+  `attio work deals move deal:1 --stage "In Progress"`.
+- **`account remove`.** It signs a profile out and, with `--delete-data`, removes its local copy, which it refuses
+  while another profile here still reads that workspace. A second profile's `session start` to a workspace another
+  profile holds is refused (`session.duplicate`).
+- **`schedule`, as in the other WireCat CRM tools.** `attio work schedule command crm --every 1h -- sync` syncs every
+  hour, and `schedule command crm-digest --at 08:00 -- changes list --format report` sends the morning CRM digest.
+
+### Changed — may break callers
+
+- **A CRM command on a profile that is not signed in answers `session.missing`**, as every other WireCat tool does. It
+  answered `auth.missing`, which no other tool uses. A profile this computer does not know at all now answers
+  `profile.unknown` (`not_found`), as cli-core turns a `session.missing` into for an unknown profile, and names the
+  profiles there. The message still says how to sign in.
+
+### Fixed
+
+- `deals close <deal> won` finds the won stage by its name too, in a workspace where the stage's celebration is
+  turned off.
+- **The MCP server tells the agent about every kind of outside text it can see**: names of deals, pipelines, stages
+  and workspace members, e-mail addresses, phone numbers and links, the notes, e-mails, comments and transcripts the
+  `api` commands read, and what `search all` finds. It named only record names, attribute values and member names.
+- **The skill says how signing in works**: only the owner signs in, never with the token as an argument, and which
+  scopes the token needs.
+- **The package description names deals** beside people and companies.
+
 ## 0.2.2 — 19.11.2026
 
 ### Fixed
