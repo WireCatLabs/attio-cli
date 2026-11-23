@@ -105,16 +105,25 @@ stamp=$(date -u +%Y%m%dT%H%M%SZ)
 # Found again by the run's stamp, not by the id a create answered: an answer lost after Attio made the record leaves
 # no id to delete.
 sweep() {
-  local object=$1 filter=$2
-  "${cli[@]}" live api objects-records-query --object "$object" --body "{\"filter\":$filter}" --json 2>/dev/null |
+  local object=$1 filter=$2 found
+  if ! found=$("${cli[@]}" live api objects-records-query --object "$object" --body "{\"filter\":$filter}" \
+    --json 2>&1); then
+    echo "live: could not look for $object left by this run: ${found:0:300}" >&2
+    return 0
+  fi
+  printf '%s' "$found" |
     node -e 'for (const one of JSON.parse(require("fs").readFileSync(0, "utf8")).item?.data ?? []) console.log(one.id.record_id)' |
     while read -r id; do
       "${cli[@]}" live api objects-records-delete --object "$object" --record-id "$id" --yes --json >/dev/null 2>&1 || true
     done
 }
+# A run that passed deleted its records and signed out, so only a failed one sweeps.
+passed=""
 cleanup() {
-  sweep deals "{\"name\":{\"\$contains\":\"$stamp\"}}" || true
-  sweep people "{\"email_addresses\":\"live-$stamp@example.com\"}" || true
+  if [ -z "$passed" ]; then
+    sweep deals "{\"name\":{\"\$contains\":\"$stamp\"}}" || true
+    sweep people "{\"email_addresses\":\"live-$stamp@example.com\"}" || true
+  fi
   "${cli[@]}" live session end --json >/dev/null 2>&1 || true
   rm -rf "$work"
 }
@@ -127,8 +136,11 @@ stages=$(node -e '
   console.log([open[0].name, open[1].name].join("\t"))' "$work/pipelines.json")
 IFS=$'\t' read -r first_stage second_stage <<<"$stages"
 
-"${cli[@]}" live deals create --title "WireCat live test $stamp" --stage "$first_stage" --amount 100 --yes \
-  --json >"$work/made-deal.json"
+# Attio keeps one currency for every deal, set on the value attribute.
+currency=$("${cli[@]}" live api attributes-get --target objects --identifier deals --attribute value --json |
+  field item.data.config.currency.default_currency_code)
+"${cli[@]}" live deals create --title "WireCat live test $stamp" --stage "$first_stage" --amount 100 \
+  --currency "$currency" --yes --json >"$work/made-deal.json"
 # The ref names the deal in the copy, the record id in Attio: the commands take one, api the other.
 deal=$(field item.deal.ref <"$work/made-deal.json")
 deal_id=$(field item.deal.external_id <"$work/made-deal.json")
@@ -161,4 +173,5 @@ node -e '
   "$work/pipelines.json" "$work/deal-read.json" "$work/person-read.json"
 
 "${cli[@]}" live session end --json >/dev/null
+passed=1
 echo "live check passed: describe format 2, sign-in, sync, store status, pipelines, live people and companies, people and companies by name, a stored deal and search for it, doctor, deal create, update, move, close and delete, person create, update and delete, sign-out"

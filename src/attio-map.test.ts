@@ -62,6 +62,7 @@ const statuses = [
   { id: { status_id: "s2" }, title: "In Progress", celebration_enabled: false },
   { id: { status_id: "s3" }, title: "Won 🎉", celebration_enabled: true },
   { id: { status_id: "s4" }, title: "Lost", celebration_enabled: false },
+  { id: { status_id: "s5" }, title: "Closed won", celebration_enabled: false },
 ]
 
 const RECORDS = { deals: deal, companies: company, people: person } as Record<string, unknown>
@@ -132,13 +133,14 @@ it("maps an Attio deal with its stage, amount, owner, links and own field's curr
   ])
 })
 
-it("reads Attio's one deal pipeline: won where it celebrates, lost by the title", async () => {
+it("reads Attio's one deal pipeline: won where it celebrates or by the title, lost by the title", async () => {
   const [pipeline] = await source().pipelines("deal")
   expect(pipeline?.stages.map(({ name, outcome }) => [name, outcome])).toEqual([
     ["Lead", "open"],
     ["In Progress", "open"],
     ["Won 🎉", "won"],
     ["Lost", "lost"],
+    ["Closed won", "won"],
   ])
 })
 
