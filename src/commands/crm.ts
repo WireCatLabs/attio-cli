@@ -1,11 +1,11 @@
 import { CliError } from "@wirecat/cli-base"
 import { retrying } from "@wirecat/cli-base/http"
-import { openAppStore, recalledAccount, serviceApiCall } from "@wirecat/cli-core/cli"
-import { crmSourceFromManifest } from "@wirecat/cli-core/crm"
-import { addCrmCommands, type CrmRun, openCrmStore } from "@wirecat/cli-core/crm/cli"
+import { openAppStore, outputFor, recalledAccount, serviceApiCall } from "@wirecat/cli-core/cli"
+import { crmManifestWriteCapabilities, crmManifestWrites, crmSourceFromManifest } from "@wirecat/cli-core/crm"
+import { addCrmCommands, type CrmAccountOptions, type CrmRun, openCrmStore } from "@wirecat/cli-core/crm/cli"
 import { Pacer, pacePathFor } from "@wirecat/cli-core/sends"
 import { Command } from "commander"
-import { API } from "../config.js"
+import { API, configuration, permissions } from "../config.js"
 import { contextOf, PACE, tokenOf } from "../context.js"
 import { HOOK_OPTIONS, LIVE, SOURCE } from "../generated/wirecat-config.js"
 import { IDENTITY } from "../identity.js"
@@ -42,8 +42,17 @@ const open = async (command: Command, { readOnly }: { readOnly: boolean }): Prom
     account: () => accountOf(command),
   })
   const fetch = retrying(serviceFetch(environment), { pacer: new Pacer(pacePathFor(IDENTITY, profile, env), PACE) })
-  const call = serviceApiCall({ manifest: API.manifest, service: API.service, fetch, token: () => tokenOf(command) })
+  const sending = { manifest: API.manifest, service: API.service, fetch, token: () => tokenOf(command) }
+  const call = serviceApiCall(sending)
   let source: ReturnType<typeof crmSourceFromManifest> | undefined
+  const crm = () => (source ??= crmSourceFromManifest(SOURCE, { api: API.manifest, call, ...HOOK_OPTIONS }))
+  // The member who made the token, asked only when a write names an owner; an app's own token has none.
+  let member: Promise<string | undefined> | undefined
+  const self = () =>
+    (member ??= call("getV2Self", { path: {}, query: {}, headers: {}, fields: {} }).then((answer) => {
+      const id = (answer as { authorized_by_workspace_member_id?: unknown }).authorized_by_workspace_member_id
+      return typeof id === "string" ? id : undefined
+    }))
   return {
     profile,
     account,
@@ -52,9 +61,28 @@ const open = async (command: Command, { readOnly }: { readOnly: boolean }): Prom
     store,
     env,
     locked: Boolean(env[`${IDENTITY.envPrefix}_PROFILE_LOCK`]),
-    source: () => (source ??= crmSourceFromManifest(SOURCE, { api: API.manifest, call, ...HOOK_OPTIONS })),
+    source: crm,
+    writes: () =>
+      crmManifestWrites(SOURCE, {
+        ...sending,
+        source: crm,
+        app: IDENTITY,
+        env,
+        self,
+        // Attio refuses a deal with no owner.
+        ownedByDefault: ["deal"],
+        warn: outputFor(command).renderer.warn,
+        settings: () => ({ ...contextOf(command).settings, permissionDefaults: permissions.defaults }),
+      }),
     close: () => store.close(),
   }
+}
+
+/** One account, one profile: `account remove` and the sign-in refuse what another profile here holds. */
+export const CRM_ACCOUNT: CrmAccountOptions = {
+  provider: SOURCE.provider,
+  service: API.service,
+  resolveSettings: configuration.resolveSettings,
 }
 
 /** cli-core's CRM commands over the source wirecat.config.ts describes: sync, store status, deals, search. */
@@ -68,6 +96,8 @@ export const crmCommands = (): Command[] => {
     live: LIVE,
     // Attio's own record search takes words, not field conditions.
     liveQuery: "words",
+    writes: crmManifestWriteCapabilities(SOURCE, API.manifest),
+    account: CRM_ACCOUNT,
   })
   return [...holder.commands]
 }

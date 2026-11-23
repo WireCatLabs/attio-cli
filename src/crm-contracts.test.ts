@@ -6,6 +6,7 @@ import { parseCrmManifest } from "@wirecat/cli-core/crm"
 import {
   type CrmManifestFake,
   crmManifestFixture,
+  crmManifestWriteContract,
   crmSourceContract,
   crmSyncContract,
   FAKE_MANIFEST_TOKEN,
@@ -34,6 +35,11 @@ describe("crmSourceContract over a fake of the API, from wirecat.config.ts", () 
     fakes.push(fixture.fake)
     return fixture
   }))
+    it(name, run)
+})
+
+describe("crmWriteContract over a fake of the API, from wirecat.config.ts", () => {
+  for (const { name, run } of crmManifestWriteContract(manifest, { api: API.manifest, definitions, ...HOOK_OPTIONS }))
     it(name, run)
 })
 
@@ -76,4 +82,42 @@ it("sync through this CLI keeps the rows under the account session start checked
   expect(stored).toEqual({ organization: 3, person: 6, deal: 3, lead: 0 })
 
   expect(service.signIn.refusals).toEqual([])
+})
+
+it("a change to Attio asks first: without a terminal it waits for --yes, and nothing is sent", async () => {
+  const keyring = memoryKeyring()
+  const source = crmFake()
+  fakes.push(source)
+  const service = signInAndCrm(source)
+  await runCli(["personal", "session", "start", "--json"], { keyring, service, stdin: FAKE_MANIFEST_TOKEN })
+  await runCli(["personal", "sync", "--json"], { keyring, service })
+  const before = source.calls.length
+  const asked = await runCli(["personal", "deals", "update", "deal:1", "--title", "Renamed", "--json"], {
+    keyring,
+    service,
+  })
+  expect(asked.json()).toMatchObject({ error: { code: "confirmation_required" } })
+  expect(source.calls.slice(before).filter((call) => call.method !== "GET")).toEqual([])
+  const done = await runCli(["personal", "deals", "update", "deal:1", "--title", "Renamed", "--yes", "--json"], {
+    keyring,
+    service,
+  })
+  expect(done.code, done.err).toBe(0)
+  expect((done.json() as { item: { deal: object } }).item.deal).toMatchObject({ title: "Renamed" })
+})
+
+it("api at readonly stops a deal write too: it sends through the same Attio operation", async () => {
+  const keyring = memoryKeyring()
+  const source = crmFake()
+  fakes.push(source)
+  const service = signInAndCrm(source)
+  await runCli(["personal", "session", "start", "--json"], { keyring, service, stdin: FAKE_MANIFEST_TOKEN })
+  await runCli(["personal", "sync", "--json"], { keyring, service })
+  const set = await runCli(["personal", "config", "set", "permissions.api", "readonly", "--json"], { keyring })
+  expect(set.code, set.err).toBe(0)
+  const refused = await runCli(["personal", "deals", "update", "deal:1", "--title", "Renamed", "--yes", "--json"], {
+    keyring,
+    service,
+  })
+  expect(refused.json()).toMatchObject({ error: { code: "permission_error" } })
 })

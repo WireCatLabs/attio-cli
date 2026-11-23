@@ -310,6 +310,181 @@ export const SOURCE: Readonly<Record<string, unknown>> & {
       },
     },
   },
+  writes: {
+    deal: {
+      create: {
+        operation: "postV2ObjectsByObjectRecords",
+        path: {
+          object: "deals",
+        },
+        body: {
+          data: {
+            values: "{values}",
+          },
+        },
+      },
+      update: {
+        operation: "putV2ObjectsByObjectRecordsByRecordId",
+        path: {
+          object: "deals",
+          record_id: "{id}",
+        },
+        body: {
+          data: {
+            values: "{values}",
+          },
+        },
+      },
+      id: "data.id.record_id",
+      clear: [],
+      custom: {
+        list: true,
+      },
+      remove: {
+        operation: "deleteV2ObjectsByObjectRecordsByRecordId",
+        path: {
+          object: "deals",
+          record_id: "{id}",
+        },
+      },
+      fields: {
+        title: {
+          to: "name",
+          list: true,
+          each: {
+            value: "{value}",
+          },
+        },
+        pipeline: "implied",
+        stage: {
+          to: "stage",
+          list: true,
+          each: {
+            status: "{value}",
+          },
+        },
+        owner: {
+          to: "owner",
+          list: true,
+          each: {
+            referenced_actor_type: "workspace-member",
+            referenced_actor_id: "{value}",
+          },
+        },
+        amount: {
+          to: "value",
+          list: true,
+          number: true,
+          decimals: 4,
+          each: {
+            currency_value: "{value}",
+          },
+        },
+        currency: {
+          fixed: {
+            operation: "getV2ByTargetByIdentifierAttributesByAttribute",
+            path: {
+              target: "objects",
+              identifier: "deals",
+              attribute: "value",
+            },
+          },
+          at: "data.config.currency.default_currency_code",
+        },
+        organization: {
+          to: "associated_company",
+          list: true,
+          each: {
+            target_object: "companies",
+            target_record_id: "{value}",
+          },
+        },
+        people: {
+          to: "associated_people",
+          list: true,
+          each: {
+            target_object: "people",
+            target_record_id: "{value}",
+          },
+        },
+      },
+    },
+    person: {
+      create: {
+        operation: "postV2ObjectsByObjectRecords",
+        path: {
+          object: "people",
+        },
+        body: {
+          data: {
+            values: "{values}",
+          },
+        },
+      },
+      update: {
+        operation: "putV2ObjectsByObjectRecordsByRecordId",
+        path: {
+          object: "people",
+          record_id: "{id}",
+        },
+        body: {
+          data: {
+            values: "{values}",
+          },
+        },
+      },
+      id: "data.id.record_id",
+      clear: [],
+      custom: {
+        list: true,
+      },
+      fields: {
+        name: {
+          to: "name",
+          list: true,
+          each: {
+            full_name: "{value}",
+          },
+        },
+        firstName: {
+          to: "name",
+          list: true,
+          each: {
+            first_name: "{value}",
+          },
+        },
+        lastName: {
+          to: "name",
+          list: true,
+          each: {
+            last_name: "{value}",
+          },
+        },
+        position: {
+          to: "job_title",
+          list: true,
+          each: {
+            value: "{value}",
+          },
+        },
+        emails: {
+          to: "email_addresses",
+          list: true,
+          each: {
+            email_address: "{value}",
+          },
+        },
+        phones: {
+          to: "phone_numbers",
+          list: true,
+          each: {
+            original_phone_number: "{value}",
+            country_code: null,
+          },
+        },
+      },
+    },
+  },
   users: {
     call: {
       operation: "getV2WorkspaceMembers",

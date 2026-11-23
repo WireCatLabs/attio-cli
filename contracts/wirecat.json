@@ -1616,6 +1616,71 @@
     },
     {
       "path": [
+        "deals",
+        "create"
+      ],
+      "summary": "make a deal in the CRM, then store the CRM's copy of it",
+      "effects": {
+        "remote": "write",
+        "local": "write"
+      },
+      "permission": "deals.create",
+      "entity": "crm_write"
+    },
+    {
+      "path": [
+        "deals",
+        "update"
+      ],
+      "summary": "change a deal in the CRM; what is left out keeps its value; the CRM's copy…",
+      "effects": {
+        "remote": "write",
+        "local": "write"
+      },
+      "permission": "deals.update",
+      "entity": "crm_write"
+    },
+    {
+      "path": [
+        "deals",
+        "move"
+      ],
+      "summary": "move a deal to another stage of its pipeline; a won or lost stage checks the…",
+      "effects": {
+        "remote": "write",
+        "local": "write"
+      },
+      "permission": "deals.move",
+      "entity": "crm_write"
+    },
+    {
+      "path": [
+        "deals",
+        "close"
+      ],
+      "summary": "mark a deal won or lost, the CRM's own way",
+      "effects": {
+        "remote": "write",
+        "local": "write"
+      },
+      "permission": "deals.close",
+      "entity": "crm_write"
+    },
+    {
+      "path": [
+        "deals",
+        "delete"
+      ],
+      "summary": "delete a deal in the CRM; asks first unless allowed",
+      "effects": {
+        "remote": "write",
+        "local": "write"
+      },
+      "permission": "deals.delete",
+      "entity": "crm_removal"
+    },
+    {
+      "path": [
         "pipelines",
         "list"
       ],
@@ -1678,6 +1743,32 @@
       },
       "permission": "people.show",
       "entity": "crm_person"
+    },
+    {
+      "path": [
+        "people",
+        "create"
+      ],
+      "summary": "make a person in the CRM, then store the CRM's copy of it",
+      "effects": {
+        "remote": "write",
+        "local": "write"
+      },
+      "permission": "people.create",
+      "entity": "crm_record_write"
+    },
+    {
+      "path": [
+        "people",
+        "update"
+      ],
+      "summary": "change a person in the CRM; what is left out keeps its value; the CRM's copy…",
+      "effects": {
+        "remote": "write",
+        "local": "write"
+      },
+      "permission": "people.update",
+      "entity": "crm_record_write"
     },
     {
       "path": [
@@ -1769,6 +1860,19 @@
       },
       "permission": "search.all",
       "entity": "hit"
+    },
+    {
+      "path": [
+        "account",
+        "remove"
+      ],
+      "summary": "sign this profile out and forget it, keeping or deleting its data",
+      "effects": {
+        "remote": "none",
+        "local": "write"
+      },
+      "permission": "account.remove",
+      "entity": "account_removal"
     },
     {
       "path": [
@@ -2448,7 +2552,27 @@
         "--record",
         "--json"
       ],
-      "remove": null,
+      "remove": {
+        "minVersion": "0.0.0",
+        "keepData": [
+          "{profile}",
+          "account",
+          "remove",
+          "--keep-data",
+          "--record",
+          "--json"
+        ],
+        "deleteData": [
+          "{profile}",
+          "account",
+          "remove",
+          "--delete-data",
+          "--record",
+          "--json"
+        ],
+        "dryRun": "--dry-run",
+        "confirm": "--yes"
+      },
       "removes": [
         "signIn"
       ],

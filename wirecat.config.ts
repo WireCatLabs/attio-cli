@@ -12,6 +12,18 @@ const records = (object: string) => ({
   custom: { from: "values", typed: { by: "attribute_type", current: "active_until" } },
 })
 
+// A PUT, not a PATCH: Attio's PATCH adds to a multiselect, and an e-mail or phone list given here replaces the whole.
+const VALUES = { data: { values: "{values}" } }
+const writes = (object: string) => ({
+  create: { operation: "postV2ObjectsByObjectRecords", path: { object }, body: VALUES },
+  update: { operation: "putV2ObjectsByObjectRecordsByRecordId", path: { object, record_id: "{id}" }, body: VALUES },
+  id: "data.id.record_id",
+  clear: [],
+  custom: { list: true as const },
+})
+const text = { value: "{value}" }
+const reference = (object: string) => ({ target_object: object, target_record_id: "{value}" })
+
 // Attio's attribute definitions say which are the workspace's own.
 const attributes = (object: string) => ({
   call: { operation: "getV2ByTargetByIdentifierAttributes", path: { target: "objects", identifier: object } },
@@ -118,6 +130,45 @@ export default defineCli({
       },
     },
     fields: { organization: attributes("companies"), person: attributes("people"), deal: attributes("deals") },
+    // Companies are not written: an Attio company has no e-mail or phone attribute.
+    writes: {
+      deal: {
+        ...writes("deals"),
+        remove: { operation: "deleteV2ObjectsByObjectRecordsByRecordId", path: { object: "deals", record_id: "{id}" } },
+        fields: {
+          title: { to: "name", list: true, each: text },
+          pipeline: "implied",
+          stage: { to: "stage", list: true, each: { status: "{value}" } },
+          owner: {
+            to: "owner",
+            list: true,
+            each: { referenced_actor_type: "workspace-member", referenced_actor_id: "{value}" },
+          },
+          amount: { to: "value", list: true, number: true, decimals: 4, each: { currency_value: "{value}" } },
+          // The deal value's currency is the attribute's, one for every deal.
+          currency: {
+            fixed: {
+              operation: "getV2ByTargetByIdentifierAttributesByAttribute",
+              path: { target: "objects", identifier: "deals", attribute: "value" },
+            },
+            at: "data.config.currency.default_currency_code",
+          },
+          organization: { to: "associated_company", list: true, each: reference("companies") },
+          people: { to: "associated_people", list: true, each: reference("people") },
+        },
+      },
+      person: {
+        ...writes("people"),
+        fields: {
+          name: { to: "name", list: true, each: { full_name: "{value}" } },
+          firstName: { to: "name", list: true, each: { first_name: "{value}" } },
+          lastName: { to: "name", list: true, each: { last_name: "{value}" } },
+          position: { to: "job_title", list: true, each: text },
+          emails: { to: "email_addresses", list: true, each: { email_address: "{value}" } },
+          phones: { to: "phone_numbers", list: true, each: { original_phone_number: "{value}", country_code: null } },
+        },
+      },
+    },
     users: {
       call: { operation: "getV2WorkspaceMembers", items: "data" },
       map: {

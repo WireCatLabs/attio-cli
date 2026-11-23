@@ -24,4 +24,12 @@ Languages: en.
 
 ## Further answers
 
+- **Writes (owner, 2026-11-22: "with a confirmation before each change").** Deals and people are written through
+  cli-core's CRM write commands, from `source.writes` in `wirecat.config.ts`. Every write key is `ask` by default
+  (`src/config.ts`), and each write also checks the `api` key of the operation it sends. Updates go by `PUT`: Attio's
+  `PATCH` adds to a multiselect, and our `--email` and `--phone` replace the list. Companies are not written: an
+  Attio company has no e-mail or phone attribute, and cli-core's write contract needs both.
+- **One account, one profile.** `account remove` and the sign-in guard are cli-core's (`CRM_ACCOUNT` in
+  `src/commands/crm.ts`); attio needs no `held` hook, since the account is the one `session start` remembered.
+
 ## Open questions for the owner

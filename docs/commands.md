@@ -67,7 +67,7 @@ attio commands info [path]
 
 ## `attio session`
 
-keep this profile's Attio token in the OS keyring
+keep this profile's Attio API token in the OS keyring
 
 ### `attio session start`
 
@@ -2284,6 +2284,120 @@ attio deals show <deal>
 
 **Example:** `attio work deals show deal:12`
 
+### `attio deals create`
+
+make a deal in the CRM, then store the CRM's copy of it
+
+**Changes something in the service.**
+
+```sh
+attio deals create [options]
+```
+
+| Option | What it does |
+|---|---|
+| `--title <title>` | the deal's title. |
+| `--pipeline <pipeline>` | pipeline:<id>, or a name only one of the CRM's pipelines has. |
+| `--stage <stage>` | a stage of its pipeline, by the CRM's id or name; checks the move key too, and the close key for a won or lost stage. |
+| `--amount <decimal>` | the expected sum, such as 1500.50, with --currency. |
+| `--currency <code>` | an ISO 4217 code, such as EUR. |
+| `--close-date <date>` | the day it is expected to close, YYYY-MM-DD. |
+| `--owner <user>` | the CRM user it is assigned to; anyone but the sign-in's own user checks crm.assign-others. |
+| `--field <key=value>` | one of the CRM's own fields, by its code or label as `fields list` prints them, and its value; a list field takes its option's label or id; repeat it for more fields, or for each value of a multiple field; an empty value clears it. Default: ``. |
+
+**Returns:** crm write — operation_id, untrusted, deal, lead; every field: attio commands info deals create
+
+**Example:** `attio work deals create --title "Example kitchen" --amount 15000 --currency EUR`, `attio work deals create --title "Example office" --pipeline Sales --stage "Quote sent" --field Source=web`
+
+### `attio deals update`
+
+change a deal in the CRM; what is left out keeps its value; the CRM's copy is stored again
+
+**Changes something in the service.**
+
+```sh
+attio deals update <deal> [options]
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `deal` | required | deal:<id>, as a list shows it. |
+
+| Option | What it does |
+|---|---|
+| `--title <title>` | the deal's title. |
+| `--pipeline <pipeline>` | pipeline:<id>, or a name only one of the CRM's pipelines has. |
+| `--stage <stage>` | a stage of its pipeline, by the CRM's id or name; checks the move key too, and the close key for a won or lost stage. |
+| `--amount <decimal>` | the expected sum, such as 1500.50, with --currency. |
+| `--currency <code>` | an ISO 4217 code, such as EUR. |
+| `--close-date <date>` | the day it is expected to close, YYYY-MM-DD. |
+| `--owner <user>` | the CRM user it is assigned to; anyone but the sign-in's own user checks crm.assign-others. |
+| `--field <key=value>` | one of the CRM's own fields, by its code or label as `fields list` prints them, and its value; a list field takes its option's label or id; repeat it for more fields, or for each value of a multiple field; an empty value clears it. Default: ``. |
+
+**Returns:** crm write — operation_id, untrusted, deal, lead; every field: attio commands info deals update
+
+**Example:** `attio work deals update deal:12 --amount 18000`, `attio work deals update deal:12 --field Source=`
+
+### `attio deals move`
+
+move a deal to another stage of its pipeline; a won or lost stage checks the close key too
+
+**Changes something in the service.**
+
+```sh
+attio deals move <deal> <stage>
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `deal` | required | deal:<id>, as a list shows it. |
+| `stage` | required | the stage, by the CRM's id or a name only one stage of its pipeline has; or a stage:<id>, of its pipeline or of the owner's base set, which moves it to the one stage of its pipeline mapped there and refuses several (with the candidates) or none. |
+
+**Returns:** crm write — operation_id, untrusted, deal, lead; every field: attio commands info deals move
+
+**Example:** `attio work deals move deal:12 "Quote sent"`, `attio work deals move deal:12 stage:5`
+
+### `attio deals close`
+
+mark a deal won or lost, the CRM's own way
+
+**Changes something in the service.**
+
+```sh
+attio deals close <deal> <outcome> [options]
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `deal` | required | deal:<id>, as a list shows it. |
+| `outcome` | required | how it ended. One of: `won`, `lost`. |
+
+| Option | What it does |
+|---|---|
+| `--reason <text>` | why, in a few words; kept with it. |
+
+**Returns:** crm write — operation_id, untrusted, deal, lead; every field: attio commands info deals close
+
+**Example:** `attio work deals close deal:12 won`, `attio work deals close deal:12 lost --reason "Example: chose another supplier"`
+
+### `attio deals delete`
+
+delete a deal in the CRM; asks first unless allowed
+
+**Changes something in the service.**
+
+```sh
+attio deals delete <deal>
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `deal` | required | deal:<id>, as a list shows it. |
+
+**Returns:** crm removal — operation_id, ref, removed; every field: attio commands info deals delete
+
+**Example:** `attio work deals delete deal:12`
+
 ## `attio pipelines`
 
 the CRM's pipelines and their stages, as last synced
@@ -2386,6 +2500,60 @@ attio people show <person>
 **Returns:** crm person — id, name, first_name, last_name, position, organization_ids, assigned_to, created_at, and 6 more; every field: attio commands info people show
 
 **Example:** `attio work people show 42`, `attio work people show "Anna Example" --json`
+
+### `attio people create`
+
+make a person in the CRM, then store the CRM's copy of it
+
+**Changes something in the service.**
+
+```sh
+attio people create [options]
+```
+
+| Option | What it does |
+|---|---|
+| `--name <name>` | the whole name. |
+| `--first-name <name>` | the first name; empty clears it. |
+| `--last-name <name>` | the last name; empty clears it. |
+| `--position <title>` | the job title; empty clears it. |
+| `--email <address>` | an e-mail address to give it; repeat it for more; replaces its list, and an empty one clears it. |
+| `--phone <phone>` | a phone number to give it, in international form starting with +; repeat it for more; replaces its list, and an empty one clears it. |
+| `--owner <user>` | the CRM user it is assigned to; anyone but the sign-in's own user checks crm.assign-others. |
+| `--field <key=value>` | one of the CRM's own fields, by its code or label as `fields list` prints them, and its value; a list field takes its option's label or id; repeat it for more fields, or for each value of a multiple field; an empty value clears it. Default: ``. |
+
+**Returns:** crm record write — operation_id, stored, untrusted, removed, person, organization; every field: attio commands info people create
+
+**Example:** `attio work people create --first-name Anna --last-name Example --position Buyer`
+
+### `attio people update`
+
+change a person in the CRM; what is left out keeps its value; the CRM's copy is stored again
+
+**Changes something in the service.**
+
+```sh
+attio people update <person> [options]
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `person` | required | the CRM's id of the person, as list prints it. |
+
+| Option | What it does |
+|---|---|
+| `--name <name>` | the whole name. |
+| `--first-name <name>` | the first name; empty clears it. |
+| `--last-name <name>` | the last name; empty clears it. |
+| `--position <title>` | the job title; empty clears it. |
+| `--email <address>` | an e-mail address to give it; repeat it for more; replaces its list, and an empty one clears it. |
+| `--phone <phone>` | a phone number to give it, in international form starting with +; repeat it for more; replaces its list, and an empty one clears it. |
+| `--owner <user>` | the CRM user it is assigned to; anyone but the sign-in's own user checks crm.assign-others. |
+| `--field <key=value>` | one of the CRM's own fields, by its code or label as `fields list` prints them, and its value; a list field takes its option's label or id; repeat it for more fields, or for each value of a multiple field; an empty value clears it. Default: ``. |
+
+**Returns:** crm record write — operation_id, stored, untrusted, removed, person, organization; every field: attio commands info people update
+
+**Example:** `attio work people update 42 --position Buyer`
 
 ## `attio organizations`
 
@@ -2551,6 +2719,30 @@ attio search all <query> [options]
 **Returns:** hit — kind, ref, provider, account, title, timestamp, excerpt, url, and 18 more; every field: attio commands info search all
 
 **Example:** `attio work search all Example LLC`, `attio work search all website --only crm --json`
+
+## `attio account`
+
+this profile on this computer
+
+### `attio account remove`
+
+sign the profile out, then forget it on this computer: its settings, its saved sign-in and its files; --keep-data leaves its messages in the store, where search still finds them, --delete-data deletes them; asks first, or --yes
+
+**Changes something on this computer only.**
+
+```sh
+attio account remove [options]
+```
+
+| Option | What it does |
+|---|---|
+| `--keep-data` | leave what the store holds of this account, still searchable. |
+| `--delete-data` | delete what the store and the tool's own files hold of this account. |
+| `--dry-run` | list what it would remove and keep, and change nothing. |
+
+**Returns:** account removal — profile, data, dry_run, account, revoked, config_file, removed, kept; every field: attio commands info account remove
+
+**Example:** `attio personal account remove --keep-data --dry-run`, `attio personal account remove --delete-data --yes`
 
 ## `attio schedule`
 

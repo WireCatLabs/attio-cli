@@ -48,7 +48,8 @@ const argsOf = (operation: Operation) => [
   ...(operation.request?.schema
     ? ["--body", JSON.stringify(sampleOf({ type: "ref", ref: operation.request.schema }, definitions))]
     : []),
-  ...(operation.effect === "destructive" ? ["--yes"] : []),
+  // Every change asks first, so outside a terminal it needs --yes.
+  ...(operation.effect === "read" ? [] : ["--yes"]),
 ]
 
 it("the spec offers operations", () => {
@@ -70,6 +71,16 @@ it.each(API.manifest.operations.map((operation) => [operation.command, operation
 )
 
 const destructive = API.manifest.operations.filter((operation) => operation.effect === "destructive")
+
+it("a write through api asks first, so outside a terminal it waits for --yes with nothing sent", async () => {
+  const service = fake()
+  const create = API.manifest.operations.find((operation) => operation.command === "objects-records-create")
+  if (!create) throw new Error("the spec has no objects-records-create")
+  const args = argsOf(create).filter((arg) => arg !== "--yes")
+  const ran = await runCli(["personal", "api", "objects-records-create", ...args, "--json"], { service })
+  expect(ran.json()).toMatchObject({ error: { code: "confirmation_required" } })
+  expect(service.calls).toEqual([])
+})
 
 // A service whose API only reads has no delete to check.
 it.runIf(destructive.length > 0)(
@@ -105,7 +116,8 @@ it.each(API.manifest.operations.map((operation) => [operation.command, operation
     const argv = [
       ...options,
       ...(sendsBytes(operation) ? ["--body-file", upload] : body === undefined ? [] : ["--body-file", bodyFile]),
-      ...(operation.effect === "destructive" ? ["--yes"] : []),
+      // Every change asks first, so outside a terminal it needs --yes.
+      ...(operation.effect === "read" ? [] : ["--yes"]),
     ]
     const ran = await runCli(["personal", "api", operation.command, ...argv, "--json"], { service })
     expect(ran.code, ran.err).toBe(0)
