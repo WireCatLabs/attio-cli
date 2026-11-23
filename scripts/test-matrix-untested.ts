@@ -7,12 +7,12 @@ const SHARED_STORE =
   "drive them on a CRM program"
 const SHARED_SCHEDULE =
   "cli-core's scheduleCommandFor; its schedule tests drive every timer and option, and src/schedule.test.ts installs, " +
-  "lists and removes attio's sync timer"
+  "lists, runs and removes attio's sync timer"
 const LONG_RUNNING = `starts an HTTP server or a background process that runs until stopped; ${SHARED_MCP}`
 
 export const UNTESTED: { command: string; option?: string; reason: string }[] = [
   ...[
-    ...["--at", "--at-time", "--notify-on", "--deliver-to"].map((option) => ({ command: "schedule command", option })),
+    ...["--at-time", "--notify-on", "--deliver-to"].map((option) => ({ command: "schedule command", option })),
     { command: "schedule agent" },
     ...[
       "--model",
@@ -25,9 +25,7 @@ export const UNTESTED: { command: string; option?: string; reason: string }[] = 
       "--notify-on",
       "--deliver-to",
     ].map((option) => ({ command: "schedule agent", option })),
-    { command: "schedule run" },
     ...["--no-notify", "--deliver-to"].map((option) => ({ command: "schedule run", option })),
-    { command: "schedule exec" },
     { command: "schedule pause" },
     { command: "schedule resume" },
     { command: "schedule agents list" },

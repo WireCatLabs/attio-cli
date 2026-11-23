@@ -78,7 +78,7 @@ try {
       const title = values.name[0].value ?? values.name[0].full_name
       const filter = object === "people" ? { name: { full_name: { $eq: title } } } : { name: { $eq: title } }
       const found = api("objects-records-query", { object }, { filter, limit: 1 })
-      const existing = found.items?.[0]?.id?.record_id
+      const existing = found.item?.data?.[0]?.id?.record_id
       const made = existing ? undefined : api("objects-records-create", { object }, { data: { values } })
       const id = existing ?? recordOf(made)
       if (!id) throw new Error(`${key}: no record id in the answer`)
@@ -87,10 +87,10 @@ try {
       process.stdout.write(`${existing ? "found" : "created"} ${key}\n`)
       return id
     }
-    // The token's own member owns the test deals, never whoever comes first in the list.
+    // The token's own member owns the test deals.
     const me = self.authorized_by_workspace_member_id
     const members = me ? api("workspace-members-list", {}) : {}
-    const owner = (members.items ?? []).find((one) => one.id?.workspace_member_id === me)?.email_address
+    const owner = (members.item?.data ?? []).find((one) => one.id?.workspace_member_id === me)?.email_address
     const answer = api("attributes-statuses-list", { target: "objects", identifier: "deals", attribute: "stage" })
     const list = answer.items ?? answer.item?.data ?? answer.data ?? []
     const stages = list

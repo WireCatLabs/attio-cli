@@ -5,7 +5,7 @@ const QUERY = "postV2ObjectsByObjectRecordsQuery"
 // harmless; one deleted then makes the next page skip a row until the next sync.
 const NEWEST = [{ direction: "desc", attribute: "created_at" }]
 
-// Attio's docs say each attribute's typed entries come current only; `current` drops any past ones should they come.
+// Attio's docs say each attribute's typed entries come current only; `current` holds to that should a past one come.
 const records = (object: string) => ({
   list: { operation: QUERY, path: { object }, body: { limit: 500, sorts: NEWEST } },
   get: { operation: "getV2ObjectsByObjectRecordsByRecordId", path: { object, record_id: "{id}" }, items: "data" },
