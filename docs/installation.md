@@ -1,7 +1,8 @@
 # Install
 
-Get `attio` running on your computer and connected to your Attio workspace in about five minutes. Attio lets a
-program in through an access token that a workspace admin makes, and this page walks you through it.
+Connect your Attio workspace once, and from then on your AI agent tells you where every deal stands without you
+opening Attio. Attio lets a program in only through an access token that a workspace admin makes. Making the token,
+installing `attio` and signing in take about five minutes.
 
 Once it is done, an agent on this computer reads your deals, people and companies when you ask.
 
@@ -25,8 +26,10 @@ Once it is done, an agent on this computer reads your deals, people and companie
 
 ## In WireCat Desktop
 
-Add Attio from the tool list, then paste the access token when it asks.
-[Make an access token in Attio](#make-an-access-token-in-attio) shows how to get one.
+1. On the **Tools** page, click **Install** on the Attio row.
+2. Click **Manage**, type an account name, such as `work`, and click **Sign in here**.
+3. Paste the access token when it asks. [Make an access token in Attio](#make-an-access-token-in-attio) shows how
+   to get one.
 
 ## Install the tool
 
@@ -51,8 +54,8 @@ Attio describes these steps on its help page,
 
 1. In Attio, open the menu next to your workspace name and choose **Workspace settings**.
 2. Open the **Developers** tab.
-3. Click **New access token** and give it a name, such as `WireCat`.
-4. Under the scopes, set these three to read:
+3. Click **+ New access token** and give it a name, such as `WireCat`.
+4. Under **Scopes**, give it read access to records, object configuration and user management:
 
    | Scope | Needed for |
    |---|---|
