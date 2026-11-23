@@ -7,7 +7,7 @@ ran it · ⛔ not tested offline, with the reason and where it is checked instea
 Measured from the test run (`coverage/argv.jsonl`), not searched for — see
 [TESTING.md](TESTING.md) for how, and for the states and failures that cut across commands.
 
-**547 ✅ · 62 ⛔ · 0 ❌** — 178 commands, 431 options.
+**591 ✅ · 62 ⛔ · 0 ❌** — 186 commands, 467 options.
 
 | Command | Option | | Note |
 |---|---|---|---|
@@ -483,6 +483,28 @@ Measured from the test run (`coverage/argv.jsonl`), not searched for — see
 | `deals list` | `--page` | ✅ |  |
 | `deals list` | `--format` | ✅ |  |
 | `deals show` |  | ✅ |  |
+| `deals create` |  | ✅ |  |
+| `deals create` | `--title` | ✅ |  |
+| `deals create` | `--pipeline` | ✅ |  |
+| `deals create` | `--stage` | ✅ |  |
+| `deals create` | `--amount` | ✅ |  |
+| `deals create` | `--currency` | ✅ |  |
+| `deals create` | `--close-date` | ✅ |  |
+| `deals create` | `--owner` | ✅ |  |
+| `deals create` | `--field` | ✅ |  |
+| `deals update` |  | ✅ |  |
+| `deals update` | `--title` | ✅ |  |
+| `deals update` | `--pipeline` | ✅ |  |
+| `deals update` | `--stage` | ✅ |  |
+| `deals update` | `--amount` | ✅ |  |
+| `deals update` | `--currency` | ✅ |  |
+| `deals update` | `--close-date` | ✅ |  |
+| `deals update` | `--owner` | ✅ |  |
+| `deals update` | `--field` | ✅ |  |
+| `deals move` |  | ✅ |  |
+| `deals close` |  | ✅ |  |
+| `deals close` | `--reason` | ✅ |  |
+| `deals delete` |  | ✅ |  |
 | `pipelines list` |  | ✅ |  |
 | `pipelines show` |  | ✅ |  |
 | `pipelines show` | `--since-time` | ✅ |  |
@@ -493,6 +515,24 @@ Measured from the test run (`coverage/argv.jsonl`), not searched for — see
 | `people list` | `--page` | ✅ |  |
 | `people list` | `--format` | ✅ |  |
 | `people show` |  | ✅ |  |
+| `people create` |  | ✅ |  |
+| `people create` | `--name` | ✅ |  |
+| `people create` | `--first-name` | ✅ |  |
+| `people create` | `--last-name` | ✅ |  |
+| `people create` | `--position` | ✅ |  |
+| `people create` | `--email` | ✅ |  |
+| `people create` | `--phone` | ✅ |  |
+| `people create` | `--owner` | ✅ |  |
+| `people create` | `--field` | ✅ |  |
+| `people update` |  | ✅ |  |
+| `people update` | `--name` | ✅ |  |
+| `people update` | `--first-name` | ✅ |  |
+| `people update` | `--last-name` | ✅ |  |
+| `people update` | `--position` | ✅ |  |
+| `people update` | `--email` | ✅ |  |
+| `people update` | `--phone` | ✅ |  |
+| `people update` | `--owner` | ✅ |  |
+| `people update` | `--field` | ✅ |  |
 | `organizations list` |  | ✅ |  |
 | `organizations list` | `--limit` | ✅ |  |
 | `organizations list` | `--page` | ✅ |  |
@@ -517,6 +557,10 @@ Measured from the test run (`coverage/argv.jsonl`), not searched for — see
 | `search all` | `--page` | ✅ |  |
 | `search all` | `--exact` | ✅ |  |
 | `search all` | `--timezone` | ✅ |  |
+| `account remove` |  | ✅ |  |
+| `account remove` | `--keep-data` | ✅ |  |
+| `account remove` | `--delete-data` | ✅ |  |
+| `account remove` | `--dry-run` | ✅ |  |
 | `schedule command` |  | ✅ |  |
 | `schedule command` | `--every` | ✅ |  |
 | `schedule command` | `--at` | ✅ |  |

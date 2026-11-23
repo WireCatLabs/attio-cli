@@ -46,10 +46,14 @@ run it yourself in a terminal.
 |---|---|---|
 | `api.<operation>` that deletes, such as `api.objects-records-delete` | `ask` | A delete cannot be undone. It also checks `attio.delete`. |
 | `attio.delete` | `ask` | One key for every delete. Set it to `deny` to stop them all. |
+| `deals.create`, `deals.update`, `deals.move`, `deals.close`, `deals.delete` | `ask` | Each changes a deal colleagues see. |
+| `people.create`, `people.update` | `ask` | Each changes a person colleagues see. |
+| `crm.assign-others` | `deny` | Giving a deal to another workspace member waits until you allow it. |
 | Every other command, `api` writes included | `allow` | |
 
-The deal, pipeline, stage, change, field and search commands only read. The people, organization and user commands
-only read too. Only the `api` group writes to Attio.
+A deal or person write also checks the `api` key of the Attio operation it sends, such as
+`api.objects-records-replace`, so a `readonly` on `api` stops it too. The pipeline, stage, change, field and search
+commands only read, and so do the organization and user commands.
 
 ## Keep every write away from an agent
 
@@ -63,7 +67,8 @@ The record id above is invented. Any of these keeps writes yours:
 
 - **Read scopes on the token.** Make the token with only the three read scopes from [install](installation.md).
   Attio itself then refuses every write.
-- **`api` at `readonly`.** `attio work config set permissions.api readonly`. Every `api` read still works.
+- **`api` at `readonly`.** `attio work config set permissions.api readonly`. Every read still works, and every write
+  is refused: the deal and person commands send through the same operations.
 - **No deletes.** `attio work config set permissions.attio.delete deny` stops every delete and leaves other writes as
   they are.
 

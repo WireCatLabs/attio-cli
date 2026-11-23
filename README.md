@@ -21,8 +21,8 @@
   Codex, Claude Desktop or any app that speaks MCP.
 - **Your pipeline, offline.** Deals, stages and what changed since yesterday are read from your computer, with no
   request to Attio.
-- **Safe to hand to an agent.** The deal commands only read, and one line keeps every write in the Attio API away
-  from an agent.
+- **Safe to hand to an agent.** Every change to Attio asks you first in a terminal, and one line keeps every write
+  away from an agent.
 
 ## What you get
 
@@ -98,13 +98,13 @@ Ask in plain words. The agent picks the commands.
 - **ChatGPT or Claude in the browser** reach it through your own tunnel, after a login with a one-time code.
 
 ```sh
-attio work config set permissions.api readonly   # no writes through the Attio API on this profile
+attio work config set permissions.api readonly   # no writes to Attio on this profile
 attio work mcp add claude-code --allow-writes    # or: codex
 attio work mcp config                            # the entry for Claude Desktop, Cursor and others
 ```
 
-Over MCP nobody is at a terminal to answer a question, so a write set to `ask` goes ahead. The first line above keeps
-every write away from the agent.
+Over MCP nobody is at a terminal to answer a question, so a write set to `ask` goes ahead and the app asks you
+before each tool call. The first line above keeps every write away from the agent.
 
 More: [agents and MCP](https://github.com/WireCatLabs/attio-cli/blob/main/docs/mcp.md) ·
 [permissions](https://github.com/WireCatLabs/attio-cli/blob/main/docs/permissions.md)

@@ -34,6 +34,20 @@ describe("each remote command runs inside cli-core's run", () => {
           "cli-core's addCrmCommands runs it in its run; src/attio-map.test.ts and crmSourceContract read the live list",
         ]),
       ),
+      ...Object.fromEntries(
+        [
+          "deals create",
+          "deals update",
+          "deals move",
+          "deals close",
+          "deals delete",
+          "people create",
+          "people update",
+        ].map((command) => [
+          command,
+          "cli-core's addCrmCommands runs it in its run; src/crm-contracts.test.ts writes through it and its contract",
+        ]),
+      ),
       doctor:
         "cli-core's appDoctorCommand answers --online outside a run of its own; drop this once core runs it inside",
     },

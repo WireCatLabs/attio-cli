@@ -43,9 +43,10 @@ access token.
 - **The deal commands read a copy, the people commands read Attio.** `sync` copies the workspace's deals and the
   people and companies they name, with the stages of the deal pipeline. `deals`, `pipelines` and `changes` answer from that copy. `people`,
   `organizations` and `users` ask Attio each time, so they always show the newest data and need the internet.
-- **The deal commands only read, the `api` group can write.** `deals`, `people` and the other CRM commands never
-  change Attio. `attio work api …` reaches every operation of the Attio API, writes and deletes included, as far as
-  the token's scopes and your [permissions](permissions.md) allow.
+- **Every change asks you first.** `deals create`, `update`, `move`, `close` and `delete`, and `people create` and
+  `update`, change Attio and store its answer. In a terminal each asks yes or no first. Companies, notes and tasks go
+  through `attio work api …`, which reaches every operation of the Attio API, as far as the token's scopes and your
+  [permissions](permissions.md) allow.
 - **Over MCP, "ask" goes ahead.** MCP is the way apps such as Claude Desktop call a tool, and nobody sits at a terminal
   there to answer a question. Lock the `api` group before you connect such an app: [MCP](mcp.md).
 

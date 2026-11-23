@@ -6,6 +6,8 @@
 # Needs: an Attio access token (keyring service attio) reading records, object configuration and workspace members
 # Needs: at least one person and one company in that workspace
 # Needs: for the deal checks, at least one deal with a person or a company on it (without deals they are skipped)
+# Needs: record_permission:read-write on the token, for a deal and a person named "WireCat live test" it makes,
+# changes and deletes, also when a step fails
 set -euo pipefail
 root=$(cd -- "$(dirname -- "$0")/.." && pwd)
 work=$(mktemp -d)
@@ -98,5 +100,61 @@ fi
 echo "deals: $deals"
 "${cli[@]}" live doctor --json >/dev/null
 
+# The write round trip. A run without a terminal refuses `ask`, so each write here confirms with --yes.
+made="$work/made"
+mkdir -p "$made"
+cleanup() {
+  [ -f "$made/person" ] && "${cli[@]}" live api objects-records-delete --object people \
+    --record-id "$(cat "$made/person")" --yes --json >/dev/null 2>&1 || true
+  [ -f "$made/deal" ] && "${cli[@]}" live deals delete "$(cat "$made/deal")" --yes --json >/dev/null 2>&1 || true
+  "${cli[@]}" live session end --json >/dev/null 2>&1 || true
+  rm -rf "$work"
+}
+trap cleanup EXIT
+field() { node -e 'let v = JSON.parse(require("fs").readFileSync(0, "utf8")); for (const k of process.argv[1].split(".")) v = v?.[k]; if (v === undefined || v === null) process.exit(1); console.log(v)' "$1"; }
+
+stamp=$(date -u +%Y%m%dT%H%M%SZ)
+stages=$(node -e '
+  const [deals] = JSON.parse(require("fs").readFileSync(process.argv[1], "utf8")).items ?? []
+  const open = (deals?.stages ?? []).filter((one) => one.outcome === "open")
+  if (open.length < 2) throw new Error("the deal pipeline needs two open stages")
+  console.log([open[0].name, open[1].name].join("\t"))' "$work/pipelines.json")
+IFS=$'\t' read -r first_stage second_stage <<<"$stages"
+
+"${cli[@]}" live deals create --title "WireCat live test $stamp" --stage "$first_stage" --amount 100 --yes \
+  --json >"$work/made-deal.json"
+# The ref names the deal in the copy, the record id in Attio: the commands take one, api the other.
+deal=$(field item.deal.ref <"$work/made-deal.json")
+deal_id=$(field item.deal.external_id <"$work/made-deal.json")
+echo "$deal" >"$made/deal"
+"${cli[@]}" live deals update "$deal" --title "WireCat live test $stamp, renamed" --yes --json >/dev/null
+"${cli[@]}" live deals move "$deal" "$second_stage" --yes --json >/dev/null
+"${cli[@]}" live deals close "$deal" won --yes --json >/dev/null
+"${cli[@]}" live api objects-records-get --object deals --record-id "$deal_id" --json >"$work/deal-read.json"
+
+"${cli[@]}" live people create --first-name WireCat --last-name "Live test $stamp" \
+  --email "live-$stamp@example.com" --yes --json >"$work/made-person.json"
+field item.person.id <"$work/made-person.json" >"$made/person"
+"${cli[@]}" live people update "$(cat "$made/person")" --first-name Wirecat --yes --json >"$work/person-read.json"
+"${cli[@]}" live api objects-records-delete --object people --record-id "$(cat "$made/person")" --yes \
+  --json >/dev/null
+rm "$made/person"
+
+"${cli[@]}" live deals delete "$deal" --yes --json >/dev/null
+rm "$made/deal"
+node -e '
+  const fs = require("fs")
+  const read = (file) => JSON.parse(fs.readFileSync(file, "utf8"))
+  const [pipelines, got, person] = process.argv.slice(1).map(read)
+  const values = got.item?.data?.values ?? {}
+  if (!String(values.name?.[0]?.value).endsWith(", renamed")) throw new Error("the update did not reach Attio")
+  const won = (pipelines.items?.[0]?.stages ?? []).filter((one) => one.outcome === "won").map((one) => one.external_id)
+  if (!won.includes(values.stage?.[0]?.status?.id?.status_id)) throw new Error("the close did not reach a won stage")
+  // A part of the name changed alone keeps the other part.
+  const name = person.item?.person ?? {}
+  if (name.first_name !== "Wirecat" || !String(name.last_name).startsWith("Live test"))
+    throw new Error(`the name update lost a part: ${JSON.stringify([name.first_name, name.last_name])}`)' \
+  "$work/pipelines.json" "$work/deal-read.json" "$work/person-read.json"
+
 "${cli[@]}" live session end --json >/dev/null
-echo "live check passed: describe format 2, sign-in, sync, store status, pipelines, live people and companies, people and companies by name, a stored deal and search for it, doctor, sign-out"
+echo "live check passed: describe format 2, sign-in, sync, store status, pipelines, live people and companies, people and companies by name, a stored deal and search for it, doctor, deal create, update, move, close and delete, person create, update and delete, sign-out"
