@@ -2,7 +2,7 @@
 
 Notable changes to `@wirecat/attio-cli`. One section per version, newest first.
 
-## 0.2.3 — 23.11.2026
+## 0.3.0 — 23.11.2026
 
 ### Added
 
