@@ -3,10 +3,22 @@ import { expect, it } from "vitest"
 import { FAKE_API_TOKEN, fakeServiceApi } from "./testing/fake-api.js"
 import { runCli } from "./testing/harness.js"
 
-it("sync without a sign-in says how to sign in, and reaches nothing", async () => {
+it("a profile that ended its session names the command that signs it in", async () => {
+  const keyring = memoryKeyring()
+  const service = fakeServiceApi()
+  expect((await runCli(["home", "session", "start", "--json"], { keyring, service, stdin: FAKE_API_TOKEN })).code).toBe(
+    0,
+  )
+  expect((await runCli(["home", "session", "end", "--json"], { keyring, service })).code).toBe(0)
+  const ran = await runCli(["home", "sync", "--json"], { keyring, service })
+  expect(ran.json()).toMatchObject({ error: { code: "authentication_error", reason: "session.missing" } })
+  expect(ran.err + JSON.stringify(ran.json())).toContain("attio home session start")
+})
+
+it("sync on a profile this computer does not know says how to sign in, and reaches nothing", async () => {
   const fake = fakeServiceApi()
   const ran = await runCli(["personal", "sync", "--json"], { keyring: memoryKeyring(), service: fake })
-  expect(ran.json()).toMatchObject({ error: { code: "authentication_error" } })
+  expect(ran.json()).toMatchObject({ error: { code: "not_found", reason: "profile.unknown" } })
   expect(ran.err + JSON.stringify(ran.json())).toContain("attio personal session start")
   expect(fake.calls).toEqual([])
 })

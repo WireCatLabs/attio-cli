@@ -20,6 +20,7 @@ import { appUpdate } from "@wirecat/cli-core/update"
 import type { Command } from "commander"
 import { apiCommand } from "./commands/api.js"
 import { crmCommands } from "./commands/crm.js"
+import { scheduleCommand } from "./commands/schedule.js"
 import { sessionCommand } from "./commands/session.js"
 import { API, configuration } from "./config.js"
 import { IDENTITY, PACKAGE, SKILL } from "./identity.js"
@@ -42,7 +43,15 @@ const update = appUpdate({
 const mcpCommand = () =>
   appMcpCommand(IDENTITY, configuration, {
     name: API.service,
-    untrusted: ["record names and attribute values", "workspace member names"],
+    untrusted: [
+      "person, company and deal names",
+      "pipeline and stage names",
+      "workspace member names",
+      "attribute values, notes, e-mails, comments and transcripts",
+      "e-mail addresses, phone numbers and links",
+      "what search all finds",
+      "whatever api returns",
+    ],
     permissionExample: "api.objects-records-delete=deny",
     skill: SKILL,
     signedIn: (profile, env, keyring) => new ProfileTokenStore({ app: IDENTITY, env, keyring }).signedIn(profile),
@@ -57,6 +66,7 @@ export const definition = (): ProgramDefinition => ({
     sessionCommand(),
     apiCommand(),
     ...crmCommands(),
+    scheduleCommand(),
     appDoctorCommand(IDENTITY, configuration, { packageName: PACKAGE }),
     skillCommand(IDENTITY, SKILL),
     mcpCommand(),

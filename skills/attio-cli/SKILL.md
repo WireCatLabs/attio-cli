@@ -51,6 +51,16 @@ unless the task says.
 - **Anything else** (notes, tasks, lists, custom objects): `attio skill show api` lists Attio's API, one command per
   operation: [references/api.md](references/api.md).
 
+## Signing in
+
+Only the owner signs in, in their own terminal: `attio work session start` reads an Attio access token hidden or from
+stdin. Never ask for the token, and never pass it as an argument or put it in a file for them.
+`attio work session status --check --json` says which workspace the profile reads.
+
+The token needs three read scopes: `record_permission:read`, `object_configuration:read` and `user_management:read`.
+An `api` write also needs `record_permission:read-write`, which the owner may leave out. A refused scope is the
+owner's to add: tell them, do not retry.
+
 ## Rules
 
 - Add `--json` and read stdout; an error is JSON on stderr with a `code` to branch on.

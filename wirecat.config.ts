@@ -1,17 +1,18 @@
 import { defineCli } from "@wirecat/cli-core/manifest"
 
 const QUERY = "postV2ObjectsByObjectRecordsQuery"
-// Newest first, and a fixed order, so offset pages neither skip nor repeat a record.
+// Newest first, in a fixed order. A record added during a sync repeats a row on the next offset page, which is
+// harmless; one deleted then makes the next page skip a row until the next sync.
 const NEWEST = [{ direction: "desc", attribute: "created_at" }]
 
-// Attio answers each attribute as a list of typed entries, by its docs the current ones only; `current` keeps that so
-// should one come with history. Its attribute definitions say which are the workspace's own.
+// Attio's docs say each attribute's typed entries come current only; `current` holds to that should a past one come.
 const records = (object: string) => ({
   list: { operation: QUERY, path: { object }, body: { limit: 500, sorts: NEWEST } },
   get: { operation: "getV2ObjectsByObjectRecordsByRecordId", path: { object, record_id: "{id}" }, items: "data" },
   custom: { from: "values", typed: { by: "attribute_type", current: "active_until" } },
 })
 
+// Attio's attribute definitions say which are the workspace's own.
 const attributes = (object: string) => ({
   call: { operation: "getV2ByTargetByIdentifierAttributes", path: { target: "objects", identifier: object } },
   map: { code: "api_slug", label: "title", type: "type", multiple: "is_multiselect" },

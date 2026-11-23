@@ -2552,6 +2552,187 @@ attio search all <query> [options]
 
 **Example:** `attio work search all Example LLC`, `attio work search all website --only crm --json`
 
+## `attio schedule`
+
+run a attio command or an agent later or on a timer (systemd, launchd, Task Scheduler); an agent cannot send
+
+### `attio schedule command`
+
+run attio <args…> on a timer — reads save what they read, so this is how the store stays current
+
+**Changes something on this computer only.**
+
+```sh
+attio schedule command <name> <args> [options]
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `name` | required | lowercase letters, digits and dashes. |
+| `args` | required | the attio command after its name, e.g. -- doctor. |
+
+| Option | What it does |
+|---|---|
+| `--every <duration>` | repeat: 30m, 2h, 1d. |
+| `--at <HH:MM>` | every day at this local time; 'mon 09:00' once a week, 'mon,fri 09:00' on several days (mon, tue, wed, thu, fri, sat, sun); repeat it for more times. |
+| `--at-time <time>` | one run: 30m, 2d from now, or an ISO time; the schedule removes itself after it. |
+| `--notify-on <when>` | desktop notice after a run (default failures for an agent that repeats with --every, else always). One of: `always`, `failures`, `never`. |
+| `--deliver-to <route>` | also send the result, when --notify-on says so, by the owner's own tg or mail: telegram-bot:<profile>/<chat id or user:id>, or email:<profile>/<address>; repeat it for more. |
+
+**Example:** `attio personal schedule command health --every 1h -- doctor`, `attio personal schedule command morning-check --at 08:00 -- doctor`
+
+### `attio schedule agent`
+
+start an agent (claude, codex, gemini, cursor, opencode, openclaw, hermes, grok, kimi) with a prompt on a timer; it runs with WCATTIO_READ_ONLY=1, so it reads and drafts and cannot send, and its own limits hold it to these CLIs' commands; an agent with no such limit is refused (`schedule agents list` says which) — its answer is kept and you are notified
+
+**Changes something on this computer only.**
+
+```sh
+attio schedule agent <name> <harness> <prompt> [options]
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `name` | required | lowercase letters, digits and dashes. |
+| `harness` | required | the agent to start. One of: `claude`, `codex`, `gemini`, `cursor`, `opencode`, `openclaw`, `hermes`, `grok`, `kimi`. |
+| `prompt` | required | what to do, e.g. "say what needs attention in this installation: attio doctor". |
+
+| Option | What it does |
+|---|---|
+| `--model <model>` | the model it runs on: an alias such as sonnet, or a model id; "" for the agent's own default (default sonnet for claude, the agent's own for the others, or the config file's). |
+| `--max-cost <usd>` | claude only: stop a run that costs more than this, in US dollars. |
+| `--allow-dangerous` | start an agent its own limits cannot hold to these CLIs' commands, where `schedule agents list` says allowed_with_ack: it may then run any program inside its sandbox. |
+| `--max-cost-per-day <usd>` | claude only, as the others report no cost: start no run for the rest of the day once its runs cost this much, in US dollars; 0 for no cap (default 5, or the config file's). |
+| `--every <duration>` | repeat: 30m, 2h, 1d. |
+| `--at <HH:MM>` | every day at this local time; 'mon 09:00' once a week, 'mon,fri 09:00' on several days (mon, tue, wed, thu, fri, sat, sun); repeat it for more times. |
+| `--at-time <time>` | one run: 30m, 2d from now, or an ISO time; the schedule removes itself after it. |
+| `--notify-on <when>` | desktop notice after a run (default failures for an agent that repeats with --every, else always). One of: `always`, `failures`, `never`. |
+| `--deliver-to <route>` | also send the result, when --notify-on says so, by the owner's own tg or mail: telegram-bot:<profile>/<chat id or user:id>, or email:<profile>/<address>; repeat it for more. |
+
+**Example:** `attio personal schedule agent review claude "review what came in overnight and draft replies" --at 08:30`, `attio personal schedule agent triage gemini "list what needs an answer today" --every 2h`, `attio personal schedule agent weekly claude "review the week's open threads" --at 09:00 --model opus`
+
+### `attio schedule list`
+
+the schedules, when they run and how their last run went
+
+```sh
+attio schedule list [query]
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `query` | optional | field:value terms that narrow the list — the fields are below. |
+
+**Returns:** scheduled job — name, kind, when, last, paused, notify, deliver_to, harness, and 4 more; every field: attio commands info schedule list
+
+**Example:** `attio personal schedule list`, `attio personal schedule list kind:agent`
+
+### `attio schedule agents`
+
+the coding agents an agent schedule may start
+
+#### `attio schedule agents list`
+
+the agents a schedule may start, and which are on PATH here
+
+```sh
+attio schedule agents list [query]
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `query` | optional | field:value terms; this list filters by none yet. |
+
+**Returns:** schedule harness — id, name, programs, reports_cost, restricted, restricted_reason, allowed_with_ack, installed, and 1 more; every field: attio commands info schedule agents list
+
+**Example:** `attio personal schedule agents list`, `attio personal schedule agents list --json`
+
+### `attio schedule run`
+
+run a schedule now, as its timer would, and wait for it; a paused one runs too
+
+**Changes something in the service.**
+
+```sh
+attio schedule run <name> [options]
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `name` | required | the schedule's name, as `schedule list` shows it. |
+
+| Option | What it does |
+|---|---|
+| `--no-notify` | keep the result here: send it along none of its routes. |
+| `--deliver-to <route>` | send it along only this one of its own routes; repeat it for more. |
+
+**Example:** `attio personal schedule run health`
+
+### `attio schedule remove`
+
+stop a schedule and remove its timer; its past output stays
+
+**Changes something on this computer only.**
+
+```sh
+attio schedule remove <name>
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `name` | required | the schedule's name, as `schedule list` shows it. |
+
+**Example:** `attio personal schedule remove health`
+
+### `attio schedule pause`
+
+take a schedule off its timer and keep it; run runs it, resume puts it back
+
+**Changes something on this computer only.**
+
+```sh
+attio schedule pause <name>
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `name` | required | the schedule's name, as `schedule list` shows it. |
+
+**Example:** `attio personal schedule pause health`
+
+### `attio schedule resume`
+
+put a paused schedule back on its timer
+
+**Changes something on this computer only.**
+
+```sh
+attio schedule resume <name>
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `name` | required | the schedule's name, as `schedule list` shows it. |
+
+**Example:** `attio personal schedule resume health`
+
+### `attio schedule exec`
+
+what a timer runs, given the schedule's file; to run one by hand, use run
+
+**Changes something in the service.**
+
+```sh
+attio schedule exec <file> [seal]
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `file` | required | the schedule's schedule.json in the state folder, as the timer passes it. |
+| `seal` | optional | the file's SHA-256 as it was saved, which the timer passes; a file that differs does not run. |
+
+**Example:** `attio personal schedule exec ~/.local/share/attio-cli/schedules/health/schedule.json`
+
 ## `attio doctor`
 
 the state this installation is in, without connecting unless --online
