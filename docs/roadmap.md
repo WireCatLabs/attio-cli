@@ -20,14 +20,16 @@ companies they name into the local WireCat store, with the stages of the deal pi
 `pipelines`, `stages` and `changes` work offline, and `search all` finds deals next to your messages, notes and
 meetings. `pipelines show` is the pipeline board: each stage's deals, their number, their total per currency and the
 win rate. `changes list` shows deals created, moved, won and lost, and `--format report` makes it a digest.
-`fields list` shows the workspace's own attributes. `people`, `organizations` and `users` read Attio live. Lists
+`fields list` shows the workspace's own attributes. With the `activities` setting on, the copy also holds the
+notes and tasks on its deals, people and companies. `people`, `organizations` and `users` read Attio live. `deals`
+create, update, move and close deals, and `people` create and update people, each change asking you first. Lists
 export to CSV with `--format csv`. `attio work api` reaches every operation of the Attio API. Every command is in the
 [command reference](commands.md).
 
 ## Next
 
-- **Change deals.** Move a deal to a stage by its name, and close it as won or lost, with a permission for each.
-- **Notes and tasks.** Read and add the notes and tasks on a deal, a person or a company.
+- **Add notes and tasks.** Add a note or a task to a deal, a person or a company with its own command. Reading them
+  is in the copy already.
 - **Sign in with one click.** Sign in through Attio in the browser, in place of making a token by hand.
 
 ## Later

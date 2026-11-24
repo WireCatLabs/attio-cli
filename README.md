@@ -193,9 +193,9 @@ More: [permissions](https://github.com/WireCatLabs/attio-cli/blob/main/docs/perm
 
 ## Limits
 
-- The deal commands read. Moving or closing a deal from `attio` is on the
-  [roadmap](https://github.com/WireCatLabs/attio-cli/blob/main/docs/roadmap.md), and so are notes, tasks, custom
-  objects, lists and a one-click sign-in.
+- Adding notes and tasks with their own command, custom objects, lists and a one-click sign-in are on the
+  [roadmap](https://github.com/WireCatLabs/attio-cli/blob/main/docs/roadmap.md). Reading notes and tasks is in the
+  copy, with the `activities` setting on.
 - Only a workspace admin can make the token, and it reads the whole workspace.
 - Attio documents 100 reads and 25 writes a second
   ([rate limits](https://docs.attio.com/rest-api/guides/rate-limiting)).

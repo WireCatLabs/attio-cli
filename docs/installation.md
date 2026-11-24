@@ -62,6 +62,7 @@ Attio describes these steps on its help page,
    | `record_permission:read` | Deals, people and companies. |
    | `object_configuration:read` | The deal stages and your workspace's own attributes. |
    | `user_management:read` | Workspace members, the owners of deals. |
+   | `note:read` and `task:read` | Only to copy notes and tasks, see [notes and tasks](usage.md#notes-and-tasks-on-a-deal). |
 
 5. Save, and copy the token Attio shows.
 
