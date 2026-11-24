@@ -152,6 +152,11 @@ attio work search all renewal --only crm
 `search all` searches the deals in the copy by the words of their title, company and people, and the messages, notes,
 calendar events and meetings that other WireCat tools stored on this computer. The best match comes first.
 
+After `attio work sync --embed`, it also finds a deal by the meaning of its notes and tasks, in other words or another
+language: «клиент жалуется на сроки» finds the deal whose note says the launch slipped. The vectors are built on this
+computer with a model already downloaded. Until then `search all` searches by words and says so. A Latin name typed
+in Cyrillic is found too: `феррара` finds Ferrara.
+
 ## The Attio API
 
 `attio work api` runs any operation of the Attio API, one command each, with its own flags and help. It reaches what

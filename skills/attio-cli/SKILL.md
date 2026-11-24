@@ -50,7 +50,7 @@ unless the task says.
 - **Missing is not absent.** A sync can be partial and still exit `0`: read `complete` and `issues`. Before you say
   something is not there, search in other words, and `sync` if the store is old.
 - **Notes and tasks.** With the owner's `activities` setting on, `deals show` lists a deal's notes and tasks and
-  `search all` finds a deal by the words of its notes. Without it, or for a note on no kept deal, read them through
+  `search all` finds a deal by the words of its notes, and by their meaning after `sync --embed`. Without it, or for a note on no kept deal, read them through
   `api notes-list` and `api tasks-list`. Only the owner turns the setting on.
 - **Anything else** (lists, custom objects): `attio skill show api` lists Attio's API, one command per
   operation: [references/api.md](references/api.md).

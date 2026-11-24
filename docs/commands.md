@@ -1994,10 +1994,11 @@ attio sync [options]
 |---|---|
 | `--rescan` | list everything again, every id too, dropping a round in progress. |
 | `--max-pages <pages>` | at most this many requests to the CRM in this run. |
+| `--embed` | also index new activities and tasks for search all by meaning, with a model already downloaded. |
 
-**Returns:** crm sync — provider, account, scope, pipelines, skipped_owner_rejected, stage_tasks, synced, issues, and 9 more; every field: attio commands info sync
+**Returns:** crm sync — provider, account, scope, pipelines, skipped_owner_rejected, stage_tasks, synced, issues, and 10 more; every field: attio commands info sync
 
-**Example:** `attio work sync`, `attio work sync --rescan`, `attio work sync --max-pages 20`
+**Example:** `attio work sync`, `attio work sync --rescan`, `attio work sync --embed`
 
 ## `attio store`
 
@@ -2519,7 +2520,6 @@ attio people create [options]
 | `--position <title>` | the job title; empty clears it. |
 | `--email <address>` | an e-mail address to give it; repeat it for more; replaces its list, and an empty one clears it. |
 | `--phone <phone>` | a phone number to give it, in international form starting with +; repeat it for more; replaces its list, and an empty one clears it. |
-| `--owner <user>` | the CRM user it is assigned to; anyone but the sign-in's own user checks crm.assign-others. |
 | `--field <key=value>` | one of the CRM's own fields, by its code or label as `fields list` prints them, and its value; a list field takes its option's label or id; repeat it for more fields, or for each value of a multiple field; an empty value clears it. Default: ``. |
 
 **Returns:** crm record write — operation_id, stored, untrusted, removed, person, organization; every field: attio commands info people create
@@ -2548,7 +2548,6 @@ attio people update <person> [options]
 | `--position <title>` | the job title; empty clears it. |
 | `--email <address>` | an e-mail address to give it; repeat it for more; replaces its list, and an empty one clears it. |
 | `--phone <phone>` | a phone number to give it, in international form starting with +; repeat it for more; replaces its list, and an empty one clears it. |
-| `--owner <user>` | the CRM user it is assigned to; anyone but the sign-in's own user checks crm.assign-others. |
 | `--field <key=value>` | one of the CRM's own fields, by its code or label as `fields list` prints them, and its value; a list field takes its option's label or id; repeat it for more fields, or for each value of a multiple field; an empty value clears it. Default: ``. |
 
 **Returns:** crm record write — operation_id, stored, untrusted, removed, person, organization; every field: attio commands info people update
