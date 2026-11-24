@@ -2,6 +2,13 @@
 
 Notable changes to `@wirecat/attio-cli`. One section per version, newest first.
 
+## 0.5.1 — 24.11.2026
+
+### Fixed
+
+- **`search all` and `deals list` find a Cyrillic name typed in Latin letters**, marked as a correction. An agent that
+  searched a Russian company's name in Latin found nothing and answered wrong.
+
 ## 0.5.0 — 24.11.2026
 
 ### Added
