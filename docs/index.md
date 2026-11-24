@@ -69,8 +69,8 @@ Agent:  (runs attio work changes list change:won "at>=7d")
 
 - **A copy of your deals on your computer.** Lists, the pipeline board and search answer from it with no request to
   Attio, also offline.
-- **Safe to hand to an agent.** The CRM commands only read. Each command and each Attio API operation has its own
-  permission: allow, ask, read only or refuse. One line keeps every write away from an agent.
+- **Safe to hand to an agent.** Every change to Attio asks you first in a terminal. Each command and each Attio API
+  operation has its own permission: allow, ask, read only or refuse. One line keeps every write away from an agent.
 - **The token stays in your system keyring.** It never shows in output, errors or logs.
 - **Polite to Attio.** Most answers need no request at all, so your workspace's rate limit is left for your other
   apps.
@@ -126,8 +126,10 @@ token.
 
 ## Limits
 
-- Deals are read and never changed by the deal commands. Moving or closing a deal is on the [roadmap](roadmap.md).
-- Notes, tasks, lists and custom objects have no commands of their own yet. `attio work api` reaches them.
+- Companies are read, not written: an Attio company has no e-mail or phone attribute to write. Change one through
+  `api`.
+- Notes and tasks show on a deal in `deals show` once the owner turns on the `activities` setting, but have no commands
+  of their own yet. Lists and custom objects have none either. `attio work api` reaches them all.
 - People, companies and workspace members are read from Attio each time, so they need the internet.
 - Attio cannot list only what changed since a time, so each sync lists every deal again. A large workspace takes
   longer to sync.

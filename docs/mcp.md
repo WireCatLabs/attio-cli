@@ -25,7 +25,8 @@ attio work mcp add claude-code --allow-writes   # or codex
 attio work mcp check                            # the handshake and the tool list, as the client sees them
 ```
 
-`--allow-writes` says you know the profile offers tools that write: the `api` group's writes. For Claude Desktop,
+`--allow-writes` says you know the profile offers tools that write: the deal and people writes and the `api` group's
+writes. For Claude Desktop,
 Cursor or any other client, `attio work mcp config` prints the entry to paste into its settings, with full paths. By
 hand, for Claude Code:
 
@@ -52,8 +53,8 @@ the `api` commands read, and what `search all` finds. The agent is told it is da
 
 ## Keep writes yours
 
-The deal, people and company commands only read. The `api` group reaches every Attio operation, and its writes are
-`allow` by default, its deletes `ask`. Over MCP nobody is at a terminal to answer `ask`, so a delete goes ahead too.
+The deal and people commands write, and the `api` group reaches every Attio operation. Each write is `ask` by default.
+Over MCP nobody is at a terminal to answer `ask`, so every write goes ahead, and your MCP client is what asks.
 
 Two things stop a write. Use at least one before you add the server:
 
