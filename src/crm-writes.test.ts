@@ -163,8 +163,8 @@ it("a person is created and changed; a name part changed alone keeps the other",
   expect(sent(source, PUT).at(-1)).toMatchObject({
     data: { values: { name: [{ first_name: "Madonna", last_name: "", full_name: "Madonna" }] } },
   })
-  refused(await attio(["people", "create", "--name", "Owned", "--owner", "7001", "--yes"]), "permission_error")
-  refused(await attio(["people", "update", id, "--owner", "7001", "--yes"]), "permission_error")
+  refused(await attio(["people", "create", "--name", "Owned", "--owner", "7001", "--yes"]), "validation_error")
+  refused(await attio(["people", "update", id, "--owner", "7001", "--yes"]), "validation_error")
 })
 
 it("account remove signs out and keeps or deletes the local copy", async () => {

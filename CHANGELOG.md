@@ -2,6 +2,20 @@
 
 Notable changes to `@wirecat/attio-cli`. One section per version, newest first.
 
+## 0.5.0 — 24.11.2026
+
+### Added
+
+- **`search all` finds a deal by the meaning of its notes and tasks**, in other words or another language, after
+  `sync --embed` builds the vectors. Until then it searches by words and says so.
+- **`search all` and `deals list` find a Latin name typed in Cyrillic** (`феррара` finds Ferrara), and a name one
+  letter off a query word.
+
+### Fixed
+
+- **`people create` and `people update` no longer offer `--owner`.** A person in Attio has no owner, and the flag was
+  refused twice before the write. The help lists only the flags Attio takes.
+
 ## 0.4.1 — 24.11.2026
 
 ### Fixed

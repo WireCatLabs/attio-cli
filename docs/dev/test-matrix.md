@@ -7,7 +7,7 @@ ran it · ⛔ not tested offline, with the reason and where it is checked instea
 Measured from the test run (`coverage/argv.jsonl`), not searched for — see
 [TESTING.md](TESTING.md) for how, and for the states and failures that cut across commands.
 
-**591 ✅ · 62 ⛔ · 0 ❌** — 186 commands, 467 options.
+**589 ✅ · 63 ⛔ · 0 ❌** — 186 commands, 466 options.
 
 | Command | Option | | Note |
 |---|---|---|---|
@@ -457,6 +457,7 @@ Measured from the test run (`coverage/argv.jsonl`), not searched for — see
 | `sync` |  | ✅ |  |
 | `sync` | `--rescan` | ✅ |  |
 | `sync` | `--max-pages` | ✅ |  |
+| `sync` | `--embed` | ⛔ | cli-core's CRM sync embeds activities; its src/crm/cli/activity-meaning.test.ts drives sync --embed and search all by meaning on a CRM program with the small test model, and a test here would need a model on disk |
 | `store status` |  | ✅ |  |
 | `store apply` |  | ⛔ | cli-core's addStoreMaintenanceCommands, mounted by addCrmCommands; its store and src/crm/cli/store-file tests drive them on a CRM program |
 | `store apply` | `--yes` | ⛔ | cli-core's addStoreMaintenanceCommands, mounted by addCrmCommands; its store and src/crm/cli/store-file tests drive them on a CRM program |
@@ -522,7 +523,6 @@ Measured from the test run (`coverage/argv.jsonl`), not searched for — see
 | `people create` | `--position` | ✅ |  |
 | `people create` | `--email` | ✅ |  |
 | `people create` | `--phone` | ✅ |  |
-| `people create` | `--owner` | ✅ |  |
 | `people create` | `--field` | ✅ |  |
 | `people update` |  | ✅ |  |
 | `people update` | `--name` | ✅ |  |
@@ -531,7 +531,6 @@ Measured from the test run (`coverage/argv.jsonl`), not searched for — see
 | `people update` | `--position` | ✅ |  |
 | `people update` | `--email` | ✅ |  |
 | `people update` | `--phone` | ✅ |  |
-| `people update` | `--owner` | ✅ |  |
 | `people update` | `--field` | ✅ |  |
 | `organizations list` |  | ✅ |  |
 | `organizations list` | `--limit` | ✅ |  |
