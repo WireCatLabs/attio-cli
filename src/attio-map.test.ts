@@ -1,5 +1,6 @@
+import { CliError } from "@wirecat/cli-base"
 import { crmSourceFromManifest } from "@wirecat/cli-core/crm"
-import { expect, it } from "vitest"
+import { expect, it, vi } from "vitest"
 import { API } from "./config.js"
 import { HOOK_OPTIONS, SOURCE } from "./generated/wirecat-config.js"
 
@@ -113,7 +114,6 @@ const source = (calls: Call[] = []) =>
           : { data: [] }
       // A person or a company is copied as a deal names it, each read by id.
       if (operation === "getV2ObjectsByObjectRecordsByRecordId") return { data: RECORDS[String(request.path.object)] }
-      // Notes page by 50: one note is the last page.
       if (operation === "getV2Notes") return { data: Number(request.query.offset) ? [] : [note] }
       if (operation === "getV2Objects") return { data: objects }
       if (operation === "getV2Tasks") return { data: [task] }
@@ -252,4 +252,50 @@ it("reads Attio's notes and then its tasks as activities on the records they han
       }),
     ],
   })
+})
+
+it("pages a full list of notes, keeps a note on another object off every record, and reads a done task", async () => {
+  const notes = Array.from({ length: 50 }, (_, i) => ({
+    ...note,
+    id: { workspace_id: "w1", note_id: `n${i}` },
+    parent_object: i ? "deals" : "invoices",
+    content_plaintext: i ? note.content_plaintext : "",
+    created_by_actor: { type: "api-token", id: "k1" },
+  }))
+  const done = { ...task, is_completed: true, completed_at: "2026-03-09T12:00:00.000Z", assignees: [] }
+  const live = crmSourceFromManifest(SOURCE, {
+    api: API.manifest,
+    call: async (operation, request) => {
+      if (operation === "getV2Notes") return { data: notes }
+      if (operation === "getV2Objects") return { data: objects }
+      return { data: Number(request.query.offset) ? [done] : Array.from({ length: 200 }, () => done) }
+    },
+    ...HOOK_OPTIONS,
+  })
+  const first = await live.activities?.(0)
+  expect(first).toMatchObject({ hasMore: true, nextCursor: "notes:50" })
+  expect(first?.items[0]).toMatchObject({ body: null, assignee: null, on: [] })
+  expect(await live.activities?.(0, "tasks:0")).toMatchObject({ hasMore: true, nextCursor: "tasks:200" })
+  const last = await live.activities?.(0, "tasks:200")
+  expect(last?.hasMore).toBe(false)
+  expect(last?.items[0]).toMatchObject({
+    done: true,
+    assignee: null,
+    updatedAt: Date.parse("2026-03-09T12:00:00.000Z"),
+  })
+})
+
+it("reads the notes when the token may not read tasks, and says what it could not read", async () => {
+  const live = crmSourceFromManifest(SOURCE, {
+    api: API.manifest,
+    call: async (operation) => {
+      if (operation === "getV2Notes") return { data: [note] }
+      throw new CliError("permission_error", "missing scope", { scope: "task:read" })
+    },
+    ...HOOK_OPTIONS,
+  })
+  const context = { spend: vi.fn(), gap: vi.fn() }
+  expect((await live.activities?.(0, undefined, context))?.items).toHaveLength(1)
+  expect(await live.activities?.(0, "tasks:0", context)).toEqual({ items: [], hasMore: false })
+  expect(context.gap).toHaveBeenCalledWith(expect.objectContaining({ kind: "activities", scope: "task:read" }))
 })

@@ -22,7 +22,7 @@ meetings. `pipelines show` is the pipeline board: each stage's deals, their numb
 win rate. `changes list` shows deals created, moved, won and lost, and `--format report` makes it a digest.
 `fields list` shows the workspace's own attributes. With the `activities` setting on, the copy also holds the
 notes and tasks on its deals, people and companies. `people`, `organizations` and `users` read Attio live. `deals`
-and `people` also create, update, move and close records, each change asking you first. Lists
+create, update, move and close deals, and `people` create and update people, each change asking you first. Lists
 export to CSV with `--format csv`. `attio work api` reaches every operation of the Attio API. Every command is in the
 [command reference](commands.md).
 

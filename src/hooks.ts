@@ -1,3 +1,4 @@
+import { CliError } from "@wirecat/cli-base"
 import type { CrmActivity, CrmKind } from "@wirecat/cli-core"
 import type { CrmManifestHooks } from "@wirecat/cli-core/crm"
 
@@ -74,26 +75,42 @@ const taskActivity = (task: Task, objects: Map<string, CrmKind>): CrmActivity =>
     createdAt: at,
     updatedAt: task.completed_at ? Date.parse(task.completed_at) : at,
     on: task.linked_records.flatMap((link) => {
-      const kind = objects.get(link.target_object_id)
+      // Attio's spec calls it the object's id, and its examples give the slug.
+      const kind = KINDS[link.target_object_id] ?? objects.get(link.target_object_id)
       return kind ? [{ kind, externalId: link.target_record_id }] : []
     }),
   }
 }
 
+const refused = (error: unknown) =>
+  error instanceof CliError && (error.code === "permission_error" || typeof error.details?.scope === "string")
+
 export const hooks: CrmManifestHooks = {
-  // Attio's notes and tasks lists take no time filter, so every sync reads them all, as it reads every record. A page
-  // token is the list and its offset: the notes, then the tasks.
+  // Attio's notes and tasks lists take no time filter, so every sync reads them all, as it reads every record. A token
+  // may have one of their scopes and not the other: the list it may not read is a gap, and the other is still read.
   extend: (_base, { call }) => ({
-    activities: async (_since, page) => {
+    activities: async (_since, page, context) => {
       const [list, at] = (page ?? "notes:0").split(":")
       const offset = Number(at)
       const query = (limit: number) => ({ limit: String(limit), offset: String(offset) })
       const input = { path: {}, headers: {}, fields: {} }
-      if (list === "notes") {
-        const { data } = (await call("getV2Notes", { ...input, query: query(NOTES_PAGE) })) as { data: Note[] }
-        const next = data.length < NOTES_PAGE ? "tasks:0" : `notes:${offset + NOTES_PAGE}`
-        return { items: data.map(noteActivity), hasMore: true, nextCursor: next }
+      const read = async <T>(operation: string, limit: number, scope: string): Promise<T[] | null> => {
+        try {
+          return ((await call(operation, { ...input, query: query(limit) })) as { data: T[] }).data
+        } catch (error) {
+          if (!refused(error)) throw error
+          context?.gap({ kind: "activities", scope, message: `${scope} scope missing: no ${list} were read` })
+          return null
+        }
       }
+      if (list === "notes") {
+        const data = await read<Note>("getV2Notes", NOTES_PAGE, "note:read")
+        const next = !data || data.length < NOTES_PAGE ? "tasks:0" : `notes:${offset + NOTES_PAGE}`
+        return { items: (data ?? []).map(noteActivity), hasMore: true, nextCursor: next }
+      }
+      const data = await read<Task>("getV2Tasks", TASKS_PAGE, "task:read")
+      if (!data?.length) return { items: [], hasMore: false }
+      context?.spend()
       const { data: types } = (await call("getV2Objects", { ...input, query: {} })) as {
         data: { id: { object_id: string }; api_slug: string }[]
       }
@@ -103,7 +120,6 @@ export const hooks: CrmManifestHooks = {
           return kind ? [[one.id.object_id, kind] as const] : []
         }),
       )
-      const { data } = (await call("getV2Tasks", { ...input, query: query(TASKS_PAGE) })) as { data: Task[] }
       const more = data.length === TASKS_PAGE
       return {
         items: data.map((task) => taskActivity(task, objects)),
