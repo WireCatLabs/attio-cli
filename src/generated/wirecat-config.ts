@@ -203,6 +203,7 @@ export const SOURCE: Readonly<Record<string, unknown>> & {
           value: "deals",
         },
         stage: "values.stage.0.status.id.status_id",
+        closedDate: "values.stage.0.active_from",
         organization: "values.associated_company.0.target_record_id",
         people: {
           each: "values.associated_people",
