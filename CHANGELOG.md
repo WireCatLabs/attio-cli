@@ -2,6 +2,13 @@
 
 Notable changes to `@wirecat/attio-cli`. One section per version, newest first.
 
+## 0.4.1 — 24.11.2026
+
+### Fixed
+
+- A won or lost deal's `closed_date` is the day it entered that stage in Attio. It was the day of the first sync that
+  saw it closed, so a filter such as `closed:>=90d` counted every deal won before you installed `attio`.
+
 ## 0.4.0 — 24.11.2026
 
 ### Added

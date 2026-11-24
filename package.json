@@ -1,6 +1,6 @@
 {
   "name": "@wirecat/attio-cli",
-  "version": "0.4.0",
+  "version": "0.4.1",
   "description": "Attio CRM: deals, people and companies for you and your AI agent",
   "license": "Apache-2.0",
   "author": "Viacheslav Ptsarev",
