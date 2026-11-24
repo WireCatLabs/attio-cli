@@ -101,6 +101,8 @@ export default defineCli({
           title: "values.name.0.value",
           pipeline: { value: "deals" },
           stage: "values.stage.0.status.id.status_id",
+          // Attio keeps no closed day. A won or lost deal entered that stage when its value became active.
+          closedDate: "values.stage.0.active_from",
           organization: "values.associated_company.0.target_record_id",
           people: { each: "values.associated_people", id: "target_record_id" },
           assignee: "values.owner.0.referenced_actor_id",

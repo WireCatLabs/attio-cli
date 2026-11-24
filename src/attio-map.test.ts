@@ -155,6 +155,7 @@ it("maps an Attio deal with its stage, amount, owner, links and own field's curr
       title: "Kitchen for Example",
       pipeline: "deals",
       stage: "s2",
+      closedDate: "2026-01-01",
       organization: "c1",
       people: [{ externalId: "p1", role: "contact" }],
       assignee: "m1",
