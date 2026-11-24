@@ -66,6 +66,35 @@ const statuses = [
   { id: { status_id: "s5" }, title: "Closed won", celebration_enabled: false },
 ]
 
+const note = {
+  id: { workspace_id: "w1", note_id: "n1" },
+  parent_object: "deals",
+  parent_record_id: "d1",
+  title: "Terms",
+  content_plaintext: "They want a 10% discount",
+  created_by_actor: { type: "workspace-member", id: "m1" },
+  created_at: "2026-03-02T09:00:00.000Z",
+}
+
+const task = {
+  id: { workspace_id: "w1", task_id: "t1" },
+  content_plaintext: "Send the addendum",
+  is_completed: false,
+  completed_at: null,
+  deadline_at: "2026-03-10T11:00:00.000Z",
+  linked_records: [
+    { target_object_id: "o3", target_record_id: "d1" },
+    { target_object_id: "o9", target_record_id: "x1" },
+  ],
+  assignees: [{ referenced_actor_type: "workspace-member", referenced_actor_id: "m1" }],
+  created_at: "2026-03-03T09:00:00.000Z",
+}
+
+const objects = [
+  { id: { object_id: "o3" }, api_slug: "deals" },
+  { id: { object_id: "o9" }, api_slug: "invoices" },
+]
+
 const RECORDS = { deals: deal, companies: company, people: person } as Record<string, unknown>
 
 type Call = { operation: string; object: unknown; body: unknown }
@@ -84,6 +113,10 @@ const source = (calls: Call[] = []) =>
           : { data: [] }
       // A person or a company is copied as a deal names it, each read by id.
       if (operation === "getV2ObjectsByObjectRecordsByRecordId") return { data: RECORDS[String(request.path.object)] }
+      // Notes page by 50: one note is the last page.
+      if (operation === "getV2Notes") return { data: Number(request.query.offset) ? [] : [note] }
+      if (operation === "getV2Objects") return { data: objects }
+      if (operation === "getV2Tasks") return { data: [task] }
       expect(operation).toBe("postV2ObjectsByObjectRecordsQuery")
       return { data: Number(body?.offset) ? [] : [RECORDS[String(request.path.object)]] }
     },
@@ -182,4 +215,41 @@ it("lists people live, newest first: words search names and emails, none list th
   await live.list?.("person", { conditions: [], limit: 10 })
   expect(query()).not.toHaveProperty("filter")
   expect(query()).toMatchObject({ sorts: [{ direction: "desc", attribute: "created_at" }] })
+})
+
+it("reads Attio's notes and then its tasks as activities on the records they hang on", async () => {
+  const live = source()
+  const notes = await live.activities?.(0)
+  expect(notes).toEqual({
+    hasMore: true,
+    nextCursor: "tasks:0",
+    items: [
+      {
+        externalId: "note:n1",
+        kind: "comment",
+        subject: "Terms",
+        body: "They want a 10% discount",
+        done: true,
+        assignee: "m1",
+        createdAt: Date.parse("2026-03-02T09:00:00.000Z"),
+        updatedAt: Date.parse("2026-03-02T09:00:00.000Z"),
+        on: [{ kind: "deal", externalId: "d1" }],
+      },
+    ],
+  })
+  const tasks = await live.activities?.(0, notes?.nextCursor)
+  expect(tasks).toEqual({
+    hasMore: false,
+    items: [
+      expect.objectContaining({
+        externalId: "task:t1",
+        kind: "task",
+        subject: "Send the addendum",
+        dueAt: Date.parse("2026-03-10T11:00:00.000Z"),
+        done: false,
+        assignee: "m1",
+        on: [{ kind: "deal", externalId: "d1" }],
+      }),
+    ],
+  })
 })

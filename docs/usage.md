@@ -70,11 +70,28 @@ the deal in Attio. `--offline` reads the same, with no request to Attio. A list 
 
 Attio has one deal pipeline. Its stages are the statuses of the deal's **Stage** attribute, in Attio's order:
 
-- **Won** is the stage Attio celebrates when a deal reaches it.
-- **Lost** is a stage whose title starts with "Lost", as in a new Attio workspace.
+- **Won** is the stage Attio celebrates when a deal reaches it, or one with the word "won" in its title.
+- **Lost** is a stage with the word "lost" in its title, as in a new Attio workspace.
 - Every other stage is open.
 
-If you renamed your lost stage to something else, its deals count as open. Keep "Lost" at the start of its title.
+If you renamed your lost stage to something else, its deals count as open. Keep the word "Lost" in its title.
+
+### Notes and tasks on a deal
+
+With `activities` on, each sync also copies the notes and tasks of your workspace that hang on the deals, people and
+companies it keeps. `deals show` lists them, open tasks first, and `search all` finds a deal by the words of its notes.
+The setting's key names the workspace by its id, the `id` that `session status --check --json` prints:
+
+```sh
+attio work config set crm.attio:<workspace id>.activities on
+attio work sync
+attio work deals show deal:12
+```
+
+It is off until you turn it on, and only you can: an agent is refused. Notes and tasks hold what clients wrote and
+said. Attio cannot list only the notes changed since a time, so each sync reads them all again. The token needs two
+more scopes, `note:read` and `task:read`. Without them the sync copies the deals and says the notes and tasks were not
+read.
 
 ## The pipeline
 
