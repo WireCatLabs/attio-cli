@@ -60,7 +60,7 @@ Agent:  (runs attio work changes list change:won "at>=7d")
 - **Your CRM beside your other context.** Deals sit in the same local store as your messages, mail, notes and
   meetings from the other WireCat tools, so one search covers all of them.
 - **The whole Attio API too.** Every operation is a command with its own help, for what has no command of its own
-  yet: notes, tasks, lists, custom objects.
+  yet: lists, custom objects, meetings.
 - **Free and open source.** Apache 2.0.
 
 ## Quick start
@@ -193,9 +193,9 @@ More: [permissions](https://github.com/WireCatLabs/attio-cli/blob/main/docs/perm
 
 ## Limits
 
-- Adding notes and tasks with their own command, custom objects, lists and a one-click sign-in are on the
-  [roadmap](https://github.com/WireCatLabs/attio-cli/blob/main/docs/roadmap.md). Reading notes and tasks is in the
-  copy, with the `activities` setting on.
+- Custom objects, lists and a one-click sign-in are on the
+  [roadmap](https://github.com/WireCatLabs/attio-cli/blob/main/docs/roadmap.md). Reading notes and tasks needs the
+  `activities` setting on.
 - Only a workspace admin can make the token, and it reads the whole workspace.
 - Attio documents 100 reads and 25 writes a second
   ([rate limits](https://docs.attio.com/rest-api/guides/rate-limiting)).

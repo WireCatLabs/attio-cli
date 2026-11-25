@@ -5,7 +5,14 @@ import {
   serviceApiPermissions,
   settingsFor,
 } from "@wirecat/cli-core/cli"
-import { CRM_WRITE_DEFAULTS, CRM_WRITE_KEYS, crmAlsoChecks, crmManifestWriteKeys } from "@wirecat/cli-core/crm"
+import {
+  CRM_WRITE_DEFAULTS,
+  CRM_WRITE_KEYS,
+  crmAlsoChecks,
+  crmManifestActivityKeys,
+  crmManifestWriteKeys,
+} from "@wirecat/cli-core/crm"
+import { ACTIVITIES } from "./activities.js"
 import * as manifest from "./generated/manifest.js"
 import { SOURCE } from "./generated/wirecat-config.js"
 import { IDENTITY } from "./identity.js"
@@ -23,12 +30,15 @@ export const API = {
  */
 const api = serviceApiPermissions(API)
 const writeKeys = crmManifestWriteKeys(SOURCE, API.manifest)
+const activityKeys = crmManifestActivityKeys(API.manifest, ACTIVITIES)
 
 // Every change to Attio asks first, through the api group too (owner's ruling, 2026-11-22); a profile's config may
 // loosen one to `allow`.
 const ASK = Object.fromEntries(
   [
     ...CRM_WRITE_KEYS.filter((key) => CRM_WRITE_DEFAULTS[key] === "allow"),
+    "activities.create",
+    "activities.close",
     ...API.manifest.operations.filter((one) => one.effect === "write").map((one) => `api.${one.command}`),
   ].map((key) => [key, "ask" as const]),
 )
@@ -36,7 +46,7 @@ const ASK = Object.fromEntries(
 export const permissions = commandPermissions({
   ...api,
   extra: [...api.extra, ...CRM_WRITE_KEYS],
-  alsoChecks: (path) => [...api.alsoChecks(path), ...crmAlsoChecks(writeKeys)(path)],
+  alsoChecks: (path) => [...api.alsoChecks(path), ...crmAlsoChecks(writeKeys, activityKeys)(path)],
   defaults: { ...api.defaults, ...CRM_WRITE_DEFAULTS, ...ASK },
 })
 

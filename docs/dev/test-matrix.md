@@ -7,7 +7,7 @@ ran it · ⛔ not tested offline, with the reason and where it is checked instea
 Measured from the test run (`coverage/argv.jsonl`), not searched for — see
 [TESTING.md](TESTING.md) for how, and for the states and failures that cut across commands.
 
-**589 ✅ · 63 ⛔ · 0 ❌** — 186 commands, 466 options.
+**598 ✅ · 64 ⛔ · 0 ❌** — 189 commands, 473 options.
 
 | Command | Option | | Note |
 |---|---|---|---|
@@ -541,6 +541,16 @@ Measured from the test run (`coverage/argv.jsonl`), not searched for — see
 | `users list` | `--limit` | ✅ |  |
 | `users list` | `--page` | ✅ |  |
 | `users show` |  | ✅ |  |
+| `activities list` |  | ✅ |  |
+| `activities list` | `--limit` | ✅ |  |
+| `activities list` | `--page` | ⛔ | cli-core's addCrmCommands pages the copy's activities; its src/crm/cli/commands.test.ts follows the cursor |
+| `activities create` |  | ✅ |  |
+| `activities create` | `--subject` | ✅ |  |
+| `activities create` | `--title` | ✅ |  |
+| `activities create` | `--text` | ✅ |  |
+| `activities create` | `--due` | ✅ |  |
+| `activities create` | `--owner` | ✅ |  |
+| `activities close` |  | ✅ |  |
 | `changes list` |  | ✅ |  |
 | `changes list` | `--limit` | ✅ |  |
 | `changes list` | `--cursor` | ✅ |  |

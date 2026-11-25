@@ -48,6 +48,12 @@ describe("each remote command runs inside cli-core's run", () => {
           "cli-core's addCrmCommands runs it in its run; src/crm-contracts.test.ts writes through it and its contract",
         ]),
       ),
+      ...Object.fromEntries(
+        ["activities create", "activities close"].map((command) => [
+          command,
+          "cli-core's addCrmCommands runs it in its run; src/crm-writes.test.ts writes notes and tasks through it",
+        ]),
+      ),
       doctor:
         "cli-core's appDoctorCommand answers --online outside a run of its own; drop this once core runs it inside",
     },

@@ -5,6 +5,7 @@ import { crmManifestWriteCapabilities, crmManifestWrites, crmSourceFromManifest 
 import { addCrmCommands, type CrmAccountOptions, type CrmRun, openCrmStore } from "@wirecat/cli-core/crm/cli"
 import { Pacer, pacePathFor } from "@wirecat/cli-core/sends"
 import { Command } from "commander"
+import { ACTIVITIES } from "../activities.js"
 import { API, configuration, permissions } from "../config.js"
 import { contextOf, PACE, tokenOf } from "../context.js"
 import { HOOK_OPTIONS, LIVE, SOURCE } from "../generated/wirecat-config.js"
@@ -71,6 +72,7 @@ const open = async (command: Command, { readOnly }: { readOnly: boolean }): Prom
         self,
         // Attio refuses a deal with no owner.
         ownedByDefault: ["deal"],
+        activities: ACTIVITIES,
         warn: outputFor(command).renderer.warn,
         settings: () => ({ ...contextOf(command).settings, permissionDefaults: permissions.defaults }),
       }),
@@ -96,7 +98,8 @@ export const crmCommands = (): Command[] => {
     live: LIVE,
     // Attio's own record search takes words, not field conditions.
     liveQuery: "words",
-    writes: crmManifestWriteCapabilities(SOURCE, API.manifest),
+    activities: true,
+    writes: crmManifestWriteCapabilities(SOURCE, API.manifest, ACTIVITIES),
     account: CRM_ACCOUNT,
   })
   return [...holder.commands]

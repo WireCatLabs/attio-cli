@@ -43,9 +43,10 @@ access token.
 - **The deal commands read a copy, the people commands read Attio.** `sync` copies the workspace's deals and the
   people and companies they name, with the stages of the deal pipeline. `deals`, `pipelines` and `changes` answer from that copy. `people`,
   `organizations` and `users` ask Attio each time, so they always show the newest data and need the internet.
-- **Every change asks you first in a terminal.** `deals create`, `update`, `move`, `close` and `delete`, and `people create` and
-  `update`, change Attio and store its answer. In a terminal each asks yes or no first, and so does every write
-  through `api`. A new deal with no `--owner` is yours. Companies, notes and tasks go through `attio work api …`,
+- **Every change asks you first in a terminal.** `deals create`, `update`, `move`, `close` and `delete`, `people create`
+  and `update`, and `activities create` and `close` for notes and tasks change Attio and store its answer. In a
+  terminal each asks yes or no first, and so does every write through `api`. A new deal with no `--owner` is yours.
+  Companies go through `attio work api …`,
   which reaches every operation of the Attio API, as far as the token's scopes and your
   [permissions](permissions.md) allow.
 - **Over MCP, "ask" goes ahead.** MCP is the way apps such as Claude Desktop call a tool, and nobody sits at a terminal
@@ -128,8 +129,8 @@ token.
 
 - Companies are read, not written: an Attio company has no e-mail or phone attribute to write. Change one through
   `api`.
-- Notes and tasks show on a deal in `deals show` once the owner turns on the `activities` setting, but have no commands
-  of their own yet. Lists and custom objects have none either. `attio work api` reaches them all.
+- Notes and tasks are listed and shown on a deal once the owner turns on the `activities` setting. Lists and custom
+  objects have no commands of their own yet. `attio work api` reaches them.
 - People, companies and workspace members are read from Attio each time, so they need the internet.
 - Attio cannot list only what changed since a time, so each sync lists every deal again. A large workspace takes
   longer to sync.

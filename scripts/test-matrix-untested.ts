@@ -12,6 +12,12 @@ const LONG_RUNNING = `starts an HTTP server or a background process that runs un
 
 export const UNTESTED: { command: string; option?: string; reason: string }[] = [
   {
+    command: "activities list",
+    option: "--page",
+    reason:
+      "cli-core's addCrmCommands pages the copy's activities; its src/crm/cli/commands.test.ts follows the cursor",
+  },
+  {
     command: "sync",
     option: "--embed",
     reason:

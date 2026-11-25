@@ -117,10 +117,26 @@ sweep() {
       "${cli[@]}" live api objects-records-delete --object "$object" --record-id "$id" --yes --json >/dev/null 2>&1 || true
     done
 }
+# Notes and tasks on the run's deal, found by the deal: deleting a deal is not known to delete them.
+sweep_activities() {
+  local deal_id=$1
+  { "${cli[@]}" live api notes-list --parent-object deals --parent-record-id "$deal_id" --json 2>/dev/null |
+    node -e 'for (const one of JSON.parse(require("fs").readFileSync(0, "utf8")).item?.data ?? []) console.log(one.id.note_id)' |
+    while read -r id; do
+      "${cli[@]}" live api notes-delete --note-id "$id" --yes --json >/dev/null 2>&1 || true
+    done; } || true
+  { "${cli[@]}" live api tasks-list --linked-object deals --linked-record-id "$deal_id" --json 2>/dev/null |
+    node -e 'for (const one of JSON.parse(require("fs").readFileSync(0, "utf8")).item?.data ?? []) console.log(one.id.task_id)' |
+    while read -r id; do
+      "${cli[@]}" live api tasks-delete --task-id "$id" --yes --json >/dev/null 2>&1 || true
+    done; } || true
+}
+deal_id=""
 # A run that passed deleted its records and signed out, so only a failed one sweeps.
 passed=""
 cleanup() {
   if [ -z "$passed" ]; then
+    [ -n "$deal_id" ] && sweep_activities "$deal_id"
     sweep deals "{\"name\":{\"\$contains\":\"$stamp\"}}" || true
     sweep people "{\"email_addresses\":\"live-$stamp@example.com\"}" || true
   fi
@@ -149,6 +165,30 @@ deal_id=$(field item.deal.external_id <"$work/made-deal.json")
 "${cli[@]}" live deals close "$deal" won --yes --json >/dev/null
 "${cli[@]}" live api objects-records-get --object deals --record-id "$deal_id" --json >"$work/deal-read.json"
 
+# A note and a task on the deal, the task marked done, then both deleted. A token without the two write scopes is
+# told, not failed: they are optional (docs/installation.md).
+activities="notes and tasks not checked: the token lacks note:read-write or task:read-write"
+if note_out=$("${cli[@]}" live activities create comment --subject "$deal" --text "WireCat live test $stamp" \
+  --yes --json 2>&1); then
+  note=$(printf '%s' "$note_out" | field item.activity.external_id)
+  "${cli[@]}" live activities create task --subject "$deal" --title "WireCat live test $stamp" \
+    --due "$(date -u -d '+1 day' +%Y-%m-%dT%H:%M:%SZ)" --yes --json >"$work/made-task.json"
+  task=$(field item.activity.external_id <"$work/made-task.json")
+  "${cli[@]}" live activities close "$task" --yes --json >"$work/done-task.json"
+  [ "$(field item.activity.done <"$work/done-task.json")" = "true" ] || { echo "live: the task was not marked done" >&2; exit 1; }
+  "${cli[@]}" live api notes-delete --note-id "${note#note:}" --yes --json >/dev/null
+  "${cli[@]}" live api tasks-delete --task-id "${task#task:}" --yes --json >/dev/null
+  left=$( { "${cli[@]}" live api notes-list --parent-object deals --parent-record-id "$deal_id" --json
+    "${cli[@]}" live api tasks-list --linked-object deals --linked-record-id "$deal_id" --json; } |
+    node -e 'const text = require("fs").readFileSync(0, "utf8"); console.log((text.match(/"(note|task)_id"/g) ?? []).length)')
+  [ "$left" = 0 ] || { echo "live: $left notes or tasks were left on the deal" >&2; exit 1; }
+  activities="a note, a task, the task marked done, both deleted"
+elif ! printf '%s' "$note_out" | grep -q "scope"; then
+  echo "live: activities create comment failed: ${note_out:0:300}" >&2
+  exit 1
+fi
+echo "activities: $activities"
+
 "${cli[@]}" live people create --first-name WireCat --last-name "Live test $stamp" \
   --email "live-$stamp@example.com" --yes --json >"$work/made-person.json"
 person=$(field item.person.id <"$work/made-person.json")
@@ -174,4 +214,4 @@ node -e '
 
 "${cli[@]}" live session end --json >/dev/null
 passed=1
-echo "live check passed: describe format 2, sign-in, sync, store status, pipelines, live people and companies, people and companies by name, a stored deal and search for it, doctor, deal create, update, move, close and delete, person create, update and delete, sign-out"
+echo "live check passed: describe format 2, sign-in, sync, store status, pipelines, live people and companies, people and companies by name, a stored deal and search for it, doctor, deal create, update, move, close and delete, ${activities}, person create, update and delete, sign-out"

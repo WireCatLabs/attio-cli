@@ -17,11 +17,59 @@ const sent = (fake: CrmManifestFake, operation: string) =>
 const CREATE = "postV2ObjectsByObjectRecords"
 const PUT = "putV2ObjectsByObjectRecordsByRecordId"
 
+// Notes, tasks and the objects list are not the manifest's records. They are answered here as Attio answers them,
+// from the request, since the spec's samples carry no real dates.
+const notesAndTasks: { path: string; body: unknown }[] = []
+const AT = "2026-11-25T09:00:00.000Z"
+const DEALS_OBJECT = "0b7d3c1e-0000-4000-8000-000000000001"
+type Sent = Record<string, unknown> & { linked_records?: { target_record_id: string }[] }
+const taskOf = (id: string, data: Sent, done: boolean) => ({
+  id: { task_id: id },
+  content_plaintext: data.content ?? "Example",
+  is_completed: done,
+  deadline_at: data.deadline_at ?? null,
+  linked_records: (data.linked_records ?? []).map((one) => ({
+    target_object_id: DEALS_OBJECT,
+    target_record_id: one.target_record_id,
+  })),
+  assignees: [],
+  created_at: AT,
+})
+const answerActivity = (path: string, method: string, data: Sent): unknown => {
+  if (path === "/v2/objects") return { data: [{ id: { object_id: DEALS_OBJECT }, api_slug: "deals" }] }
+  if (path === "/v2/notes")
+    return {
+      data: {
+        id: { note_id: "n1" },
+        parent_object: data.parent_object,
+        parent_record_id: data.parent_record_id,
+        title: data.title,
+        content_plaintext: data.content,
+        created_at: AT,
+      },
+    }
+  if (path === "/v2/tasks") return { data: taskOf("t1", data, false) }
+  if (method === "PATCH") return { data: taskOf(path.split("/").at(-1) as string, data, true) }
+  return undefined
+}
+
 const synced = async () => {
   const keyring = memoryKeyring()
   const source = crmFake()
   fakes.push(source)
-  const service = signInAndCrm(source)
+  const crm = signInAndCrm(source)
+  const service = {
+    ...crm,
+    fetch: (input: string | URL | Request, init?: RequestInit) => {
+      const url = new URL(input instanceof Request ? input.url : input)
+      const method = init?.method ?? "GET"
+      const body = JSON.parse(String(init?.body ?? "null")) as { data?: Sent } | null
+      const answer = answerActivity(url.pathname, method, body?.data ?? {})
+      if (answer === undefined) return crm.fetch(input, init)
+      if (method !== "GET") notesAndTasks.push({ path: url.pathname, body })
+      return Promise.resolve(Response.json(answer))
+    },
+  }
   await runCli(["personal", "session", "start", "--json"], { keyring, service, stdin: FAKE_MANIFEST_TOKEN })
   expect((await runCli(["personal", "sync", "--json"], { keyring, service })).code).toBe(0)
   const attio = (args: string[]) => runCli(["personal", ...args, "--json"], { keyring, service })
@@ -165,6 +213,84 @@ it("a person is created and changed; a name part changed alone keeps the other",
   })
   refused(await attio(["people", "create", "--name", "Owned", "--owner", "7001", "--yes"]), "validation_error")
   refused(await attio(["people", "update", id, "--owner", "7001", "--yes"]), "validation_error")
+})
+
+it("a note and a task go on a deal, each asking first, and the task is marked done", async () => {
+  const { attio, open } = await synced()
+  notesAndTasks.length = 0
+  const made = await attio(["deals", "create", "--title", "Example deal", "--stage", String(open[0]), "--yes"])
+  const { ref, external_id: id } = (made.json() as { item: { deal: { ref: string; external_id: string } } }).item.deal
+  const asked = await attio(["activities", "create", "comment", "--subject", ref, "--text", "Called"])
+  refused(asked, "confirmation_required")
+  expect(notesAndTasks).toEqual([])
+  const note = await attio(["activities", "create", "comment", "--subject", ref, "--text", "Called", "--yes"])
+  expect(note.code, note.err).toBe(0)
+  // The same id a sync gives it, so a later full list of notes keeps it.
+  expect((note.json() as { item: { activity: object } }).item.activity).toMatchObject({
+    external_id: "note:n1",
+    on: [{ kind: "deal", ref }],
+  })
+  expect(notesAndTasks.at(-1)).toEqual({
+    path: "/v2/notes",
+    body: { data: { parent_object: "deals", parent_record_id: id, title: "", format: "plaintext", content: "Called" } },
+  })
+  const task = await attio([
+    "activities",
+    "create",
+    "task",
+    "--subject",
+    ref,
+    "--title",
+    "Send the offer",
+    "--text",
+    "With the discount",
+    "--due",
+    "2026-12-01T10:00:00Z",
+    "--yes",
+  ])
+  expect(task.code, task.err).toBe(0)
+  expect(notesAndTasks.at(-1)).toEqual({
+    path: "/v2/tasks",
+    body: {
+      data: {
+        content: "Send the offer\n\nWith the discount",
+        format: "plaintext",
+        deadline_at: "2026-12-01T10:00:00.000Z",
+        is_completed: false,
+        linked_records: [{ target_object: "deals", target_record_id: id }],
+        assignees: [],
+      },
+    },
+  })
+  // Another member as the assignee waits until the owner allows it, as for a deal.
+  const owned = ["activities", "create", "task", "--subject", ref, "--title", "Theirs", "--owner", "7001", "--yes"]
+  refused(await attio(owned), "permission_error")
+  const { external_id } = (task.json() as { item: { activity: { external_id: string } } }).item.activity
+  expect(external_id).toMatch(/^task:/)
+  const done = await attio(["activities", "close", external_id, "--yes"])
+  expect(done.code, done.err).toBe(0)
+  expect(notesAndTasks.at(-1)).toEqual({
+    path: `/v2/tasks/${external_id.slice("task:".length)}`,
+    body: { data: { is_completed: true } },
+  })
+  // The copy keeps them only with the owner's activities setting on, which is off here.
+  const listed = await attio(["activities", "list", "--limit", "5"])
+  expect(listed.code, listed.err).toBe(0)
+  expect(listed.json()).toMatchObject({ items: [] })
+})
+
+it("a note on two records, or a note marked done, is refused before anything is sent", async () => {
+  const { attio, open } = await synced()
+  const made = await attio(["deals", "create", "--title", "Example deal", "--stage", String(open[0]), "--yes"])
+  const { ref } = (made.json() as { item: { deal: { ref: string } } }).item.deal
+  const people = (await attio(["people", "create", "--name", "Anna Example", "--yes"])).json() as {
+    item: { person: { id: string } }
+  }
+  notesAndTasks.length = 0
+  const two = ["--subject", ref, "--subject", `person:crm:${people.item.person.id}`]
+  refused(await attio(["activities", "create", "comment", ...two, "--text", "Called", "--yes"]), "validation_error")
+  refused(await attio(["activities", "close", "note:n1", "--yes"]), "validation_error")
+  expect(notesAndTasks).toEqual([])
 })
 
 it("account remove signs out and keeps or deletes the local copy", async () => {
