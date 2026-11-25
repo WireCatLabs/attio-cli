@@ -34,7 +34,9 @@ mkdir -p "$HOME"
 "${cli[@]}" live session start --credential-storage file --json >/dev/null
 trap '"${cli[@]}" live session end --json >/dev/null 2>&1 || true; rm -rf "$work"' EXIT
 
-"${cli[@]}" live sync --max-pages 20 --json >"$work/sync.json"
+# No --max-pages: each company and person a deal names is read on its own, so a page of 50 costs about 100 requests,
+# and a smaller budget saves nothing at all (the test workspace's deals name about 300).
+"${cli[@]}" live sync --json >"$work/sync.json"
 "${cli[@]}" live store status --json >/dev/null
 node -e '
   const sync = JSON.parse(require("fs").readFileSync(process.argv[1], "utf8"))
