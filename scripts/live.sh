@@ -207,7 +207,7 @@ meeting_body="{\"data\":{\"title\":\"WireCat live test $stamp\",\"description\":
   \"participants\":[{\"name\":\"WireCat live test\",\"is_organizer\":true,\"status\":\"accepted\"}],
   \"linked_records\":[{\"object\":\"deals\",\"record_id\":\"$deal_id\"}]}}"
 if meeting_out=$("${cli[@]}" live api meetings-create --body "$meeting_body" --yes --json 2>&1) &&
-  meeting_id=$(printf '%s' "$meeting_out" | field item.data.id.meeting_id) &&
+  meeting_id=$(printf '%s' "$meeting_out" | field item.result.data.id.meeting_id) &&
   "${cli[@]}" live api meetings-call-recordings-create --meeting-id "$meeting_id" --yes --json --body \
     "{\"data\":{\"transcript\":[{\"speech\":\"The $said kitchen starts in May\",\"start_time\":0,\"end_time\":3,
     \"speaker\":{\"name\":\"WireCat live test\"}}]}}" >/dev/null 2>"$work/recording.err"; then
