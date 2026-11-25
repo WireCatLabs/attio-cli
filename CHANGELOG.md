@@ -2,6 +2,15 @@
 
 Notable changes to `@wirecat/attio-cli`. One section per version, newest first.
 
+## 0.5.2 — 25.11.2026
+
+### Fixed
+
+- **A note or task deleted in Attio leaves the local copy at the next sync.** It stayed in `deals show` and in
+  `search all` for good. Every sync reads all of Attio's notes and tasks, so one that is no longer listed is marked
+  deleted. When a token may not read one of the two lists, nothing is removed. If a sync would remove most of them at
+  once, it holds them and says so until `attio work sync --rescan`.
+
 ## 0.5.1 — 24.11.2026
 
 ### Fixed

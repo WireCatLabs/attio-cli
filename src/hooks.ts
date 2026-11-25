@@ -86,8 +86,9 @@ const refused = (error: unknown) =>
   error instanceof CliError && (error.code === "permission_error" || typeof error.details?.scope === "string")
 
 export const hooks: CrmManifestHooks = {
-  // Attio's notes and tasks lists take no time filter, so every sync reads them all, as it reads every record. A token
-  // may have one of their scopes and not the other: the list it may not read is a gap, and the other is still read.
+  // Attio's notes and tasks lists take no time filter, so every sync reads them all, as it reads every record, and the
+  // last page says so: one stored and no longer listed was deleted. A token may have one of their scopes and not the
+  // other: the list it may not read is a gap, the other is still read, and the gap keeps the sync from removing any.
   extend: (_base, { call }) => ({
     activities: async (_since, page, context) => {
       const [list, at] = (page ?? "notes:0").split(":")
@@ -109,7 +110,8 @@ export const hooks: CrmManifestHooks = {
         return { items: (data ?? []).map(noteActivity), hasMore: true, nextCursor: next }
       }
       const data = await read<Task>("getV2Tasks", TASKS_PAGE, "task:read")
-      if (!data?.length) return { items: [], hasMore: false }
+      if (!data) return { items: [], hasMore: false }
+      if (!data.length) return { items: [], hasMore: false, listedAll: true }
       context?.spend()
       const { data: types } = (await call("getV2Objects", { ...input, query: {} })) as {
         data: { id: { object_id: string }; api_slug: string }[]
@@ -124,7 +126,7 @@ export const hooks: CrmManifestHooks = {
       return {
         items: data.map((task) => taskActivity(task, objects)),
         hasMore: more,
-        ...(more ? { nextCursor: `tasks:${offset + TASKS_PAGE}` } : {}),
+        ...(more ? { nextCursor: `tasks:${offset + TASKS_PAGE}` } : { listedAll: true }),
       }
     },
   }),

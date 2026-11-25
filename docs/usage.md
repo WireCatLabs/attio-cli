@@ -89,9 +89,9 @@ attio work deals show deal:12
 ```
 
 It is off until you turn it on, and only you can: an agent is refused. Notes and tasks hold what clients wrote and
-said. Attio cannot list only the notes changed since a time, so each sync reads them all again. A note or task deleted
-in Attio stays in the copy. The token needs two more scopes, `note:read` and `task:read`. Without one of them the sync
-copies the rest and says which list it could not read.
+said. Attio cannot list only the notes changed since a time, so each sync reads them all again, and a note or task
+deleted in Attio leaves the copy. The token needs two more scopes, `note:read` and `task:read`. Without one of them the
+sync copies the rest, removes nothing, and says which list it could not read.
 
 ## The pipeline
 

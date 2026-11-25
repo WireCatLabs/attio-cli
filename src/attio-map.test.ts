@@ -241,6 +241,7 @@ it("reads Attio's notes and then its tasks as activities on the records they han
   const tasks = await live.activities?.(0, notes?.nextCursor)
   expect(tasks).toEqual({
     hasMore: false,
+    listedAll: true,
     items: [
       expect.objectContaining({
         externalId: "task:t1",
