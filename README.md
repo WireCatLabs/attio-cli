@@ -194,8 +194,8 @@ More: [permissions](https://github.com/WireCatLabs/attio-cli/blob/main/docs/perm
 ## Limits
 
 - Custom objects, lists and a one-click sign-in are on the
-  [roadmap](https://github.com/WireCatLabs/attio-cli/blob/main/docs/roadmap.md). Reading notes and tasks needs the
-  `activities` setting on.
+  [roadmap](https://github.com/WireCatLabs/attio-cli/blob/main/docs/roadmap.md). Reading notes, tasks and meetings needs
+  the `activities` setting on.
 - Only a workspace admin can make the token, and it reads the whole workspace.
 - Attio documents 100 reads and 25 writes a second
   ([rate limits](https://docs.attio.com/rest-api/guides/rate-limiting)).

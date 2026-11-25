@@ -91,6 +91,32 @@ const task = {
   created_at: "2026-03-03T09:00:00.000Z",
 }
 
+// A call with Ann, linked by Attio to her and her company, not to the deal they are on.
+const meeting = {
+  id: { workspace_id: "w1", meeting_id: "mt1" },
+  title: "Kitchen call",
+  description: "Second call about the kitchen",
+  is_all_day: false,
+  start: { datetime: "2026-03-04T10:00:00.000Z", timezone: "UTC" },
+  end: { datetime: "2026-03-04T10:30:00.000Z", timezone: "UTC" },
+  participants: [{ status: "accepted", is_organizer: false, email_address: "ann@acme.test", name: null }],
+  linked_records: [
+    { object_slug: "people", object_id: "o1", record_id: "p1" },
+    { object_slug: "companies", object_id: "o2", record_id: "c1" },
+  ],
+  created_at: "2026-03-01T10:00:00.000Z",
+  created_by_actor: { type: "workspace-member", id: "m1" },
+}
+
+const recording = (id: string, status: string) => ({
+  id: { workspace_id: "w1", meeting_id: "mt1", call_recording_id: id },
+  status,
+  web_url: `https://app.attio.com/acme/calls/${id}`,
+  created_at: "2026-03-04T10:31:00.000Z",
+})
+
+const SCOPES = "record_permission:read note:read task:read meeting:read call_recording:read"
+
 const objects = [
   { id: { object_id: "o3" }, api_slug: "deals" },
   { id: { object_id: "o9" }, api_slug: "invoices" },
@@ -117,6 +143,23 @@ const source = (calls: Call[] = []) =>
       if (operation === "getV2Notes") return { data: Number(request.query.offset) ? [] : [note] }
       if (operation === "getV2Objects") return { data: objects }
       if (operation === "getV2Tasks") return { data: [task] }
+      if (operation === "getV2Self") return { active: true, scope: SCOPES }
+      if (operation === "getV2Meetings") return { data: [meeting], pagination: { next_cursor: null } }
+      if (operation === "getV2MeetingsByMeetingIdCallRecordings")
+        return {
+          data: [recording("r1", "completed"), recording("r2", "processing")],
+          pagination: { next_cursor: null },
+        }
+      if (operation === "getV2MeetingsByMeetingIdCallRecordingsByCallRecordingId") {
+        expect(request.path.call_recording_id).toBe("r1")
+        const segments = [
+          { speech: "We can start in May", start_time: 1, end_time: 3, speaker: { name: "Ann Lee" } },
+          { speech: "May works", start_time: 4, end_time: 5, speaker: { name: null } },
+        ]
+        return {
+          data: { ...recording("r1", "completed"), video_url: null, transcript: { segments, raw_transcript: "" } },
+        }
+      }
       expect(operation).toBe("postV2ObjectsByObjectRecordsQuery")
       return { data: Number(body?.offset) ? [] : [RECORDS[String(request.path.object)]] }
     },
@@ -240,8 +283,8 @@ it("reads Attio's notes and then its tasks as activities on the records they han
   })
   const tasks = await live.activities?.(0, notes?.nextCursor)
   expect(tasks).toEqual({
-    hasMore: false,
-    listedAll: true,
+    hasMore: true,
+    nextCursor: "meetings:",
     items: [
       expect.objectContaining({
         externalId: "task:t1",
@@ -254,6 +297,81 @@ it("reads Attio's notes and then its tasks as activities on the records they han
       }),
     ],
   })
+})
+
+it("reads Attio's meetings last, with what was said in their finished calls, also on their people's deals", async () => {
+  const calls: Call[] = []
+  const meetings = await source(calls).activities?.(0, "meetings:")
+  expect(meetings).toEqual({
+    hasMore: false,
+    listedAll: true,
+    items: [
+      {
+        externalId: "meeting:mt1",
+        kind: "meeting",
+        subject: "Kitchen call",
+        body: "Second call about the kitchen\n\nAnn Lee: We can start in May\nMay works",
+        done: true,
+        assignee: "m1",
+        createdAt: Date.parse("2026-03-04T10:00:00.000Z"),
+        updatedAt: Date.parse("2026-03-04T10:00:00.000Z"),
+        on: [
+          { kind: "person", externalId: "p1" },
+          { kind: "deal", externalId: "d1" },
+          { kind: "organization", externalId: "c1" },
+        ],
+      },
+    ],
+  })
+  expect(calls).toContainEqual(
+    expect.objectContaining({ operation: "postV2ObjectsByObjectRecordsQuery", object: "deals" }),
+  )
+})
+
+it("reads no meetings, and reports no gap, for a token made for notes and tasks", async () => {
+  const asked: string[] = []
+  const live = crmSourceFromManifest(SOURCE, {
+    api: API.manifest,
+    call: async (operation) => {
+      asked.push(operation)
+      return { active: true, scope: "record_permission:read note:read task:read" }
+    },
+    ...HOOK_OPTIONS,
+  })
+  const context = { spend: vi.fn(), gap: vi.fn() }
+  expect(await live.activities?.(0, "meetings:", context)).toEqual({ items: [], hasMore: false, listedAll: true })
+  expect(asked).toEqual(["getV2Self"])
+  expect(context.gap).not.toHaveBeenCalled()
+})
+
+it("pages meetings by Attio's cursor and, without call_recording:read, reads no recordings", async () => {
+  const asked: { operation: string; cursor: unknown }[] = []
+  const live = crmSourceFromManifest(SOURCE, {
+    api: API.manifest,
+    call: async (operation, request) => {
+      asked.push({ operation, cursor: request.query.cursor })
+      if (operation === "getV2Self") return { active: true, scope: "meeting:read record_permission:read" }
+      if (operation === "getV2Meetings")
+        return { data: [meeting], pagination: { next_cursor: request.query.cursor ? null : "next=1" } }
+      return { data: [] }
+    },
+    ...HOOK_OPTIONS,
+  })
+  const first = await live.activities?.(0, "meetings:")
+  expect(first).toMatchObject({ hasMore: true, nextCursor: "meetings:next=1" })
+  expect(first?.items[0]).toMatchObject({
+    body: "Second call about the kitchen",
+    on: [
+      { kind: "person", externalId: "p1" },
+      { kind: "organization", externalId: "c1" },
+    ],
+  })
+  expect(await live.activities?.(0, first?.nextCursor)).toMatchObject({ listedAll: true })
+  expect(asked.filter(({ operation }) => operation === "getV2Meetings").map(({ cursor }) => cursor)).toEqual([
+    undefined,
+    "next=1",
+  ])
+  expect(asked.map(({ operation }) => operation)).not.toContain("getV2MeetingsByMeetingIdCallRecordings")
 })
 
 it("pages a full list of notes, keeps a note on another object off every record, and reads a done task", async () => {
@@ -279,7 +397,7 @@ it("pages a full list of notes, keeps a note on another object off every record,
   expect(first?.items[0]).toMatchObject({ body: null, assignee: null, on: [] })
   expect(await live.activities?.(0, "tasks:0")).toMatchObject({ hasMore: true, nextCursor: "tasks:200" })
   const last = await live.activities?.(0, "tasks:200")
-  expect(last?.hasMore).toBe(false)
+  expect(last).toMatchObject({ hasMore: true, nextCursor: "meetings:" })
   expect(last?.items[0]).toMatchObject({
     done: true,
     assignee: null,
@@ -298,6 +416,6 @@ it("reads the notes when the token may not read tasks, and says what it could no
   })
   const context = { spend: vi.fn(), gap: vi.fn() }
   expect((await live.activities?.(0, undefined, context))?.items).toHaveLength(1)
-  expect(await live.activities?.(0, "tasks:0", context)).toEqual({ items: [], hasMore: false })
+  expect(await live.activities?.(0, "tasks:0", context)).toEqual({ items: [], hasMore: true, nextCursor: "meetings:" })
   expect(context.gap).toHaveBeenCalledWith(expect.objectContaining({ kind: "activities", scope: "task:read" }))
 })

@@ -1,7 +1,8 @@
 import { CliError } from "@wirecat/cli-base"
 import type { CrmKind } from "@wirecat/cli-core"
 import type { CrmManifestActivities } from "@wirecat/cli-core/crm"
-import { KINDS, type Note, noteActivity, type Task, taskActivity } from "./hooks.js"
+import { type Note, noteActivity, type Task, taskActivity } from "./hooks.js"
+import { KINDS } from "./links.js"
 
 const SLUGS = Object.fromEntries(Object.entries(KINDS).map(([slug, kind]) => [kind, slug])) as Record<CrmKind, string>
 const MOST_TASK = 2000

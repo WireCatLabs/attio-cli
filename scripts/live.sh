@@ -6,6 +6,7 @@
 # Needs: an Attio access token (keyring service attio) reading records, object configuration and workspace members
 # Needs: at least one person and one company in that workspace
 # Needs: for the deal checks, at least one deal with a person or a company on it (without deals they are skipped)
+# Needs: for the meeting check, meeting:read-write and call_recording:read-write on the token (without them it is told)
 # Needs: record_permission:read-write on the token, for a deal and a person named "WireCat live test" it makes,
 # changes and deletes, also when a step fails
 set -euo pipefail
@@ -130,6 +131,11 @@ sweep_activities() {
     while read -r id; do
       "${cli[@]}" live api tasks-delete --task-id "$id" --yes --json >/dev/null 2>&1 || true
     done; } || true
+  { "${cli[@]}" live api meetings-list --linked-object deals --linked-record-id "$deal_id" --json 2>/dev/null |
+    node -e 'for (const one of JSON.parse(require("fs").readFileSync(0, "utf8")).item?.data ?? []) console.log(one.id.meeting_id)' |
+    while read -r id; do
+      "${cli[@]}" live api meetings-delete --meeting-id "$id" --yes --json >/dev/null 2>&1 || true
+    done; } || true
 }
 deal_id=""
 # A run that passed deleted its records and signed out, so only a failed one sweeps.
@@ -189,6 +195,43 @@ elif ! printf '%s' "$note_out" | grep -q "scope"; then
 fi
 echo "activities: $activities"
 
+# A meeting on the deal with a recorded call, copied by a sync with the activities setting on and found by a word said
+# in it, then deleted. The meeting scopes are optional, and the setting is the owner's in a terminal: either missing
+# is told, not failed.
+meetings="meetings not checked: the token lacks meeting:read-write or call_recording:read-write"
+said="Quillback"
+starts=$(date -u -d '-1 hour' +%Y-%m-%dT%H:%M:%SZ)
+ends=$(date -u +%Y-%m-%dT%H:%M:%SZ)
+meeting_body="{\"data\":{\"title\":\"WireCat live test $stamp\",\"description\":\"\",\"is_all_day\":false,
+  \"start\":{\"datetime\":\"$starts\",\"timezone\":\"UTC\"},\"end\":{\"datetime\":\"$ends\",\"timezone\":\"UTC\"},
+  \"participants\":[{\"name\":\"WireCat live test\",\"is_organizer\":true,\"status\":\"accepted\"}],
+  \"linked_records\":[{\"object\":\"deals\",\"record_id\":\"$deal_id\"}]}}"
+if meeting_out=$("${cli[@]}" live api meetings-create --body "$meeting_body" --yes --json 2>&1) &&
+  meeting_id=$(printf '%s' "$meeting_out" | field item.result.data.id.meeting_id) &&
+  "${cli[@]}" live api meetings-call-recordings-create --meeting-id "$meeting_id" --yes --json --body \
+    "{\"data\":{\"transcript\":[{\"speech\":\"The $said kitchen starts in May\",\"start_time\":0,\"end_time\":3,
+    \"speaker\":{\"name\":\"WireCat live test\"}}]}}" >/dev/null 2>"$work/recording.err"; then
+  workspace=$(field item.data.id.workspace_id <"$work/deal-read.json")
+  if "${cli[@]}" live config set "crm.attio:$workspace.activities" on --json >/dev/null 2>&1; then
+    # Attio makes the recording's transcript after the call is made: the sync waits for it to finish.
+    for _ in 1 2 3 4 5 6; do
+      "${cli[@]}" live sync --json >/dev/null
+      "${cli[@]}" live search all "$said" --json >"$work/said.json"
+      grep -q "$deal_id" "$work/said.json" && break
+      sleep 10
+    done
+    grep -q "$deal_id" "$work/said.json" || { echo "live: search all did not find the deal by a word said in its call" >&2; exit 1; }
+    meetings="a meeting with a recorded call on the deal, synced and found by a word said in it, deleted"
+  else
+    meetings="a meeting with a recorded call made and deleted, its sync not checked: the activities setting is the owner's"
+  fi
+  "${cli[@]}" live api meetings-delete --meeting-id "$meeting_id" --yes --json >/dev/null
+elif ! printf '%s%s' "$meeting_out" "$(cat "$work/recording.err" 2>/dev/null)" | grep -q "scope"; then
+  echo "live: a meeting with a recorded call could not be made: ${meeting_out:0:300}" >&2
+  exit 1
+fi
+echo "meetings: $meetings"
+
 "${cli[@]}" live people create --first-name WireCat --last-name "Live test $stamp" \
   --email "live-$stamp@example.com" --yes --json >"$work/made-person.json"
 person=$(field item.person.id <"$work/made-person.json")
@@ -214,4 +257,4 @@ node -e '
 
 "${cli[@]}" live session end --json >/dev/null
 passed=1
-echo "live check passed: describe format 2, sign-in, sync, store status, pipelines, live people and companies, people and companies by name, a stored deal and search for it, doctor, deal create, update, move, close and delete, ${activities}, person create, update and delete, sign-out"
+echo "live check passed: describe format 2, sign-in, sync, store status, pipelines, live people and companies, people and companies by name, a stored deal and search for it, doctor, deal create, update, move, close and delete, ${activities}, ${meetings}, person create, update and delete, sign-out"

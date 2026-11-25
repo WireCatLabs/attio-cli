@@ -63,6 +63,7 @@ Attio describes these steps on its help page,
    | `object_configuration:read` | The deal stages and your workspace's own attributes. |
    | `user_management:read` | Workspace members, the owners of deals. |
    | `note:read` and `task:read` | Only to copy notes and tasks, see [notes and tasks](usage.md#notes-and-tasks-on-a-deal). |
+   | `meeting:read` and `call_recording:read` | Only to copy meetings and what was said in their calls. |
    | `record_permission:read-write` | Only to change deals and people. |
    | `note:read-write` and `task:read-write` | Only to add notes and tasks and mark a task done. |
 

@@ -129,7 +129,8 @@ token.
 
 - Companies are read, not written: an Attio company has no e-mail or phone attribute to write. Change one through
   `api`.
-- Notes and tasks are listed and shown on a deal once the owner turns on the `activities` setting. Lists and custom
+- Notes, tasks and meetings are listed and shown on a deal once the owner turns on the `activities` setting. A
+  recorded call is kept up to its first 20,000 characters. Lists and custom
   objects have no commands of their own yet. `attio work api` reaches them.
 - People, companies and workspace members are read from Attio each time, so they need the internet.
 - Attio cannot list only what changed since a time, so each sync lists every deal again. A large workspace takes
