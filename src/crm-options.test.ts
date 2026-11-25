@@ -56,6 +56,7 @@ it("every option of the CRM commands runs against the fake workspace", async () 
     ["changes", "list", "--format", "csv"],
     ["search", "all", "name", "--only", "crm", "--limit", "5", "--page", "1", "--exact", "--timezone", "UTC"],
     ["search", "all", "name", "--source", "attio"],
+    ["sync", "--allow-deletions", "5"],
   ]) {
     const answer = await ran(argv)
     expect(answer.code, `${argv.join(" ")}: ${answer.err}`).toBe(0)
