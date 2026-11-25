@@ -1,6 +1,6 @@
 {
   "name": "@wirecat/attio-cli",
-  "version": "0.5.3",
+  "version": "0.6.0",
   "description": "Attio CRM: deals, people and companies for you and your AI agent",
   "license": "Apache-2.0",
   "author": "Viacheslav Ptsarev",
@@ -62,7 +62,7 @@
   },
   "dependencies": {
     "@wirecat/cli-base": "0.132.0",
-    "@wirecat/cli-core": "0.751.0",
+    "@wirecat/cli-core": "0.753.0",
     "commander": "15.0.0",
     "valibot": "1.5.0"
   },

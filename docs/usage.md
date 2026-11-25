@@ -93,6 +93,21 @@ said. Attio cannot list only the notes changed since a time, so each sync reads 
 deleted in Attio leaves the copy. The token needs two more scopes, `note:read` and `task:read`. Without one of them the
 sync copies the rest, removes nothing, and says which list it could not read.
 
+`activities list` lists them from the copy, open tasks first. `activities create` adds a note or a task to a deal, a
+person or a company, and `activities close` marks a task done. Each asks first, as every change does:
+
+```sh
+attio work activities list status:open
+attio work activities create comment --subject deal:12 --text "Called, they want the offer by Friday"
+attio work activities create task --subject deal:12 --title "Send the offer" --due 2026-12-04T10:00:00Z
+attio work activities close task:3f6c0c2e-0000-4000-8000-000000000000
+```
+
+`--subject` takes the reference `deals show` gives (`deal:12`, `person:3`), or `person:crm:<id>` by Attio's id. An
+Attio note is on one record, so a comment takes one `--subject`; a task takes several. A task with no `--owner` is
+assigned to nobody. Attio keeps a task as one text, so `--text` goes under its title. Adding them needs two more
+scopes on the token, `note:read-write` and `task:read-write`.
+
 ## The pipeline
 
 ```sh
@@ -160,7 +175,7 @@ in Cyrillic is found too: `феррара` finds Ferrara.
 ## The Attio API
 
 `attio work api` runs any operation of the Attio API, one command each, with its own flags and help. It reaches what
-has no command of its own yet: notes, tasks, lists, custom objects, meetings and more.
+has no command of its own yet: lists, custom objects, meetings and more.
 
 ```sh
 attio work api list                               # every operation, without calling Attio

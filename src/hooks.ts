@@ -15,7 +15,7 @@ const described = <R extends { metadata?: object }>(record: R, raw: unknown): R 
 }
 
 type Actor = { referenced_actor_type?: string; referenced_actor_id?: string; type?: string; id?: string } | undefined
-type Note = {
+export type Note = {
   id: { note_id: string }
   parent_object: string
   parent_record_id: string
@@ -24,7 +24,7 @@ type Note = {
   created_by_actor?: Actor
   created_at: string
 }
-type Task = {
+export type Task = {
   id: { task_id: string }
   content_plaintext?: string
   is_completed: boolean
@@ -35,7 +35,7 @@ type Task = {
   created_at: string
 }
 
-const KINDS: Record<string, CrmKind> = { deals: "deal", people: "person", companies: "organization" }
+export const KINDS: Record<string, CrmKind> = { deals: "deal", people: "person", companies: "organization" }
 const NOTES_PAGE = 50
 const TASKS_PAGE = 200
 
@@ -46,7 +46,7 @@ const member = (actor: Actor) =>
       ? actor.id
       : null
 
-const noteActivity = (note: Note): CrmActivity => {
+export const noteActivity = (note: Note): CrmActivity => {
   const at = Date.parse(note.created_at)
   const kind = KINDS[note.parent_object]
   return {
@@ -62,7 +62,7 @@ const noteActivity = (note: Note): CrmActivity => {
   }
 }
 
-const taskActivity = (task: Task, objects: Map<string, CrmKind>): CrmActivity => {
+export const taskActivity = (task: Task, objects: Map<string, CrmKind>): CrmActivity => {
   const at = Date.parse(task.created_at)
   return {
     externalId: `task:${task.id.task_id}`,

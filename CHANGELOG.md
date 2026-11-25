@@ -2,6 +2,16 @@
 
 Notable changes to `@wirecat/attio-cli`. One section per version, newest first.
 
+## 0.6.0 — 25.11.2026
+
+### Added
+
+- **Add a note or a task to a deal, a person or a company.** `activities create comment` adds a note,
+  `activities create task` a task with a title, a text and a deadline, and `activities close` marks a task done.
+  Each asks first, as every change to Attio does. `activities list` lists the notes and tasks the copy holds, open
+  tasks first. Adding them needs the token's `note:read-write` and `task:read-write` scopes
+  ([usage](docs/usage.md#notes-and-tasks-on-a-deal)).
+
 ## 0.5.3 — 25.11.2026
 
 ### Fixed

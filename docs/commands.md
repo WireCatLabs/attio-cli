@@ -2637,6 +2637,75 @@ attio users show <user>
 
 **Example:** `attio work users show 7`
 
+## `attio activities`
+
+the CRM's activities and tasks on deals, leads, contacts and companies, as last synced
+
+### `attio activities list`
+
+activities copied from the CRM, open ones first by due time, then the rest newest first; status:open unless a status is given; the activities setting must be on
+
+```sh
+attio activities list [query] [options]
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `query` | optional | field:value terms that narrow the list — the fields are below. |
+
+| Option | What it does |
+|---|---|
+| `--limit <n>` | activities per page, 1–500. Default: `50`. |
+| `--page <n>` | which page, starting at 1. Default: `1`. |
+
+**Returns:** crm activity — external_id, kind, subject, body, due_at, done, done_at, assignee, and 4 more; every field: attio commands info activities list
+
+**Example:** `attio work activities list overdue:true`, `attio work activities list due:today --json`, `attio work activities list deal:12 status:done`
+
+### `attio activities create`
+
+add a comment or task to records of the CRM, then store the CRM's copy of it when the activities setting is on
+
+**Changes something in the service.**
+
+```sh
+attio activities create <kind> [options]
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `kind` | required | what to add. One of: `comment`, `task`. |
+
+| Option | What it does |
+|---|---|
+| `--subject <ref>` | a record it is on: deal:<id>, person:<id> or organization:<id> as a list or deals show gives it, or person:crm:<id> or organization:crm:<id> by the CRM's id as people list and organizations list print it; repeat it for more. Default: ``. |
+| `--title <title>` | a task's title, needed for a task; a comment's title where the CRM keeps one. |
+| `--text <text>` | a comment's text, needed for a comment; a task's description. |
+| `--due <time>` | a task's deadline: an ISO 8601 time, a date (its end), today, or 2h, 3d from now; in your time zone. |
+| `--owner <user>` | the CRM user a task is assigned to; anyone but the sign-in's own user checks crm.assign-others. |
+
+**Returns:** crm activity write — operation_id, stored, activity, untrusted; every field: attio commands info activities create
+
+**Example:** `attio work activities create comment --subject deal:12 --text "Example: asked for a discount"`, `attio work activities create task --subject deal:12 --title "Example: call back" --due 2026-12-01T10:00`
+
+### `attio activities close`
+
+mark a task done in the CRM, then store the CRM's copy of it when the activities setting is on
+
+**Changes something in the service.**
+
+```sh
+attio activities close <task>
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `task` | required | the task's id in the CRM, as activities list prints its external_id. |
+
+**Returns:** crm activity write — operation_id, stored, activity, untrusted; every field: attio commands info activities close
+
+**Example:** `attio work activities close 42`
+
 ## `attio changes`
 
 what changed in the CRM's deals, activities and contacts, as the syncs copied it
