@@ -19,9 +19,10 @@ lists the profiles on this computer.
 3. [Pipelines](#attio-pipelines)
 4. [People](#attio-people)
 5. [Companies](#attio-organizations)
-6. [What changed](#attio-changes)
-7. [The API](#attio-api)
-8. [Exit codes](#exit-codes)
+6. [Notes and tasks](#attio-activities)
+7. [What changed](#attio-changes)
+8. [The API](#attio-api)
+9. [Exit codes](#exit-codes)
 
 ## Options for every command
 
