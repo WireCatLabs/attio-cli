@@ -93,6 +93,13 @@ said. Attio cannot list only the notes changed since a time, so each sync reads 
 deleted in Attio leaves the copy. The token needs two more scopes, `note:read` and `task:read`. Without one of them the
 sync copies the rest, removes nothing, and says which list it could not read.
 
+The same setting copies your Attio meetings, with what was said in their recorded calls, so `search all` finds a deal
+by a word said in a call. Attio links a meeting to the people and companies who took part, and to a deal only when
+someone links it, so a meeting also goes on the deals of those people and companies. This needs two more scopes,
+`meeting:read` and `call_recording:read`. A token without `meeting:read` copies no meetings and still copies the rest.
+A call longer than about 20 minutes is cut: the copy keeps its first 20,000 characters. Attio marks its meetings
+API as beta.
+
 `activities list` lists them from the copy, open tasks first. `activities create` adds a note or a task to a deal, a
 person or a company, and `activities close` marks a task done. Each asks first, as every change does:
 

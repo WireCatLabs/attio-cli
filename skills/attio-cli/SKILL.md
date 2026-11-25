@@ -51,7 +51,9 @@ unless the task says.
   something is not there, search in other words, and `sync` if the store is old.
 - **Notes and tasks.** With the owner's `activities` setting on, `deals show` lists a deal's notes and tasks and
   `search all` finds a deal by the words of its notes, and by their meaning after `sync --embed`; `activities list`
-  lists them. Without it, or for a note on no kept deal, read them through `api notes-list` and `api tasks-list`.
+  lists them. Meetings come the same way, with what was said in their recorded calls, on the deals of the people and
+  companies who took part. Without it, or for a note on no kept deal, read them through `api notes-list`,
+  `api tasks-list` and `api meetings-list`.
   Only the owner turns the setting on.
 - **Ask by meaning before reading every note.** "Who complained the launch slipped" or "who got a cheaper offer" is
   one `search all "<the question in plain words>" --json`: with the `activities` setting on, it finds deals by what

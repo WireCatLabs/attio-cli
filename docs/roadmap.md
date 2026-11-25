@@ -21,7 +21,7 @@ companies they name into the local WireCat store, with the stages of the deal pi
 meetings. `pipelines show` is the pipeline board: each stage's deals, their number, their total per currency and the
 win rate. `changes list` shows deals created, moved, won and lost, and `--format report` makes it a digest.
 `fields list` shows the workspace's own attributes. With the `activities` setting on, the copy also holds the
-notes and tasks on its deals, people and companies, and `activities list` lists them. `people`, `organizations` and
+notes, tasks and meetings on its deals, people and companies, with what was said in recorded calls, and `activities list` lists them. `people`, `organizations` and
 `users` read Attio live. `deals` create, update, move and close deals, `people` create and update people, and
 `activities` adds a note or a task and marks a task done, each change asking you first. Lists
 export to CSV with `--format csv`. `attio work api` reaches every operation of the Attio API. Every command is in the
