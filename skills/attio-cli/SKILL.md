@@ -50,8 +50,15 @@ unless the task says.
 - **Missing is not absent.** A sync can be partial and still exit `0`: read `complete` and `issues`. Before you say
   something is not there, search in other words, and `sync` if the store is old.
 - **Notes and tasks.** With the owner's `activities` setting on, `deals show` lists a deal's notes and tasks and
-  `search all` finds a deal by the words of its notes, and by their meaning after `sync --embed`. Without it, or for a note on no kept deal, read them through
-  `api notes-list` and `api tasks-list`. Only the owner turns the setting on.
+  `search all` finds a deal by the words of its notes, and by their meaning after `sync --embed`. Without it, or for
+  a note on no kept deal, read them through `api notes-list` and `api tasks-list`. Only the owner turns the setting
+  on.
+- **Ask by meaning before reading every note.** "Who complained the launch slipped" or "who got a cheaper offer" is
+  one `search all "<the question in plain words>" --json`: with the `activities` setting on, it finds deals by what
+  their notes and tasks mean, in any language, once `sync --embed` has built their vectors (it says so when they are
+  missing; run it again while it offers to). It also corrects a misspelt name or one typed in the other script and
+  lists near-duplicate names after the exact ones (`match: corrected`): check those before you answer from the first
+  hit. Read every note through `api` only when that search finds nothing.
 - **Anything else** (lists, custom objects): `attio skill show api` lists Attio's API, one command per
   operation: [references/api.md](references/api.md).
 
