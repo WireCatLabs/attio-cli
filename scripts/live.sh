@@ -204,7 +204,7 @@ starts=$(date -u -d '-1 hour' +%Y-%m-%dT%H:%M:%SZ)
 ends=$(date -u +%Y-%m-%dT%H:%M:%SZ)
 meeting_body="{\"data\":{\"title\":\"WireCat live test $stamp\",\"description\":\"\",\"is_all_day\":false,
   \"start\":{\"datetime\":\"$starts\",\"timezone\":\"UTC\"},\"end\":{\"datetime\":\"$ends\",\"timezone\":\"UTC\"},
-  \"participants\":[{\"name\":\"WireCat live test\",\"is_organizer\":true}],
+  \"participants\":[{\"name\":\"WireCat live test\",\"is_organizer\":true,\"status\":\"accepted\"}],
   \"linked_records\":[{\"object\":\"deals\",\"record_id\":\"$deal_id\"}]}}"
 if meeting_out=$("${cli[@]}" live api meetings-create --body "$meeting_body" --yes --json 2>&1) &&
   meeting_id=$(printf '%s' "$meeting_out" | field item.data.id.meeting_id) &&
