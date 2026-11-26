@@ -219,10 +219,11 @@ if meeting_out=$("${cli[@]}" live api meetings-create --body "$meeting_body" --y
     for _ in 1 2 3 4 5 6; do
       "${cli[@]}" live sync --json >/dev/null
       "${cli[@]}" live search all "$said" --json >"$work/said.json"
-      grep -q "$deal_id" "$work/said.json" && break
+      # Search answers with the copy's ref, not Attio's record id.
+      grep -qF "\"$deal\"" "$work/said.json" && break
       sleep 10
     done
-    grep -q "$deal_id" "$work/said.json" || { echo "live: search all did not find the deal by a word said in its call" >&2; exit 1; }
+    grep -qF "\"$deal\"" "$work/said.json" || { echo "live: search all did not find the deal by a word said in its call" >&2; exit 1; }
     meetings="a meeting with a recorded call on the deal, synced and found by a word said in it, deleted"
   else
     meetings="a meeting with a recorded call made and deleted, its sync not checked: the activities setting is the owner's"
