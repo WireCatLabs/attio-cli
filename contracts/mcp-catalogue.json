@@ -1,6 +1,4 @@
 {
-  "session status": "read",
-  "session list": "read",
   "api objects-list": "read",
   "api objects-create": "write",
   "api objects-get": "read",

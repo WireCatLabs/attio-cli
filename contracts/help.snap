@@ -20,6 +20,7 @@ Works with:
   wordpress               WordPress posts and pages, searchable with your other WireCat data
   linear                  Linear issues and projects, searchable with your other WireCat data
 
+              attio session list  your profiles and their logged-in accounts
 Next:         attio commands      every command, by section
               attio help options  output, offline, timeouts, dry run
 For agents:   attio skill show    rules and the discovery loop
