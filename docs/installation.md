@@ -33,7 +33,8 @@ Once it is done, an agent on this computer reads your deals, people and companie
 
 ## Install the tool
 
-Install `attio` once on each computer where you or an agent use it.
+Install `attio` once on each computer where you or an agent use it. If other WireCat tools are on this computer,
+update them together with `attio`. Once `attio` has opened the shared store, older tools cannot open it.
 
 ```sh
 npm install -g @wirecat/attio-cli

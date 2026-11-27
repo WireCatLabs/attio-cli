@@ -5,7 +5,8 @@ Codex or Claude Desktop, a copy of your Attio deals on your computer, so it answ
 looks up people and companies in Attio when you ask about them.
 
 Ask which deals are stuck in a stage, what was won or lost this week, or how your pipeline looks today. The agent
-answers with the deal, its amount, its company and its owner. You need an Attio workspace and an admin who can make an
+answers with the deal, its amount, its company and its owner. With notes and meetings turned on, it also finds the
+deal where a client asked for a discount on a call. You need an Attio workspace and an admin who can make an
 access token.
 
 **On this page:**
@@ -24,6 +25,9 @@ access token.
 
 - **The answer, not the search.** Ask about a deal in your own words. The agent finds it with its stage, amount,
   company and people, read from your computer, with no clicking through Attio.
+- **What was said on a call.** With the `activities` setting on, the copy also holds your Attio meetings with the
+  transcripts of their recorded calls. The agent finds a deal by something a client said on a call, even when nobody
+  wrote it down ([turn it on](./usage.md#notes-and-tasks-on-a-deal)).
 - **Your pipeline at a glance.** How many deals stand in each stage, their total per currency, how many went on to
   the next stage, and your win rate.
 - **What changed since yesterday.** Deals created, moved, won and lost, as a list or as a short morning digest.
