@@ -48,8 +48,10 @@ attio work store status        # how far each kind is, and how many are stored
 ```
 
 Attio cannot list only the records changed since a time, so each sync reads every deal again, then the people and
-companies they name. A sync stops
-before its deadline or `--max-pages`, and the next one goes on from there. Records deleted in Attio leave the copy.
+companies they name. A sync stops before its deadline or `--max-pages`, and the next one goes on from there. Records
+deleted in Attio leave the copy. When a sync would mark more than half of the deals deleted at once, it marks none and
+says how many. Check the token's rights in Attio, then let them through yourself in a terminal with
+`attio work sync --allow-deletions 12`, the number the sync printed.
 
 Each record keeps its current values only. Attio keeps the history of each attribute, and a value that was replaced is
 not copied.
