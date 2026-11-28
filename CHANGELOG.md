@@ -2,6 +2,18 @@
 
 Notable changes to `@wirecat/attio-cli`. One section per version, newest first.
 
+## 0.10.0 — 28.11.2026
+
+### Added
+
+- **WireCat Desktop reads attio's MCP port from attio itself.** The manifest (`attio --wcat-describe`) now names the
+  MCP server's port, 8759.
+
+### Fixed
+
+- **attio's package is smaller: it no longer carries its own copy of cli-core.** Built on `@wirecat/cli-core` 3.0.0
+  and `@wirecat/cli-base` 2.1.0. Needed for the WireCat store version 79 (`memo` became `wcat`).
+
 ## 0.9.0 — 27.11.2026
 
 ### Changed — may break callers
