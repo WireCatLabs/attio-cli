@@ -1,5 +1,5 @@
 import { CliError } from "@wirecat/cli-base"
-import { crmSourceFromManifest } from "@wirecat/cli-core/crm"
+import { crmSourceFromManifest } from "@wirecat/cli-core"
 import { expect, it, vi } from "vitest"
 import { API } from "./config.js"
 import { HOOK_OPTIONS, SOURCE } from "./generated/wirecat-config.js"

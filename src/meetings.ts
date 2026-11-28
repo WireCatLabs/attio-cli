@@ -1,5 +1,4 @@
-import type { CrmActivity, CrmKind } from "@wirecat/cli-core"
-import type { CrmCallContext, CrmManifestActivities } from "@wirecat/cli-core/crm"
+import type { CrmActivity, CrmCallContext, CrmKind, CrmManifestActivities } from "@wirecat/cli-core"
 import { KINDS, member } from "./links.js"
 
 type Send = Parameters<CrmManifestActivities["create"]>[1]

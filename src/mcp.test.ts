@@ -1,6 +1,6 @@
 import { mkdirSync, rmSync, writeFileSync } from "node:fs"
 import { join } from "node:path"
-import { changesAuthorityAt, type RunOptions, readsOverMcpAt } from "@wirecat/cli-core/cli"
+import { changesAuthorityAt, type RunOptions, readsOverMcpAt } from "@wirecat/cli-core"
 import { mcpOverStdio, ownCatalogue } from "@wirecat/cli-core/testing"
 import { expect, it } from "vitest"
 import { permissions } from "./config.js"

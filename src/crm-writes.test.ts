@@ -1,6 +1,5 @@
 import { memoryKeyring } from "@wirecat/cli-base"
-import type { CrmManifestFake } from "@wirecat/cli-core/crm/testing"
-import { FAKE_MANIFEST_TOKEN } from "@wirecat/cli-core/crm/testing"
+import { type CrmManifestFake, FAKE_MANIFEST_TOKEN } from "@wirecat/cli-core/testing"
 import { afterEach, expect, it } from "vitest"
 import { crmFake, signInAndCrm } from "./testing/crm-service.js"
 import { runCli } from "./testing/harness.js"

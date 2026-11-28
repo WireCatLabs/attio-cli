@@ -1,5 +1,4 @@
-import { crmManifestProblems, parseCrmManifest } from "@wirecat/cli-core/crm"
-import { parseCliConfig } from "@wirecat/cli-core/manifest"
+import { crmManifestProblems, parseCliConfig, parseCrmManifest } from "@wirecat/cli-core"
 import { definitions } from "../dist/generated/definitions.js"
 import * as api from "../dist/generated/manifest.js"
 import config from "../wirecat.config.ts"

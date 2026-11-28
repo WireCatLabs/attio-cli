@@ -1,5 +1,5 @@
-import { parseCrmManifest } from "@wirecat/cli-core/crm"
-import { type CrmManifestFake, crmManifestFake, FAKE_MANIFEST_TOKEN } from "@wirecat/cli-core/crm/testing"
+import { parseCrmManifest } from "@wirecat/cli-core"
+import { type CrmManifestFake, crmManifestFake, FAKE_MANIFEST_TOKEN } from "@wirecat/cli-core/testing"
 import { API } from "../config.js"
 import { definitions } from "../generated/definitions.js"
 import { SOURCE, VERIFY } from "../generated/wirecat-config.js"

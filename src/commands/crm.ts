@@ -1,9 +1,20 @@
 import { CliError } from "@wirecat/cli-base"
 import { retrying } from "@wirecat/cli-base/http"
-import { openAppStore, outputFor, recalledAccount, serviceApiCall } from "@wirecat/cli-core/cli"
-import { crmManifestWriteCapabilities, crmManifestWrites, crmSourceFromManifest } from "@wirecat/cli-core/crm"
-import { addCrmCommands, type CrmAccountOptions, type CrmRun, openCrmStore } from "@wirecat/cli-core/crm/cli"
-import { Pacer, pacePathFor } from "@wirecat/cli-core/sends"
+import {
+  addCrmCommands,
+  type CrmAccountOptions,
+  type CrmRun,
+  crmManifestWriteCapabilities,
+  crmManifestWrites,
+  crmSourceFromManifest,
+  openAppStore,
+  openCrmStore,
+  outputFor,
+  Pacer,
+  pacePathFor,
+  recalledAccount,
+  serviceApiCall,
+} from "@wirecat/cli-core"
 import { Command } from "commander"
 import { ACTIVITIES } from "../activities.js"
 import { API, configuration, permissions } from "../config.js"

@@ -2,7 +2,7 @@ import { mkdtempSync } from "node:fs"
 import { tmpdir } from "node:os"
 import { join } from "node:path"
 import { memoryKeyring } from "@wirecat/cli-base"
-import { parseCrmManifest } from "@wirecat/cli-core/crm"
+import { type MessageStore, openStore, parseCrmManifest } from "@wirecat/cli-core"
 import {
   type CrmManifestFake,
   crmManifestFixture,
@@ -10,8 +10,7 @@ import {
   crmSourceContract,
   crmSyncContract,
   FAKE_MANIFEST_TOKEN,
-} from "@wirecat/cli-core/crm/testing"
-import { type MessageStore, openStore } from "@wirecat/cli-core/store"
+} from "@wirecat/cli-core/testing"
 import { afterEach, describe, expect, it } from "vitest"
 import { API } from "./config.js"
 import { definitions } from "./generated/definitions.js"

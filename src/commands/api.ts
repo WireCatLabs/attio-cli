@@ -1,6 +1,5 @@
 import { retrying } from "@wirecat/cli-base/http"
-import { hostsFetch, serviceApiCommand } from "@wirecat/cli-core/cli"
-import { Pacer, pacePathFor } from "@wirecat/cli-core/sends"
+import { hostsFetch, Pacer, pacePathFor, serviceApiCommand } from "@wirecat/cli-core"
 import type { Command } from "commander"
 import { API, configuration } from "../config.js"
 import { contextOf, PACE, type ServiceEnvironment, tokenOf } from "../context.js"

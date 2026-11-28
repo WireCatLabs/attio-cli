@@ -1,17 +1,15 @@
 import {
   type Configuration,
-  commandPermissions,
-  serviceApiOperations,
-  serviceApiPermissions,
-  settingsFor,
-} from "@wirecat/cli-core/cli"
-import {
   CRM_WRITE_DEFAULTS,
   CRM_WRITE_KEYS,
+  commandPermissions,
   crmAlsoChecks,
   crmManifestActivityKeys,
   crmManifestWriteKeys,
-} from "@wirecat/cli-core/crm"
+  serviceApiOperations,
+  serviceApiPermissions,
+  settingsFor,
+} from "@wirecat/cli-core"
 import { ACTIVITIES } from "./activities.js"
 import * as manifest from "./generated/manifest.js"
 import { SOURCE } from "./generated/wirecat-config.js"

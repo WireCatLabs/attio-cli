@@ -1,7 +1,7 @@
 import { execFileSync } from "node:child_process"
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs"
 import { dirname, isAbsolute, join, relative, sep } from "node:path"
-import { parseCliConfig } from "@wirecat/cli-core/manifest"
+import { parseCliConfig } from "@wirecat/cli-core"
 import config from "../wirecat.config.ts"
 
 // wirecat.config.ts → src/generated/wirecat-config.ts, what the CLI reads of it at run time: the call that checks a
@@ -74,12 +74,12 @@ const text = formatted(
       ? [`import { hooks } from "${hooksImport}"`, "", "export const HOOK_OPTIONS = { hooks }"]
       : cli.category === "tracker"
         ? [
-            'import type { TrackerManifestHooks } from "@wirecat/cli-core/tracker"',
+            'import type { TrackerManifestHooks } from "@wirecat/cli-core"',
             "",
             "export const HOOK_OPTIONS: { hooks?: TrackerManifestHooks } = {}",
           ]
         : [
-            'import type { CrmManifestHooks } from "@wirecat/cli-core/crm"',
+            'import type { CrmManifestHooks } from "@wirecat/cli-core"',
             "",
             "export const HOOK_OPTIONS: { hooks?: CrmManifestHooks } = {}",
           ]),
