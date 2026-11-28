@@ -1,8 +1,8 @@
 # Attio
 
-Know where every deal stands without opening Attio. `attio` gives the AI agent you already use, such as Claude Code,
-Codex or Claude Desktop, a copy of your Attio deals on your computer, so it answers from that copy, even offline. It
-looks up people and companies in Attio when you ask about them.
+Know where every deal stands without opening Attio. The AI agent you already use, such as Claude Code, Codex or Claude
+Desktop, answers from a copy of your Attio deals on your computer, even offline. It looks up people and companies in
+Attio when you ask about them.
 
 Ask which deals are stuck in a stage, what was won or lost this week, or how your pipeline looks today. The agent
 answers with the deal, its amount, its company and its owner. With notes and meetings turned on, it also finds the
@@ -12,12 +12,12 @@ access token.
 **On this page:**
 
 1. [What you get](#what-you-get)
-2. [Things a newcomer would not guess](#things-a-newcomer-would-not-guess)
-3. [How it looks](#how-it-looks)
-4. [Why attio](#why-attio)
-5. [What it can do](#what-it-can-do)
-6. [How it works](#how-it-works)
-7. [Start in a few minutes](#start-in-a-few-minutes)
+2. [Start in a few minutes](#start-in-a-few-minutes)
+3. [Things a newcomer would not guess](#things-a-newcomer-would-not-guess)
+4. [How it looks](#how-it-looks)
+5. [Why attio](#why-attio)
+6. [What it can do](#what-it-can-do)
+7. [How it works](#how-it-works)
 8. [Limits](#limits)
 9. [Find a guide for your task](#find-a-guide-for-your-task)
 
@@ -37,6 +37,28 @@ access token.
 - **Your CRM beside your chats.** One search finds a deal next to the messages, mail and meetings about it that the
   other WireCat tools keep on your computer.
 
+## Start in a few minutes
+
+In WireCat Desktop, install Attio on the **Tools** page and sign in under **Manage**, as
+[install](./installation.md#in-wirecat-desktop) shows. Or paste this into your agent:
+
+```text prompt
+Install attio with npm install -g @wirecat/attio-cli. Help me make an Attio access token and run attio work session start to connect my workspace, then sync and show my open deals.
+```
+
+Or in a terminal:
+
+```sh
+npm install -g @wirecat/attio-cli
+attio skill install          # teaches Claude Code, Codex and Gemini CLI to use attio
+attio work session start     # paste the Attio access token when it asks
+attio work sync              # copy your deals and their people and companies
+attio work deals list status:open
+```
+
+You need Node.js 22.16 or a later 22.x, or Node.js 24 or later. [Install](installation.md) shows how to make the
+token.
+
 ## Things a newcomer would not guess
 
 - **An access token is your key.** Attio lets a program in with a token that a workspace admin makes in Workspace
@@ -45,14 +67,13 @@ access token.
 - **`work` is a name you choose.** It names one Attio workspace, and it is the first word of every command. No
   command picks a workspace for you.
 - **The deal commands read a copy, the people commands read Attio.** `sync` copies the workspace's deals and the
-  people and companies they name, with the stages of the deal pipeline. `deals`, `pipelines` and `changes` answer from that copy. `people`,
-  `organizations` and `users` ask Attio each time, so they always show the newest data and need the internet.
-- **Every change asks you first in a terminal.** `deals create`, `update`, `move`, `close` and `delete`, `people create`
-  and `update`, and `activities create` and `close` for notes and tasks change Attio and store its answer. In a
-  terminal each asks yes or no first, and so does every write through `api`. A new deal with no `--owner` is yours.
-  Companies go through `attio work api …`,
-  which reaches every operation of the Attio API, as far as the token's scopes and your
-  [permissions](permissions.md) allow.
+  people and companies they name, with the stages of the deal pipeline. `deals`, `pipelines` and `changes` answer from
+  that copy. `people`, `organizations` and `users` ask Attio each time, so they always show the newest data and need
+  the internet.
+- **Every change asks you first in a terminal.** A command that changes Attio, such as `deals move`, `people update` or
+  `activities create`, asks yes or no first, and so does every write through `api`. A new deal with no `--owner` is
+  yours. Companies go through `attio work api …`, which reaches every operation of the Attio API, as far as the token's
+  scopes and your [permissions](permissions.md) allow. Every write command is in [Commands](commands.md).
 - **Over MCP, "ask" goes ahead.** MCP is the way apps such as Claude Desktop call a tool, and nobody sits at a terminal
   there to answer a question. Lock the `api` group before you connect such an app: [MCP](mcp.md).
 
@@ -107,28 +128,6 @@ Agent:  (runs attio work changes list change:won "at>=7d")
   [MCP](mcp.md)
 - **What is stored and what goes over the network.** [Security](security.md)
 
-## Start in a few minutes
-
-In WireCat Desktop, install Attio on the **Tools** page and sign in under **Manage**, as
-[install](./installation.md#in-wirecat-desktop) shows. Or paste this into your agent:
-
-```text prompt
-Install attio with npm install -g @wirecat/attio-cli. Help me make an Attio access token and run attio work session start to connect my workspace, then sync and show my open deals.
-```
-
-Or in a terminal:
-
-```sh
-npm install -g @wirecat/attio-cli
-attio skill install          # teaches Claude Code, Codex and Gemini CLI to use attio
-attio work session start     # paste the Attio access token when it asks
-attio work sync              # copy your deals and their people and companies
-attio work deals list status:open
-```
-
-You need Node.js 22.16 or a later 22.x, or Node.js 24 or later. [Install](installation.md) shows how to make the
-token.
-
 ## Limits
 
 - Companies are read, not written: an Attio company has no e-mail or phone attribute to write. Change one through
@@ -154,3 +153,4 @@ token.
 | Something does not work | [When something goes wrong](troubleshooting.md) |
 | What is stored and sent | [Security](security.md) |
 | What comes next | [Roadmap](roadmap.md) |
+| How attio differs from other Attio tools | [Comparison](https://wirecat.dev/en/docs/attio/compare) |

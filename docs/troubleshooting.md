@@ -1,10 +1,10 @@
 # When something goes wrong
 
-Get `attio` working again from the symptom you see. Most failures come from the token, a missing scope on it or the
-profile's permissions, and each has a check that names the cause.
+A command stopped with an error, a sync did not bring your deals, or the agent says it may not change a deal. Most of
+these take one step to fix, and the error message names that step.
 
-You find your symptom in the table, run the check it gives, and retry the command. If it still fails, you have the
-error code and the profile name ready for a support request.
+Find what you see in the table and do what it says. If the problem stays, write to us with the error code and the
+command you ran.
 
 **On this page:**
 
@@ -32,6 +32,7 @@ attio work session status --check    # asks Attio which workspace the token belo
 | A command fails with 403, or "missing scope" | The token lacks a scope. Edit it in Workspace settings → Developers, or make a new one, with `record_permission:read`, `object_configuration:read` and `user_management:read`. |
 | `rate_limited` | Attio documents 100 reads and 25 writes a second ([Attio's page](https://docs.attio.com/rest-api/guides/rate-limiting)). Wait a moment and run it again. |
 | `deals list` is empty | Run `attio work sync` first. Deals are read from the copy it makes. |
+| A sync marks no deal deleted and says how many | Attio listed far fewer deals than the copy has. Check the token's rights in Attio, then run `attio work sync --allow-deletions 12` yourself in a terminal, with the number the sync printed. See [sync](usage.md#sync). |
 | `sync` fails with `not_found` | The Deal object is off in your workspace. An admin turns it on in Attio's objects settings ([Attio's docs](https://docs.attio.com/docs/standard-objects/standard-objects-deals)). |
 | A won or lost deal shows as open | A won stage must be the one Attio celebrates, and a lost stage's title must start with "Lost". See [deals](usage.md#deals). |
 | A person or company is missing from `search all` | `sync` copies only the people and companies a deal names: run `attio work sync` after adding one to a deal. `attio work people list anna` reads Attio itself and finds anyone at once. |

@@ -1,10 +1,7 @@
 # Use it
 
-Find a deal, see your pipeline or what changed overnight with one short command, the same one your agent runs. Attio's
-API speaks in record ids, attribute slugs and status ids, and `attio` takes stage names and plain words instead.
-
-You find the deals in a stage, the week's wins or a person's e-mail in one line. An agent does the same from your
-request.
+See which deals are stuck in a stage, what you won this week or a person's e-mail, with commands that take stage names
+and plain words as your workspace shows them. Your agent runs the same commands when you ask it in your own words.
 
 Every command starts with a profile, the name you gave one workspace's sign-in. `sync` copies your deals and the people
 and companies they name into the WireCat local store, where the deal commands read them. You need a signed-in profile:
@@ -82,10 +79,11 @@ If you renamed your lost stage to something else, its deals count as open. Keep 
 
 With `activities` on, each sync also copies the notes and tasks of your workspace that hang on the deals, people and
 companies it keeps. `deals show` lists them, open tasks first, and `search all` finds a deal by the words of its notes.
-The setting's key names the workspace by its id, the `id` that `session status --check --json` prints:
+The setting's key names the workspace by its id. Put your workspace's `id` from
+`attio work session status --check --json` in place of the example:
 
 ```sh
-attio work config set crm.attio:<workspace id>.activities on
+attio work config set crm.attio:0f3c1a2b-0000-4000-8000-000000000000.activities on
 attio work sync
 attio work deals show deal:12
 ```
@@ -164,7 +162,7 @@ attio work fields list people --json
 ```
 
 `fields list` shows the attributes your workspace added on deals, people or companies (`organizations`), with their
-type, as the last `sync` stored them. A select attribute's options are not listed yet. Attio's own attributes are left out.
+type, as the last `sync` stored them. A select attribute's options are not listed. Attio's own attributes are left out.
 
 ## Search everything
 
