@@ -25,6 +25,7 @@ export const DESKTOP = {
   hosts: ["api.attio.com", "app.attio.com"],
   tagline: "Attio deals, people and companies for your agent",
   syncs: "your deals and their clients",
+  mcpPort: 8759,
   signIn: {
     gives: "Lets your agent read your Attio deals, people and companies and call the Attio API.",
     asks:
