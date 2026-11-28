@@ -1,5 +1,5 @@
 import { memoryKeyring } from "@wirecat/cli-base"
-import { recalledAccount } from "@wirecat/cli-core/cli"
+import { recalledAccount } from "@wirecat/cli-core"
 import { expect, it } from "vitest"
 import { VERIFY } from "../generated/wirecat-config.js"
 import { IDENTITY } from "../identity.js"

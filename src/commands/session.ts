@@ -1,5 +1,4 @@
-import { manifestVerify, tokenSessionCommand } from "@wirecat/cli-core/cli"
-import { crmAccountClaim } from "@wirecat/cli-core/crm/cli"
+import { crmAccountClaim, manifestVerify, tokenSessionCommand } from "@wirecat/cli-core"
 import type { Command } from "commander"
 import { API, configuration } from "../config.js"
 import { contextOf } from "../context.js"

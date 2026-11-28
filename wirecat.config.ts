@@ -1,4 +1,4 @@
-import { defineCli } from "@wirecat/cli-core/manifest"
+import { defineCli } from "@wirecat/cli-core"
 
 const QUERY = "postV2ObjectsByObjectRecordsQuery"
 // Newest first, in a fixed order. A record added during a sync repeats a row on the next offset page, which is

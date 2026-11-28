@@ -5,7 +5,7 @@ import {
   type GlobalFlags,
   ProfileTokenStore,
   refuseOffline,
-} from "@wirecat/cli-core/cli"
+} from "@wirecat/cli-core"
 import type { Command } from "commander"
 import { API, configuration } from "./config.js"
 import { IDENTITY } from "./identity.js"

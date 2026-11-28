@@ -1,6 +1,5 @@
 import { CliError } from "@wirecat/cli-base"
-import type { CrmActivity, CrmKind } from "@wirecat/cli-core"
-import type { CrmManifestHooks } from "@wirecat/cli-core/crm"
+import type { CrmActivity, CrmKind, CrmManifestHooks } from "@wirecat/cli-core"
 import { type Actor, KINDS, member } from "./links.js"
 import { type MeetingsRun, meetingsPage } from "./meetings.js"
 
