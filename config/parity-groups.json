@@ -1,7 +1,7 @@
 [
   {
     "name": "attio",
-    "members": ["attio", "tg", "max", "memo", "drive", "zm", "wa"],
+    "members": ["attio", "tg", "max", "wcat", "drive", "zm", "wa"],
     "covers": ["commands", "upgrade"],
     "differences": []
   }
